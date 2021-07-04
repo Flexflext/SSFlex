@@ -112,28 +112,28 @@ public class BuildingPlacer : MonoBehaviour
     {
         Vector3 clipPos = new Vector3();
 
-        float hitObjSize = mHitObj.transform.localScale.x / 2;
-        float currentObjSize = mNormalWall.transform.localScale.x / 2;
-
-        
-
+        Vector3 hitObjSize = mHitObj.transform.localScale / 2;
+        Vector3 currentObjSize = mNormalWall.transform.localScale / 2;
+        Vector3 totalPlaceAdj = hitObjSize + currentObjSize;
 
 
         if (_sideClip >= mClipThreshold_Side)
         {
-            clipPos = new Vector3(mHitObj.transform.position.x, mHitObj.transform.position.y, mHitObj.transform.position.z);
+            clipPos = mHitObj.transform.position - totalPlaceAdj;
+            clipPos.y = mHitObj.transform.position.y;
 
-            NormalWallPlaceholder.transform.localPosition = clipPos;
+            NormalWallPlaceholder.transform.position = clipPos;
         }
 
         if (_sideClip <= -mClipThreshold_Side)
         {
-            clipPos = new Vector3(mHitObj.transform.localPosition.x, mHitObj.transform.position.y, mHitObj.transform.position.z);
+            clipPos = mHitObj.transform.position + totalPlaceAdj;
+            clipPos.y = mHitObj.transform.position.y;
 
-            NormalWallPlaceholder.transform.localPosition = clipPos;
+            NormalWallPlaceholder.transform.position = clipPos;
         }
 
-        NormalWallPlaceholder.transform.rotation = mHitObj.transform.rotation;
+        NormalWallPlaceholder.transform.eulerAngles = mHitObj.transform.eulerAngles;
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
             Instantiate(mNormalWall, NormalWallPlaceholder.transform.position, NormalWallPlaceholder.transform.rotation);
