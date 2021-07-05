@@ -18,11 +18,17 @@ public class PlayerShooting : MonoBehaviour
     private Animator animator;
     //private PlayerMovementNew movement;
 
-    bool imAiming;
+    private bool imAiming;
+
+    private bool isMeeleing;
+    private float meeleTime = 1.2f;
+    
+    private bool isGrenadeThrowing;
+    private float grenadeTime = 1.4f;
 
     private void Start()
     {
-        //animator = GetComponentInChildren<Animator>();
+        animator = GetComponentInChildren<Animator>();
         //movement = GetComponent<PlayerMovementNew>();
     }
 
@@ -35,15 +41,35 @@ public class PlayerShooting : MonoBehaviour
             return;
         }
 
+
+
+
+        if (Input.GetKeyDown(KeyCode.F) && !isMeeleing && !isGrenadeThrowing)
+        {
+            isMeeleing = true;
+            StartCoroutine(C_MeeleTimer(meeleTime));
+            //Set Animator
+            animator.SetTrigger("isMeeleing");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q) && !isGrenadeThrowing && !isMeeleing)
+        {
+            isGrenadeThrowing = true;
+            StartCoroutine(C_GrenadeTimer(grenadeTime));
+            //Set Animator
+            animator.SetTrigger("GrenadeThrow");
+        }
+
+
         #region Aiming
 
         // Check for Player input
-        if (Input.GetButtonDown("Fire2"))
+        if (Input.GetButtonDown("Fire2") && !isMeeleing && !isGrenadeThrowing)
         {
             // Set Bool for Aiming, sets the CurrentAdsmultiplier + Sets Animator and Movement Speed
             imAiming = true;
             //PlayerLook.Instance.AdsMultiplier = currentGun.AdsMultiplier;
-            //animator.SetBool("isAiming", true);
+            animator.SetBool("isAiming", true);
             //movement.CurrentSpeed *= currentGun.ZoomMovementMultiplier;
         }
 
@@ -68,7 +94,7 @@ public class PlayerShooting : MonoBehaviour
             // Resets Bool for Aiming, Resets the CurrentAdsmultiplier + Resets Animator and Movement Speed
             imAiming = false;
             //PlayerLook.Instance.AdsMultiplier = 1;
-            //animator.SetBool("isAiming", false);
+            animator.SetBool("isAiming", false);
             //movement.CurrentSpeed = movement.MaxSpeed;
 
         }
@@ -79,16 +105,17 @@ public class PlayerShooting : MonoBehaviour
         #region Fireing
 
         // Check for Player input
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && !isMeeleing && !isGrenadeThrowing)
         {
             // Start the Fireing of the CurrentGun
             currentGun.StartFiring();
+            animator.SetTrigger("StopReload");
 
             // Check if is Fireing + has enough Ammo
             if (currentGun.IsFiring && currentGun.BulletsInMag > 0)
             {
                 // Sets Animator
-                //animator.SetBool("isShooting", true);
+                animator.SetBool("isShooting", true);
             }
             else
             {
@@ -105,7 +132,7 @@ public class PlayerShooting : MonoBehaviour
         }
         else // Sets Bool if aint fireing
         {
-            //animator.SetBool("isShooting", false);
+            animator.SetBool("isShooting", false);
         }
 
         // Check for Player input
@@ -114,7 +141,7 @@ public class PlayerShooting : MonoBehaviour
             // Stops fireing of Gun
             currentGun.StopFiring();
             // Resets Animator bool
-            //animator.SetBool("isShooting", false);
+            animator.SetBool("isShooting", false);
         }
 
         // Update CurrentBullets
@@ -124,14 +151,21 @@ public class PlayerShooting : MonoBehaviour
         #region Reload
 
         // Check for Player input
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && !isMeeleing && currentGun.BulletsInMag < currentGun.MagSize && !isGrenadeThrowing && !currentGun.IsReloading)
         {
             //Start Reloading
             currentGun.StartReload();
+            animator.SetTrigger("isReloading");
+            animator.ResetTrigger("StopReload");
+
         }
 
         //update Reload for Currentgun
-        currentGun.ReloadGun(Time.deltaTime);
+        if (!isMeeleing && !isGrenadeThrowing)
+        {
+            currentGun.ReloadGun(Time.deltaTime);
+        }
+        
         #endregion
 
         #region ChangeWeapon
@@ -163,5 +197,17 @@ public class PlayerShooting : MonoBehaviour
         //}
 
         #endregion
+    }
+
+    private IEnumerator C_MeeleTimer(float _time)
+    {
+        yield return new WaitForSeconds(_time);
+        isMeeleing = false;
+    }
+
+    private IEnumerator C_GrenadeTimer(float _time)
+    {
+        yield return new WaitForSeconds(_time);
+        isGrenadeThrowing = false;
     }
 }

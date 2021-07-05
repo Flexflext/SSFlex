@@ -22,6 +22,8 @@ public class Gun : MonoBehaviour
 
     [SerializeField] private bool isFullAuto;
     [SerializeField] private int magSize;
+    public int MagSize => magSize;
+
     [SerializeField] private float reloadTime;
 
     [SerializeField] private int currentBulletsInMag;
