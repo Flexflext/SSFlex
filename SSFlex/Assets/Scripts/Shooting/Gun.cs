@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class Gun : MonoBehaviour
 {
@@ -46,13 +47,15 @@ public class Gun : MonoBehaviour
     [SerializeField] private float spreadRadius;
     [SerializeField] private float spreadRadiusAimed;
     [SerializeField] private float spreadRange;
+    [SerializeField] private float adsMultiplier;
+    public float AdsMultiplier => adsMultiplier;
 
     //Zoom
     [SerializeField] private float zoomMultiplier;
     [SerializeField] private float zoomTime;
 
     //Recoil
-    private float duration;
+    [SerializeField] private float duration;
     private float currentRecoilTime;
     [SerializeField] private Vector2[] recoilPatternArray;
     private float xRecoil;
@@ -60,10 +63,23 @@ public class Gun : MonoBehaviour
     private int index;
 
 
+    //Refs
+    [Space]
+    [SerializeField] private VisualEffect muzzleFlash;
+    [SerializeField] private GameObject normalCanvas;
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private Transform crossHairTarget;
+    [SerializeField] private Transform muzzle;
+
+    private PlayerLook playerLook;
+
+
     private void Start()
     {
+        playerLook = GetComponentInParent<PlayerLook>();
         currentBulletsInMag = magSize;
         currentReloadTime = 0;
+        currentRecoilTime = duration;
     }
 
 
@@ -99,45 +115,51 @@ public class Gun : MonoBehaviour
         //AudioManager.Instance.PlayRandom(weaponName, weaponName + "Shot");
 
         // play MuzzleFlash
-        //muzzleFlashVFX.Play();
+        muzzleFlash.Play();
 
-        //Vector3 velocity = new Vector3();
+        Vector3 velocity = new Vector3();
 
-        // Check if aiming to Create a SpreadRadius
-        //if (!isAiming)
-        //{
-        //    Vector3 direction = (raycastDestination.position - raycastOrigin.position).normalized;
+        //Check if aiming to Create a SpreadRadius
+        if (!isAiming)
+        {
+            Vector3 direction = (crossHairTarget.position - muzzle.position).normalized;
 
-        //    Vector3 spreadRangePos = raycastOrigin.position + direction * spreadRange;
+            Vector3 spreadRangePos = muzzle.position + direction * spreadRange;
 
-        //    // Add a Random Poition in the SpreadRadius
-        //    Vector3 randomDestination = new Vector3(spreadRangePos.x + Random.Range(-bulletSpreadRadius, bulletSpreadRadius), spreadRangePos.y + Random.Range(-bulletSpreadRadius, bulletSpreadRadius), spreadRangePos.z + Random.Range(-bulletSpreadRadius, bulletSpreadRadius));
+            // Add a Random Poition in the SpreadRadius
+            Vector3 randomDestination = new Vector3(spreadRangePos.x + Random.Range(-spreadRadius, spreadRadius), spreadRangePos.y + Random.Range(-spreadRadius, spreadRadius), spreadRangePos.z + Random.Range(-spreadRadius, spreadRadius));
 
-        //    // Set a new Velocity dependend on the BulletSpeed
-        //    velocity = (randomDestination - raycastOrigin.position).normalized * bulletSpeed;
-        //}
-        //else if (isAiming)
-        //{
-        //    Vector3 direction = (raycastDestination.position - raycastOrigin.position).normalized;
+            // Set a new Velocity dependend on the BulletSpeed
+            velocity = (randomDestination - muzzle.position).normalized;
+        }
+        else if (isAiming)
+        {
+            Vector3 direction = (crossHairTarget.position - muzzle.position).normalized;
 
-        //    Vector3 spreadRangePos = raycastOrigin.position + direction * spreadRange;
+            Vector3 spreadRangePos = muzzle.position + direction * spreadRange;
 
-        //    // Add a Random Poition in the Aimed SpreadRadius
-        //    Vector3 randomDestination = new Vector3(spreadRangePos.x + Random.Range(-bulletSpreadRadiusAimed, bulletSpreadRadiusAimed), spreadRangePos.y + Random.Range(-bulletSpreadRadiusAimed, bulletSpreadRadiusAimed), spreadRangePos.z + Random.Range(-bulletSpreadRadiusAimed, bulletSpreadRadiusAimed));
-        //    velocity = (randomDestination - raycastOrigin.position).normalized * bulletSpeed;
-        //}
+            // Add a Random Poition in the Aimed SpreadRadius
+            Vector3 randomDestination = new Vector3(spreadRangePos.x + Random.Range(-spreadRadiusAimed, spreadRadiusAimed), spreadRangePos.y + Random.Range(-spreadRadiusAimed, spreadRadiusAimed), spreadRangePos.z + Random.Range(-spreadRadiusAimed, spreadRadiusAimed));
+            velocity = (randomDestination - muzzle.position).normalized;
+        }
 
-        // Creates a Bullet with the calculated origin and position
-        //Bullet bullet = CreateBullet(raycastOrigin.position, velocity);
-
-        // Add bullet to all Bullets list
-        //bullets.Add(bullet);
+        CreateBullet(muzzle.position, velocity, bulletSpeed);
 
         // Generates Recoil
-        Debug.Log("Fire");
-
         GenerateRecoil();
     }
+
+    private void CreateBullet(Vector3 _pos, Vector3 _direction, float _speed)
+    {
+        //Instantiate Bullet
+        GameObject bullet = Instantiate(bulletPrefab, _pos, Quaternion.identity);
+        Rigidbody rb = bullet.GetComponent<Rigidbody>();
+        Bullet bulletScript = bullet.GetComponent<Bullet>();
+
+        bulletScript.OnHit += HitAnything;
+        rb.AddForce(_direction * _speed);
+    }
+
 
     /// <summary>
     /// Check what Dmg to Do and to what
@@ -145,7 +167,7 @@ public class Gun : MonoBehaviour
     /// <param name="_gameobject"></param>
     public void  HitAnything(GameObject _gameobject)
     {
-
+        Debug.Log("Hit Smth");
     }
 
     /// <summary>
@@ -280,7 +302,6 @@ public class Gun : MonoBehaviour
         StopAllCoroutines();
     }
 
-
     /// <summary>
     /// Zooms in and Sets Bool isAiming
     /// </summary>
@@ -297,6 +318,7 @@ public class Gun : MonoBehaviour
         {
             // Aimed is True + right FOV
             isAiming = true;
+            normalCanvas.SetActive(false);
             _cam.fieldOfView = _normal / zoomMultiplier;
         }
     }
@@ -319,6 +341,7 @@ public class Gun : MonoBehaviour
         {
             // No mnore aiming + FOV = normal
             isAiming = false;
+            normalCanvas.SetActive(true);
             _cam.fieldOfView = _normal;
         }
     }
@@ -359,7 +382,7 @@ public class Gun : MonoBehaviour
             float xValue = ((xRecoil / 10) * Time.deltaTime) / duration;
 
             // Adds Recoil to Cam
-            //PlayerLook.Instance.AddRecoil(yValue, xValue);
+            playerLook.AddRecoil(yValue, xValue);
 
             // Reduce Recoil Time
             currentRecoilTime -= Time.deltaTime;

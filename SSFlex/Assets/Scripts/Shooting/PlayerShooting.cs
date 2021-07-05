@@ -16,6 +16,7 @@ public class PlayerShooting : MonoBehaviour
     //[SerializeField] private Gun Handgun;
 
     private Animator animator;
+    private PlayerLook playerLook;
     //private PlayerMovementNew movement;
 
     private bool imAiming;
@@ -24,11 +25,12 @@ public class PlayerShooting : MonoBehaviour
     private float meeleTime = 1.2f;
     
     private bool isGrenadeThrowing;
-    private float grenadeTime = 1.4f;
+    private float grenadeTime = 1f;
 
     private void Start()
     {
         animator = GetComponentInChildren<Animator>();
+        playerLook = GetComponent<PlayerLook>();
         //movement = GetComponent<PlayerMovementNew>();
     }
 
@@ -40,8 +42,6 @@ public class PlayerShooting : MonoBehaviour
         {
             return;
         }
-
-
 
 
         if (Input.GetKeyDown(KeyCode.F) && !isMeeleing && !isGrenadeThrowing)
@@ -68,7 +68,7 @@ public class PlayerShooting : MonoBehaviour
         {
             // Set Bool for Aiming, sets the CurrentAdsmultiplier + Sets Animator and Movement Speed
             imAiming = true;
-            //PlayerLook.Instance.AdsMultiplier = currentGun.AdsMultiplier;
+            playerLook.AdsMultiplier = currentGun.AdsMultiplier;
             animator.SetBool("isAiming", true);
             //movement.CurrentSpeed *= currentGun.ZoomMovementMultiplier;
         }
@@ -93,7 +93,7 @@ public class PlayerShooting : MonoBehaviour
         {
             // Resets Bool for Aiming, Resets the CurrentAdsmultiplier + Resets Animator and Movement Speed
             imAiming = false;
-            //PlayerLook.Instance.AdsMultiplier = 1;
+            playerLook.AdsMultiplier = 1;
             animator.SetBool("isAiming", false);
             //movement.CurrentSpeed = movement.MaxSpeed;
 
@@ -126,7 +126,7 @@ public class PlayerShooting : MonoBehaviour
 
 
         // update Fireing if Current gun is fireing
-        if (currentGun.IsFiring)
+        if (currentGun.IsFiring && !currentGun.IsReloading)
         {
             currentGun.UpdateFiring(Time.deltaTime);
         }
