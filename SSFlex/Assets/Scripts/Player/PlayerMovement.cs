@@ -9,13 +9,17 @@ public class PlayerMovement : MonoBehaviour
     // - Running
     [SerializeField] private Vector3 moveDir;
 
-    [SerializeField] private float currentPlayerSpeed;
     [SerializeField] private float playerWalkingSpeed;
     [SerializeField] private float playerRunSpeed;
-    [SerializeField] private float playerSneakSpeed;
+    [SerializeField] private float currentPlayerSpeed;
+
+    private float movementMultiplier = 1;
+    public float MovementMultiplier { get { return movementMultiplier; } set { movementMultiplier = Mathf.Clamp01(value); } }
 
     private PlayerLook playerLook;
+    private PlayerShooting shooting;
     private Rigidbody rb;
+    private Animator animator;
 
     // Invisible Stats
     
@@ -25,13 +29,14 @@ public class PlayerMovement : MonoBehaviour
     private bool isMoving;
     private bool isRunning;
     private bool isDashing;
-    private bool isSneaking;
 
 
     private void Awake()
     {
         playerLook = GetComponent<PlayerLook>();
         rb = GetComponent<Rigidbody>();
+        shooting = GetComponent<PlayerShooting>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void Start()
@@ -44,8 +49,7 @@ public class PlayerMovement : MonoBehaviour
         MoveDirection();
 
         PlayerRun();
-        PlayerSneak();
-        
+
         if (Input.GetKeyDown(KeyCode.E) && isDashing == false)
         {
             StartCoroutine(QuickDash());
@@ -69,54 +73,44 @@ public class PlayerMovement : MonoBehaviour
         if (moveDir.magnitude >= 0.1f)
         {
             isMoving = true;
-            currentPlayerSpeed = playerWalkingSpeed;
-            // Normal footsteps
+
+            if (isRunning)
+            {
+                animator.SetFloat("Velocity", 1f);
+            }
+            else
+            {
+                animator.SetFloat("Velocity", 0.5f);
+            }
+            
         }
         else
         {
             isMoving = false;
+            animator.SetFloat("Velocity", 0);
         }
     }
 
     private void PlayerRun()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && isSneaking == false && isMoving == true)
+        if (Input.GetKey(KeyCode.LeftShift) && isMoving == true && !shooting.ImAiming)
         {
-            currentPlayerSpeed = playerRunSpeed;
             isRunning = true;
-            
-            // Louder Footsteps
+            shooting.InterruptReload();
+            currentPlayerSpeed = playerRunSpeed;
         }
         else
         {
+            currentPlayerSpeed = playerWalkingSpeed * movementMultiplier;
             isRunning = false;
-        }
-    }
-
-    private void PlayerSneak()
-    {
-        if (Input.GetKey(KeyCode.LeftControl) && isRunning == false && isMoving == true)
-        {
-            currentPlayerSpeed = playerSneakSpeed;
-            isSneaking = true;
-
-            // No footsteps
-        }
-        else
-        {
-            isSneaking = false;
         }
     }
 
 
     IEnumerator QuickDash()
     {
-        isDashing = true;
         rb.AddForce(moveDir * dashSpeed, ForceMode.Impulse);
         yield return new WaitForSeconds(dashTime);
-        isDashing = false;
         rb.velocity = Vector3.zero;
-        
-        // RotS DashSound
     }
 }

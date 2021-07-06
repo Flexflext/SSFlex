@@ -10,6 +10,23 @@ public class PlayerShooting : MonoBehaviour
 
     [SerializeField] private Gun currentGun;
 
+    [Header("GrenadeStuff")]
+    [SerializeField] private Transform grenadeThrowPosition;
+    [SerializeField] private Transform crossHairTarget;
+    [SerializeField] private float regenTime;
+    [SerializeField] private float grenadeSpeed;
+    [SerializeField] private GameObject grenadePrefab;
+    private bool canThrowGrenade = true;
+    //Animation
+    private bool isGrenadeThrowing;
+    private float grenadeTime = 2/3f;
+
+    [Header("Meele")]
+    [SerializeField] private float range;
+    [SerializeField] private float dmg;
+    [SerializeField] private Transform swordPosition;
+    [SerializeField] private LayerMask allDmgLayers;
+
     [Header("Guns")]
     //[SerializeField] private Gun Sniper;
     [SerializeField] private Gun AR;
@@ -17,21 +34,22 @@ public class PlayerShooting : MonoBehaviour
 
     private Animator animator;
     private PlayerLook playerLook;
-    //private PlayerMovementNew movement;
+    private PlayerMovement movement;
 
     private bool imAiming;
+    public bool ImAiming => imAiming;
 
     private bool isMeeleing;
     private float meeleTime = 1.2f;
     
-    private bool isGrenadeThrowing;
-    private float grenadeTime = 1f;
+
+
 
     private void Start()
     {
         animator = GetComponentInChildren<Animator>();
         playerLook = GetComponent<PlayerLook>();
-        //movement = GetComponent<PlayerMovementNew>();
+        movement = GetComponent<PlayerMovement>();
     }
 
     // Update is called once per frame
@@ -47,14 +65,16 @@ public class PlayerShooting : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F) && !isMeeleing && !isGrenadeThrowing)
         {
             isMeeleing = true;
+            InterruptReload();
             StartCoroutine(C_MeeleTimer(meeleTime));
             //Set Animator
             animator.SetTrigger("isMeeleing");
         }
 
-        if (Input.GetKeyDown(KeyCode.Q) && !isGrenadeThrowing && !isMeeleing)
+        if (Input.GetKeyDown(KeyCode.Q) && !isGrenadeThrowing && !isMeeleing && canThrowGrenade)
         {
             isGrenadeThrowing = true;
+            InterruptReload();
             StartCoroutine(C_GrenadeTimer(grenadeTime));
             //Set Animator
             animator.SetTrigger("GrenadeThrow");
@@ -68,9 +88,10 @@ public class PlayerShooting : MonoBehaviour
         {
             // Set Bool for Aiming, sets the CurrentAdsmultiplier + Sets Animator and Movement Speed
             imAiming = true;
+            InterruptReload();
             playerLook.AdsMultiplier = currentGun.AdsMultiplier;
             animator.SetBool("isAiming", true);
-            //movement.CurrentSpeed *= currentGun.ZoomMovementMultiplier;
+            movement.MovementMultiplier *= currentGun.MovementMultiplier;
         }
 
         //Update the Zoomin and out of the CurrentWeapon
@@ -95,7 +116,7 @@ public class PlayerShooting : MonoBehaviour
             imAiming = false;
             playerLook.AdsMultiplier = 1;
             animator.SetBool("isAiming", false);
-            //movement.CurrentSpeed = movement.MaxSpeed;
+            movement.MovementMultiplier = 1f;
 
         }
 
@@ -109,7 +130,7 @@ public class PlayerShooting : MonoBehaviour
         {
             // Start the Fireing of the CurrentGun
             currentGun.StartFiring();
-            animator.SetTrigger("StopReload");
+            InterruptReload();
 
             // Check if is Fireing + has enough Ammo
             if (currentGun.IsFiring && currentGun.BulletsInMag > 0)
@@ -160,11 +181,7 @@ public class PlayerShooting : MonoBehaviour
 
         }
 
-        //update Reload for Currentgun
-        if (!isMeeleing && !isGrenadeThrowing)
-        {
-            currentGun.ReloadGun(Time.deltaTime);
-        }
+        currentGun.ReloadGun(Time.deltaTime);
         
         #endregion
 
@@ -199,15 +216,66 @@ public class PlayerShooting : MonoBehaviour
         #endregion
     }
 
+    /// <summary>
+    /// Interrupts the Reloading Process of the Current Gun
+    /// </summary>
+    public void InterruptReload()
+    {
+        currentGun.StopReload();
+        animator.SetTrigger("StopReload");
+    }
+
+    /// <summary>
+    /// Instantiates a Grendae and Adds an upward ands forward force to it + Starts the RegenTimer
+    /// </summary>
+    private void ThrowGrenade()
+    {
+        Vector3 direction = (crossHairTarget.position - grenadeThrowPosition.position).normalized + Vector3.up / 4;
+        GameObject grenade = Instantiate(grenadePrefab, grenadeThrowPosition.position, Quaternion.identity);
+
+        Rigidbody grendadeRb = grenade.GetComponent<Rigidbody>();
+
+        grendadeRb.AddForce(direction * grenadeSpeed, ForceMode.Impulse);
+
+        canThrowGrenade = false;
+        StartCoroutine(C_GrenadeRegenTimer(regenTime));
+    }
+
+    private void DoMeeleDmg()
+    {
+        Collider[] allDmgColliders = Physics.OverlapSphere(swordPosition.position, range, allDmgLayers);
+
+        foreach (Collider dmgObj in allDmgColliders)
+        {
+            Debug.Log("Do "+ dmg + " Dmg to: " + dmgObj.gameObject.name);
+        }
+    }
+
     private IEnumerator C_MeeleTimer(float _time)
     {
-        yield return new WaitForSeconds(_time);
+        yield return new WaitForSeconds(_time / 6);
+        DoMeeleDmg();
+        yield return new WaitForSeconds(_time - _time / 6);
         isMeeleing = false;
     }
 
     private IEnumerator C_GrenadeTimer(float _time)
     {
-        yield return new WaitForSeconds(_time);
+        yield return new WaitForSeconds(_time - _time * 1/3f);
+        ThrowGrenade();
+        yield return new WaitForSeconds(_time * 1 / 3f);
+
         isGrenadeThrowing = false;
+    }
+
+    private IEnumerator C_GrenadeRegenTimer(float _time)
+    {
+        yield return new WaitForSeconds(_time);
+        canThrowGrenade = true;
+    }
+
+    private void OnDrawGizmos()
+    {
+        //Gizmos.DrawSphere(swordPosition.position, range);
     }
 }

@@ -56,16 +56,17 @@ public class PlayerLook : MonoBehaviour
         mouseY = Input.GetAxisRaw("Mouse Y");
 
         //Check how to rotate multiplier by Delta time and ads Multiplier + sens
-        yRotation += mouseX * sensX * Time.deltaTime * currentAdsSensMultiplier;
-        xRotation -= mouseY * sensY * Time.deltaTime * currentAdsSensMultiplier;
+        yRotation += mouseX * sensX * Time.deltaTime * currentAdsSensMultiplier * Screen.height;
+        xRotation -= mouseY * sensY * Time.deltaTime * currentAdsSensMultiplier * Screen.width;
 
         //Clmap xRot between -90 and 90 deg
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
         // AddRotation to cams + GFX and orientation
-        cam.transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-        GFXHolder.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-        orientation.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+        //cam.transform.rotation = Quaternion.Lerp(cam.transform.rotation, Quaternion.Euler(xRotation, yRotation, 0), Time.deltaTime);
+        cam.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
+        GFXHolder.localRotation = Quaternion.Euler(xRotation, 0, 0);
+        transform.rotation = Quaternion.Euler(0, yRotation, 0);
     }
 
     /// <summary>
