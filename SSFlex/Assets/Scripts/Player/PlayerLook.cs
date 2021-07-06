@@ -44,7 +44,7 @@ public class PlayerLook : MonoBehaviour
         Cursor.visible = false;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         //Check that timeScale is above 0
         if (Time.timeScale == 0)
