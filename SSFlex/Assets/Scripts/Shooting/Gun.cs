@@ -90,7 +90,7 @@ public class Gun : MonoBehaviour
     /// <summary>
     /// Fire a Bullet (Check if Can fire and Where to Fire)
     /// </summary>
-    private void FireBullet()
+    protected virtual void FireBullet()
     {  
         // No more Reloading
         isReloading = false;
