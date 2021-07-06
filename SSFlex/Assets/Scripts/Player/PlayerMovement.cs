@@ -7,30 +7,63 @@ public class PlayerMovement : MonoBehaviour
     // This script is responsible for: 
     // - Walking
     // - Running
+    [SerializeField] private Vector3 moveDir;
 
+    [SerializeField] private float playerWalkingSpeed;
+    [SerializeField] private float playerRunSpeed;
+    [SerializeField] private float currentPlayerSpeed;
 
+    private PlayerLook playerLook;
+    private Rigidbody rb;
 
     // Invisible Stats
-    private float playerMovementSpeed = 20f;
+    
+    public float dashSpeed;
+    public float dashTime;
 
     private bool isMoving;
     private bool isRunning;
-    
-    void FixedUpdate()
+    private bool isDashing;
+
+
+    private void Awake()
     {
-        PlayerSmoothMovement();
-        PlayerRun();
+        playerLook = GetComponent<PlayerLook>();
+        rb = GetComponent<Rigidbody>();
     }
 
-    private void PlayerSmoothMovement()
+    private void Start()
+    {
+        currentPlayerSpeed = playerWalkingSpeed;
+    }
+
+    private void Update()
+    {
+        MoveDirection();
+
+        PlayerRun();
+
+        if (Input.GetKeyDown(KeyCode.E) && isDashing == false)
+        {
+            StartCoroutine(QuickDash());
+        }
+    }
+
+    void FixedUpdate()
+    {
+        rb.velocity = new Vector3(moveDir.x * currentPlayerSpeed * Time.fixedDeltaTime, rb.velocity.y, moveDir.z * currentPlayerSpeed * Time.fixedDeltaTime);
+    }
+
+    private void MoveDirection()
     {
         float hor = Input.GetAxisRaw("Horizontal");
         float ver = Input.GetAxisRaw("Vertical");
 
-        Vector3 direction = new Vector3(hor, 0f, ver).normalized * playerMovementSpeed * Time.deltaTime;
-        transform.Translate(direction, Space.Self);
+        moveDir = transform.forward * ver + transform.right * hor;
+        moveDir.Normalize();
 
-        if (direction.magnitude >= 0.1f)
+
+        if (moveDir.magnitude >= 0.1f)
         {
             isMoving = true;
         }
@@ -45,12 +78,20 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift) && isMoving == true)
         {
             isRunning = true;
-            playerMovementSpeed = 20f;
+            currentPlayerSpeed = playerRunSpeed;
         }
         else
         {
+            currentPlayerSpeed = playerWalkingSpeed;
             isRunning = false;
-            playerMovementSpeed = 10f;
         }
+    }
+
+
+    IEnumerator QuickDash()
+    {
+        rb.AddForce(moveDir * dashSpeed, ForceMode.Impulse);
+        yield return new WaitForSeconds(dashTime);
+        rb.velocity = Vector3.zero;
     }
 }

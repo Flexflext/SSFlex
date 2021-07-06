@@ -864,7 +864,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &1015002866
 MonoBehaviour:
@@ -878,6 +878,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53f4d1b3b80b5f148b6dff3a85f6fbc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveDir: {x: 0, y: 0, z: 0}
+  playerWalkingSpeed: 400
+  playerRunSpeed: 800
+  currentPlayerSpeed: 0
+  dashSpeed: 250
+  dashTime: 0.1
 --- !u!136 &1015002867
 CapsuleCollider:
   m_ObjectHideFlags: 0

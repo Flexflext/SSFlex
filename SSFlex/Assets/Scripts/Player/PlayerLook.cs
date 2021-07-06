@@ -12,11 +12,10 @@ public class PlayerLook : MonoBehaviour
     public float AdsMultiplier { get { return currentAdsSensMultiplier; } set { currentAdsSensMultiplier = Mathf.Clamp01(value); } }
 
     [Header("Refs")]
-    [SerializeField] private Transform cam;
+    public Transform cam;
     [SerializeField] private Transform orientation;
     [SerializeField] private Transform GFXHolder;
 
-    private Rigidbody rb;
 
     private float mouseX;
     private float mouseY;
