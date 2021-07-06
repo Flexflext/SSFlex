@@ -977,9 +977,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveDir: {x: 0, y: 0, z: 0}
+  currentPlayerSpeed: 0
   playerWalkingSpeed: 400
   playerRunSpeed: 800
-  currentPlayerSpeed: 0
+  playerSneakingSpeed: 100
   dashSpeed: 250
   dashTime: 0.1
 --- !u!136 &1015002867

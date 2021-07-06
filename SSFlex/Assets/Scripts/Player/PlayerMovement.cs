@@ -4,36 +4,45 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // This script is responsible for: 
+    // This script is responsible for:
+    // - Change of Speed
     // - Walking
     // - Running
+    // - Sneaking
+    // - Movement Animations
+    // - Movement Audio
+
+    [Header("Testing Stats")]
     [SerializeField] private Vector3 moveDir;
 
+    [SerializeField] private float currentPlayerSpeed;
     [SerializeField] private float playerWalkingSpeed;
     [SerializeField] private float playerRunSpeed;
-    [SerializeField] private float currentPlayerSpeed;
+    [SerializeField] private float playerSneakingSpeed;
 
-    private float movementMultiplier = 1;
-    public float MovementMultiplier { get { return movementMultiplier; } set { movementMultiplier = Mathf.Clamp01(value); } }
+    [SerializeField] private float dashSpeed;
+    [SerializeField] private float dashTime;
 
-    private PlayerLook playerLook;
+    
+    // References
+
     private PlayerShooting shooting;
     private Rigidbody rb;
     private Animator animator;
 
     // Invisible Stats
-    
-    public float dashSpeed;
-    public float dashTime;
+
+    private float movementMultiplier = 1;
+    public float MovementMultiplier { get { return movementMultiplier; } set { movementMultiplier = Mathf.Clamp01(value); } }
 
     private bool isMoving;
     private bool isRunning;
     private bool isDashing;
+    private bool isSneaking;
 
 
     private void Awake()
     {
-        playerLook = GetComponent<PlayerLook>();
         rb = GetComponent<Rigidbody>();
         shooting = GetComponent<PlayerShooting>();
         animator = GetComponentInChildren<Animator>();
@@ -49,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
         MoveDirection();
 
         PlayerRun();
+        PlayerSneak();
 
         if (Input.GetKeyDown(KeyCode.E) && isDashing == false)
         {
@@ -103,6 +113,22 @@ public class PlayerMovement : MonoBehaviour
         {
             currentPlayerSpeed = playerWalkingSpeed * movementMultiplier;
             isRunning = false;
+        }
+    }
+
+
+    private void PlayerSneak()
+    {
+        if (Input.GetKey(KeyCode.LeftControl) && isMoving == true)
+        {
+            currentPlayerSpeed = playerSneakingSpeed;
+            isSneaking = true;
+
+            // No footsteps
+        }
+        else
+        {
+            isSneaking = false;
         }
     }
 
