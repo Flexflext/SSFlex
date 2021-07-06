@@ -54,6 +54,8 @@ public class PlayerController : MonoBehaviour
         {
             rb.AddForce(Physics.gravity * (rb.mass * rb.mass));
         }
+
+        
     }
 
     private void Jump()

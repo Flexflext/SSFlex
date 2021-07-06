@@ -12,11 +12,10 @@ public class PlayerLook : MonoBehaviour
     public float AdsMultiplier { get { return currentAdsSensMultiplier; } set { currentAdsSensMultiplier = Mathf.Clamp01(value); } }
 
     [Header("Refs")]
-    [SerializeField] private Transform cam;
+    public Transform cam;
     [SerializeField] private Transform orientation;
     [SerializeField] private Transform GFXHolder;
 
-    private Rigidbody rb;
 
     private float mouseX;
     private float mouseY;
@@ -44,7 +43,7 @@ public class PlayerLook : MonoBehaviour
         Cursor.visible = false;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         //Check that timeScale is above 0
         if (Time.timeScale == 0)
