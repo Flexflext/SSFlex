@@ -47,8 +47,12 @@ public class Gun : MonoBehaviour
     [SerializeField] private float spreadRadius;
     [SerializeField] private float spreadRadiusAimed;
     [SerializeField] private float spreadRange;
+
     [SerializeField] private float adsMultiplier;
     public float AdsMultiplier => adsMultiplier;
+
+    [SerializeField] private float movementMultiplier;
+    public float MovementMultiplier => movementMultiplier;
 
     //Zoom
     [SerializeField] private float zoomMultiplier;
@@ -244,6 +248,16 @@ public class Gun : MonoBehaviour
     public void StartReload()
     {
         isReloading = true;
+        currentReloadTime = 0;
+    }
+
+    /// <summary>
+    /// Stops the Reload of the Gun
+    /// </summary>
+    public void StopReload()
+    {
+        isReloading = false;
+        currentReloadTime = 0;
     }
 
     /// <summary>

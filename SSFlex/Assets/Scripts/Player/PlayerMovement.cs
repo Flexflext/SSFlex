@@ -13,8 +13,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float playerRunSpeed;
     [SerializeField] private float currentPlayerSpeed;
 
+    private float movementMultiplier = 1;
+    public float MovementMultiplier { get { return movementMultiplier; } set { movementMultiplier = Mathf.Clamp01(value); } }
+
     private PlayerLook playerLook;
+    private PlayerShooting shooting;
     private Rigidbody rb;
+    private Animator animator;
 
     // Invisible Stats
     
@@ -30,6 +35,8 @@ public class PlayerMovement : MonoBehaviour
     {
         playerLook = GetComponent<PlayerLook>();
         rb = GetComponent<Rigidbody>();
+        shooting = GetComponent<PlayerShooting>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void Start()
@@ -66,23 +73,35 @@ public class PlayerMovement : MonoBehaviour
         if (moveDir.magnitude >= 0.1f)
         {
             isMoving = true;
+
+            if (isRunning)
+            {
+                animator.SetFloat("Velocity", 1f);
+            }
+            else
+            {
+                animator.SetFloat("Velocity", 0.5f);
+            }
+            
         }
         else
         {
             isMoving = false;
+            animator.SetFloat("Velocity", 0);
         }
     }
 
     private void PlayerRun()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && isMoving == true)
+        if (Input.GetKey(KeyCode.LeftShift) && isMoving == true && !shooting.ImAiming)
         {
             isRunning = true;
+            shooting.InterruptReload();
             currentPlayerSpeed = playerRunSpeed;
         }
         else
         {
-            currentPlayerSpeed = playerWalkingSpeed;
+            currentPlayerSpeed = playerWalkingSpeed * movementMultiplier;
             isRunning = false;
         }
     }
