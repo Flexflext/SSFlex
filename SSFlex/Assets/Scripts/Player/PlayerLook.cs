@@ -16,6 +16,8 @@ public class PlayerLook : MonoBehaviour
     [SerializeField] private Transform orientation;
     [SerializeField] private Transform GFXHolder;
 
+    private Rigidbody rb;
+
     private float mouseX;
     private float mouseY;
 
@@ -27,6 +29,7 @@ public class PlayerLook : MonoBehaviour
 
     private void Start()
     {
+
         yRotation = cam.transform.rotation.y;
         xRotation = cam.transform.rotation.x;
 
@@ -41,7 +44,7 @@ public class PlayerLook : MonoBehaviour
         Cursor.visible = false;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         //Check that timeScale is above 0
         if (Time.timeScale == 0)
@@ -63,7 +66,7 @@ public class PlayerLook : MonoBehaviour
         // AddRotation to cams + GFX and orientation
         cam.transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
         GFXHolder.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-        //orientation.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+        orientation.transform.rotation = Quaternion.Euler(0, yRotation, 0);
     }
 
     /// <summary>
