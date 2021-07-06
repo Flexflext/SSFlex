@@ -9,9 +9,10 @@ public class PlayerMovement : MonoBehaviour
     // - Running
     [SerializeField] private Vector3 moveDir;
 
+    [SerializeField] private float currentPlayerSpeed;
     [SerializeField] private float playerWalkingSpeed;
     [SerializeField] private float playerRunSpeed;
-    [SerializeField] private float currentPlayerSpeed;
+    [SerializeField] private float playerSneakSpeed;
 
     private PlayerLook playerLook;
     private Rigidbody rb;
@@ -24,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isMoving;
     private bool isRunning;
     private bool isDashing;
+    private bool isSneaking;
 
 
     private void Awake()
@@ -42,7 +44,8 @@ public class PlayerMovement : MonoBehaviour
         MoveDirection();
 
         PlayerRun();
-
+        PlayerSneak();
+        
         if (Input.GetKeyDown(KeyCode.E) && isDashing == false)
         {
             StartCoroutine(QuickDash());
@@ -66,6 +69,8 @@ public class PlayerMovement : MonoBehaviour
         if (moveDir.magnitude >= 0.1f)
         {
             isMoving = true;
+            currentPlayerSpeed = playerWalkingSpeed;
+            // Normal footsteps
         }
         else
         {
@@ -75,23 +80,43 @@ public class PlayerMovement : MonoBehaviour
 
     private void PlayerRun()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && isMoving == true)
+        if (Input.GetKey(KeyCode.LeftShift) && isSneaking == false && isMoving == true)
         {
-            isRunning = true;
             currentPlayerSpeed = playerRunSpeed;
+            isRunning = true;
+            
+            // Louder Footsteps
         }
         else
         {
-            currentPlayerSpeed = playerWalkingSpeed;
             isRunning = false;
+        }
+    }
+
+    private void PlayerSneak()
+    {
+        if (Input.GetKey(KeyCode.LeftControl) && isRunning == false && isMoving == true)
+        {
+            currentPlayerSpeed = playerSneakSpeed;
+            isSneaking = true;
+
+            // No footsteps
+        }
+        else
+        {
+            isSneaking = false;
         }
     }
 
 
     IEnumerator QuickDash()
     {
+        isDashing = true;
         rb.AddForce(moveDir * dashSpeed, ForceMode.Impulse);
         yield return new WaitForSeconds(dashTime);
+        isDashing = false;
         rb.velocity = Vector3.zero;
+        
+        // RotS DashSound
     }
 }
