@@ -41,8 +41,8 @@ public class PlayerShooting : MonoBehaviour
 
     private bool isMeeleing;
     private float meeleTime = 1.2f;
-    
 
+    [SerializeField] private bool farmMode = true;
 
 
     private void Start()
@@ -62,128 +62,133 @@ public class PlayerShooting : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown(KeyCode.F) && !isMeeleing && !isGrenadeThrowing)
+        if (!farmMode)
         {
-            isMeeleing = true;
-            InterruptReload();
-            StartCoroutine(C_MeeleTimer(meeleTime));
-            //Set Animator
-            animator.SetTrigger("isMeeleing");
-        }
 
-        if (Input.GetKeyDown(KeyCode.Q) && !isGrenadeThrowing && !isMeeleing && canThrowGrenade)
-        {
-            isGrenadeThrowing = true;
-            InterruptReload();
-            StartCoroutine(C_GrenadeTimer(grenadeTime));
-            //Set Animator
-            animator.SetTrigger("GrenadeThrow");
-        }
-
-
-        #region Aiming
-
-        // Check for Player input
-        if (Input.GetButtonDown("Fire2") && !isMeeleing && !isGrenadeThrowing)
-        {
-            // Set Bool for Aiming, sets the CurrentAdsmultiplier + Sets Animator and Movement Speed
-            imAiming = true;
-            InterruptReload();
-            playerLook.AdsMultiplier = currentGun.AdsMultiplier;
-            animator.SetBool("isAiming", true);
-            movement.MovementMultiplier *= currentGun.MovementMultiplier;
-        }
-
-        //Update the Zoomin and out of the CurrentWeapon
-        //Check weather to aim in or Out
-        if (!currentGun.IsAiming && imAiming)
-        {
-            currentGun.ZoomIn(ref cam, 100, Time.deltaTime);
-        }
-        else
-        {
-            if (!imAiming)
+            if (Input.GetKeyDown(KeyCode.F) && !isMeeleing && !isGrenadeThrowing)
             {
-                currentGun.ZoomOut(ref cam, 100, Time.deltaTime);
+                isMeeleing = true;
+                InterruptReload();
+                StartCoroutine(C_MeeleTimer(meeleTime));
+                //Set Animator
+                animator.SetTrigger("isMeeleing");
             }
 
-        }
-
-        // Check for Player input
-        if (Input.GetButtonUp("Fire2"))
-        {
-            // Resets Bool for Aiming, Resets the CurrentAdsmultiplier + Resets Animator and Movement Speed
-            imAiming = false;
-            playerLook.AdsMultiplier = 1;
-            animator.SetBool("isAiming", false);
-            movement.MovementMultiplier = 1f;
-
-        }
-
-
-        #endregion
-
-        #region Fireing
-
-        // Check for Player input
-        if (Input.GetButtonDown("Fire1") && !isMeeleing && !isGrenadeThrowing)
-        {
-            // Start the Fireing of the CurrentGun
-            currentGun.StartFiring();
-            InterruptReload();
-
-            // Check if is Fireing + has enough Ammo
-            if (currentGun.IsFiring && currentGun.BulletsInMag > 0)
+            if (Input.GetKeyDown(KeyCode.Q) && !isGrenadeThrowing && !isMeeleing && canThrowGrenade)
             {
-                // Sets Animator
-                animator.SetBool("isShooting", true);
+                isGrenadeThrowing = true;
+                InterruptReload();
+                StartCoroutine(C_GrenadeTimer(grenadeTime));
+                //Set Animator
+                animator.SetTrigger("GrenadeThrow");
+            }
+
+
+            #region Aiming
+
+            // Check for Player input
+            if (Input.GetButtonDown("Fire2") && !isMeeleing && !isGrenadeThrowing)
+            {
+                // Set Bool for Aiming, sets the CurrentAdsmultiplier + Sets Animator and Movement Speed
+                imAiming = true;
+                InterruptReload();
+                playerLook.AdsMultiplier = currentGun.AdsMultiplier;
+                animator.SetBool("isAiming", true);
+                movement.MovementMultiplier *= currentGun.MovementMultiplier;
+            }
+
+            //Update the Zoomin and out of the CurrentWeapon
+            //Check weather to aim in or Out
+            if (!currentGun.IsAiming && imAiming)
+            {
+                currentGun.ZoomIn(ref cam, 100, Time.deltaTime);
             }
             else
             {
-                // play No more bullets Sound
-                //AudioManager.Instance.Play("NoMoreBullets");
+                if (!imAiming)
+                {
+                    currentGun.ZoomOut(ref cam, 100, Time.deltaTime);
+                }
+
             }
+
+            // Check for Player input
+            if (Input.GetButtonUp("Fire2"))
+            {
+                // Resets Bool for Aiming, Resets the CurrentAdsmultiplier + Resets Animator and Movement Speed
+                imAiming = false;
+                playerLook.AdsMultiplier = 1;
+                animator.SetBool("isAiming", false);
+                movement.MovementMultiplier = 1f;
+
+            }
+
+
+            #endregion
+
+            #region Fireing
+
+            // Check for Player input
+            if (Input.GetButtonDown("Fire1") && !isMeeleing && !isGrenadeThrowing)
+            {
+                // Start the Fireing of the CurrentGun
+                currentGun.StartFiring();
+                InterruptReload();
+
+                // Check if is Fireing + has enough Ammo
+                if (currentGun.IsFiring && currentGun.BulletsInMag > 0)
+                {
+                    // Sets Animator
+                    animator.SetBool("isShooting", true);
+                }
+                else
+                {
+                    // play No more bullets Sound
+                    //AudioManager.Instance.Play("NoMoreBullets");
+                }
+            }
+
+
+            // update Fireing if Current gun is fireing
+            if (currentGun.IsFiring && !currentGun.IsReloading)
+            {
+                currentGun.UpdateFiring(Time.deltaTime);
+            }
+            else // Sets Bool if aint fireing
+            {
+                animator.SetBool("isShooting", false);
+            }
+
+            // Check for Player input
+            if (Input.GetButtonUp("Fire1"))
+            {
+                // Stops fireing of Gun
+                currentGun.StopFiring();
+                // Resets Animator bool
+                animator.SetBool("isShooting", false);
+            }
+
+            // Update CurrentBullets
+            //currentGun.UpdateBullets(Time.deltaTime);
+            #endregion
+
+            #region Reload
+
+            // Check for Player input
+            if (Input.GetKeyDown(KeyCode.R) && !isMeeleing && currentGun.BulletsInMag < currentGun.MagSize && !isGrenadeThrowing && !currentGun.IsReloading)
+            {
+                //Start Reloading
+                currentGun.StartReload();
+                animator.SetTrigger("isReloading");
+                animator.ResetTrigger("StopReload");
+
+            }
+
+            currentGun.ReloadGun(Time.deltaTime);
+
+            #endregion
+
         }
-
-
-        // update Fireing if Current gun is fireing
-        if (currentGun.IsFiring && !currentGun.IsReloading)
-        {
-            currentGun.UpdateFiring(Time.deltaTime);
-        }
-        else // Sets Bool if aint fireing
-        {
-            animator.SetBool("isShooting", false);
-        }
-
-        // Check for Player input
-        if (Input.GetButtonUp("Fire1"))
-        {
-            // Stops fireing of Gun
-            currentGun.StopFiring();
-            // Resets Animator bool
-            animator.SetBool("isShooting", false);
-        }
-
-        // Update CurrentBullets
-        //currentGun.UpdateBullets(Time.deltaTime);
-        #endregion
-
-        #region Reload
-
-        // Check for Player input
-        if (Input.GetKeyDown(KeyCode.R) && !isMeeleing && currentGun.BulletsInMag < currentGun.MagSize && !isGrenadeThrowing && !currentGun.IsReloading)
-        {
-            //Start Reloading
-            currentGun.StartReload();
-            animator.SetTrigger("isReloading");
-            animator.ResetTrigger("StopReload");
-
-        }
-
-        currentGun.ReloadGun(Time.deltaTime);
-        
-        #endregion
 
         #region ChangeWeapon
 
