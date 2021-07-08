@@ -6,9 +6,7 @@ TagManager:
   tags:
   - ClipTag
   - ClipLayer
-  - Placeholder
-  - Ground
-  - Blocker
+  - ClipPos
   layers:
   - Default
   - TransparentFX
@@ -20,8 +18,8 @@ TagManager:
   - 
   - BuildLayer
   - TEST_Player
-  - Placeholder
-  - 
+  - Ground
+  - Bullet
   - 
   - 
   - 
