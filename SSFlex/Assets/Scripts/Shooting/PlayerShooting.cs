@@ -34,7 +34,7 @@ public class PlayerShooting : MonoBehaviour
 
     private Animator animator;
     private PlayerLook playerLook;
-    private PlayerMovement movement;
+    private PlayerController controller;
 
     private bool imAiming;
     public bool ImAiming => imAiming;
@@ -49,7 +49,7 @@ public class PlayerShooting : MonoBehaviour
     {
         animator = GetComponentInChildren<Animator>();
         playerLook = GetComponent<PlayerLook>();
-        movement = GetComponent<PlayerMovement>();
+        controller = GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
@@ -94,7 +94,7 @@ public class PlayerShooting : MonoBehaviour
                 InterruptReload();
                 playerLook.AdsMultiplier = currentGun.AdsMultiplier;
                 animator.SetBool("isAiming", true);
-                movement.MovementMultiplier *= currentGun.MovementMultiplier;
+                controller.MovementMultiplier *= currentGun.MovementMultiplier;
             }
 
             //Update the Zoomin and out of the CurrentWeapon
@@ -119,7 +119,7 @@ public class PlayerShooting : MonoBehaviour
                 imAiming = false;
                 playerLook.AdsMultiplier = 1;
                 animator.SetBool("isAiming", false);
-                movement.MovementMultiplier = 1f;
+                controller.MovementMultiplier = 1f;
 
             }
 
