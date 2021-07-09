@@ -6,76 +6,79 @@ using UnityEngine.VFX;
 public class Gun : MonoBehaviour
 {
     //Bullet Behavior
-    [SerializeField] private bool isShooting;
-    [SerializeField] private float dmg;
-    [SerializeField] private float fireRate;
-    [SerializeField] private float fireRateFullAuto;
-    [SerializeField] private float bulletSpeed;
+    [SerializeField] protected bool isShooting;
+    [SerializeField] protected float dmg;
+    [SerializeField] protected float fireRate;
+    [SerializeField] protected float fireRateFullAuto;
+    [SerializeField] protected float bulletSpeed;
 
     [SerializeField]
-    private bool isFiring;
+    protected bool isFiring;
     public bool IsFiring => isFiring;
-    private bool canFire = true;
+    protected bool canFire = true;
 
     //Magazine
-    [SerializeField] private bool isReloading;
+    [SerializeField] protected bool isReloading;
     public bool IsReloading => isReloading;
 
-    [SerializeField] private bool isFullAuto;
-    [SerializeField] private int magSize;
+    [SerializeField] protected bool isFullAuto;
+    [SerializeField] protected int magSize;
     public int MagSize => magSize;
 
-    [SerializeField] private float reloadTime;
+    [SerializeField] protected float reloadTime;
 
-    [SerializeField] private int currentBulletsInMag;
+    [SerializeField] protected int currentBulletsInMag;
     public int BulletsInMag => currentBulletsInMag;
 
-    private bool canReload;
-    private float accumulatedTime;
-    private float nextTimeToFire;
-    
-    private float currentReloadTime;
+    protected bool canReload;
+    protected float accumulatedTime;
+    protected float nextTimeToFire;
+
+    protected float currentReloadTime;
 
     [SerializeField]
-    private int currentAmmo;
-    [SerializeField] private int maxAmmo;
+    protected int currentAmmo;
+    [SerializeField] protected int maxAmmo;
 
     //BulletSpread
-    [SerializeField] private bool isAiming;
+    [SerializeField] protected bool isAiming;
     public bool IsAiming => isAiming;
 
-    [SerializeField] private float spreadRadius;
-    [SerializeField] private float spreadRadiusAimed;
-    [SerializeField] private float spreadRange;
+    [SerializeField] protected float spreadRadius;
+    [SerializeField] protected float spreadRadiusAimed;
+    [SerializeField] protected float spreadRange;
 
-    [SerializeField] private float adsMultiplier;
+    [SerializeField] protected float adsMultiplier;
     public float AdsMultiplier => adsMultiplier;
 
     [SerializeField] private float movementMultiplier;
     public float MovementMultiplier => movementMultiplier;
 
     //Zoom
-    [SerializeField] private float zoomMultiplier;
-    [SerializeField] private float zoomTime;
+    [SerializeField] protected float zoomMultiplier;
+    [SerializeField] protected float zoomTime;
 
     //Recoil
-    [SerializeField] private float duration;
-    private float currentRecoilTime;
-    [SerializeField] private Vector2[] recoilPatternArray;
-    private float xRecoil;
-    private float yRecoil;
-    private int index;
+    [SerializeField] protected float duration;
+    protected float currentRecoilTime;
+    [SerializeField] protected Vector2[] recoilPatternArray;
+    protected float xRecoil;
+    protected float yRecoil;
+    protected int index;
+
+    [SerializeField] protected string name;
+    public string GunName => name;
 
 
     //Refs
     [Space]
-    [SerializeField] private VisualEffect muzzleFlash;
-    [SerializeField] private GameObject normalCanvas;
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private Transform crossHairTarget;
-    [SerializeField] private Transform muzzle;
+    [SerializeField] protected VisualEffect muzzleFlash;
+    [SerializeField] protected GameObject normalCanvas;
+    [SerializeField] protected GameObject bulletPrefab;
+    [SerializeField] protected Transform crossHairTarget;
+    [SerializeField] protected Transform muzzle;
 
-    private PlayerLook playerLook;
+    protected PlayerLook playerLook;
 
 
     private void Start()
@@ -153,7 +156,7 @@ public class Gun : MonoBehaviour
         GenerateRecoil();
     }
 
-    private void CreateBullet(Vector3 _pos, Vector3 _direction, float _speed)
+    protected void CreateBullet(Vector3 _pos, Vector3 _direction, float _speed)
     {
         //Instantiate Bullet
         GameObject bullet = Instantiate(bulletPrefab, _pos, Quaternion.identity);
@@ -309,7 +312,7 @@ public class Gun : MonoBehaviour
     /// </summary>
     /// <param name="_time"></param>
     /// <returns></returns>
-    private IEnumerator TimeBetweenAttacks(float _time)
+    protected IEnumerator TimeBetweenAttacks(float _time)
     {
         yield return new WaitForSecondsRealtime(_time);
         canFire = true;
@@ -364,7 +367,7 @@ public class Gun : MonoBehaviour
     /// <summary>
     /// Generates Recoil for the Weapon
     /// </summary>
-    private void GenerateRecoil()
+    protected void GenerateRecoil()
     {
         // set CuurentRecoil Time
         currentRecoilTime = duration;
@@ -380,7 +383,7 @@ public class Gun : MonoBehaviour
     /// <summary>
     /// Resets the Recoil Index to 0
     /// </summary>
-    private void ResetRecoil()
+    protected void ResetRecoil()
     {
         index = 0;
     }

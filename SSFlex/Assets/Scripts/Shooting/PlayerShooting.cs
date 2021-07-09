@@ -2,13 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PrimaryWeapon 
+{ 
+    AR,
+    Shotgun,
+    Sniper,
+}
+
 public class PlayerShooting : MonoBehaviour
 {
     // Script for Player Shooting input
 
     [SerializeField] private Camera cam;
+    [SerializeField] private PrimaryWeapon weapon;
 
+    [Header("CurrentGun")]
     [SerializeField] private Gun currentGun;
+    [SerializeField] private Gun primaryGun;
+    [SerializeField] private Gun secondaryGun;
 
     [Header("GrenadeStuff")]
     [SerializeField] private Transform grenadeThrowPosition;
@@ -28,9 +39,10 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private LayerMask allDmgLayers;
 
     [Header("Guns")]
-    //[SerializeField] private Gun Sniper;
+    [SerializeField] private Gun Sniper;
     [SerializeField] private Gun AR;
-    //[SerializeField] private Gun Handgun;
+    [SerializeField] private Gun Shotgun;
+    [SerializeField] private Gun Pistol;
 
     private Animator animator;
     private PlayerLook playerLook;
@@ -42,6 +54,8 @@ public class PlayerShooting : MonoBehaviour
     private bool isMeeleing;
     private float meeleTime = 1.2f;
 
+    private bool isSwitching;
+
     [SerializeField] private bool farmMode = true;
 
 
@@ -50,6 +64,8 @@ public class PlayerShooting : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         playerLook = GetComponent<PlayerLook>();
         controller = GetComponent<PlayerController>();
+
+        ChooseGun();
     }
 
     // Update is called once per frame
@@ -65,7 +81,7 @@ public class PlayerShooting : MonoBehaviour
         if (!farmMode)
         {
 
-            if (Input.GetKeyDown(KeyCode.F) && !isMeeleing && !isGrenadeThrowing)
+            if (Input.GetKeyDown(KeyCode.F) && !isMeeleing && !isGrenadeThrowing && !isSwitching)
             {
                 isMeeleing = true;
                 InterruptReload();
@@ -74,7 +90,7 @@ public class PlayerShooting : MonoBehaviour
                 animator.SetTrigger("isMeeleing");
             }
 
-            if (Input.GetKeyDown(KeyCode.Q) && !isGrenadeThrowing && !isMeeleing && canThrowGrenade)
+            if (Input.GetKeyDown(KeyCode.Q) && !isGrenadeThrowing && !isMeeleing && canThrowGrenade && !isSwitching)
             {
                 isGrenadeThrowing = true;
                 InterruptReload();
@@ -87,7 +103,7 @@ public class PlayerShooting : MonoBehaviour
             #region Aiming
 
             // Check for Player input
-            if (Input.GetButtonDown("Fire2") && !isMeeleing && !isGrenadeThrowing)
+            if (Input.GetButtonDown("Fire2") && !isMeeleing && !isGrenadeThrowing && !isSwitching)
             {
                 // Set Bool for Aiming, sets the CurrentAdsmultiplier + Sets Animator and Movement Speed
                 imAiming = true;
@@ -129,7 +145,7 @@ public class PlayerShooting : MonoBehaviour
             #region Fireing
 
             // Check for Player input
-            if (Input.GetButtonDown("Fire1") && !isMeeleing && !isGrenadeThrowing)
+            if (Input.GetButtonDown("Fire1") && !isMeeleing && !isGrenadeThrowing && !isSwitching)
             {
                 // Start the Fireing of the CurrentGun
                 currentGun.StartFiring();
@@ -175,7 +191,7 @@ public class PlayerShooting : MonoBehaviour
             #region Reload
 
             // Check for Player input
-            if (Input.GetKeyDown(KeyCode.R) && !isMeeleing && currentGun.BulletsInMag < currentGun.MagSize && !isGrenadeThrowing && !currentGun.IsReloading)
+            if (Input.GetKeyDown(KeyCode.R) && !isMeeleing && currentGun.BulletsInMag < currentGun.MagSize && !isGrenadeThrowing && !currentGun.IsReloading && !isSwitching)
             {
                 //Start Reloading
                 currentGun.StartReload();
@@ -188,37 +204,78 @@ public class PlayerShooting : MonoBehaviour
 
             #endregion
 
+            #region ChangeWeapon
+
+            //Check for Wich gun to use as Next weapon
+            if (Input.GetKeyDown(KeyCode.Alpha1) && !currentGun.IsAiming && !imAiming && currentGun != primaryGun && !isSwitching)
+            {
+                SwitchWeapon(primaryGun, secondaryGun);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2) && !currentGun.IsAiming && !imAiming && currentGun != secondaryGun && !isSwitching)
+            {
+                SwitchWeapon(secondaryGun, primaryGun);
+            }
+
+            #endregion
+
         }
 
-        #region ChangeWeapon
+    }
 
-        // Check for Wich gun to use as Next weapon
-        //if (Input.GetKeyDown(KeyCode.Alpha3) && !currentGun.isAiming && !imAiming)
-        //{
-        //    // Sets aniamtor Bools
-        //    animator.SetBool("Sniper", true);
-        //    animator.SetBool("Handgun", false);
+    private void ChooseGun()
+    {
+        secondaryGun = Pistol;
 
-        //    // Sets new Gun as Currentgun
-        //    currentGun.gameObject.SetActive(false);
-        //    currentGun = Sniper;
+        switch (weapon)
+        {
+            case PrimaryWeapon.AR:
+                primaryGun = AR;
+                break;
+            case PrimaryWeapon.Shotgun:
+                primaryGun = Shotgun;
+                break;
+            case PrimaryWeapon.Sniper:
+                primaryGun = Sniper;
+                break;
+            default:
+                break;
+        }
 
-        //    //Changes the Ads Multiplier
-        //    if (imAiming)
-        //    {
-        //        PlayerLook.Instance.AdsMultiplier = currentGun.AdsMultiplier;
-        //    }
-        //    else
-        //    {
-        //        PlayerLook.Instance.AdsMultiplier = 1;
-        //    }
+        SwitchWeapon(primaryGun, secondaryGun);
+    }
 
-        //    //Changes the waepon and Changes the UI Images and Text
-        //    currentGun.gameObject.SetActive(true);
-        //    PlayerHud.Instance.ChangeWeapon(currentGun.WeaponIcon, currentGun.AmmoInMag, currentGun.CurrentAmmo);
-        //}
+    private void SwitchWeapon(Gun _switchtogun, Gun _switchfromgun)
+    {
+        animator.SetBool(_switchtogun.GunName, true);
+        animator.SetBool(_switchfromgun.GunName, false);
 
-        #endregion
+        StartCoroutine(C_WeaponSwitch(_switchtogun, _switchfromgun));
+    }
+
+    private IEnumerator C_WeaponSwitch(Gun _switchtogun, Gun _switchfromgun)
+    {
+        isSwitching = true;
+        yield return new WaitForSeconds(0.25f);
+
+        // Sets new Gun as Currentgun
+        currentGun.gameObject.SetActive(false);
+        currentGun = _switchtogun;
+
+        //Changes the Ads Multiplier
+        if (imAiming)
+        {
+            playerLook.AdsMultiplier = currentGun.AdsMultiplier;
+        }
+        else
+        {
+            playerLook.AdsMultiplier = 1;
+        }
+
+        //Changes the waepon and Changes the UI Images and Text
+        currentGun.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(0.25f);
+        isSwitching = false;
     }
 
     /// <summary>
