@@ -12,7 +12,7 @@ public class AudioManager : MonoBehaviour
     //          - StopAllLoopingSounds Function so the looping clip can be easily stopped.
 
 
-    public float MasterVolume = 0.1f;
+    public float MasterVolume;
     public Sound[] sounds;
 
     [SerializeField] private AudioMixer MainMixer;
