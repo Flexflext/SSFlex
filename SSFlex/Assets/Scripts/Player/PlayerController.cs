@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     [Header("References")]
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundMask;
+    [SerializeField] private LayerMask groundStoneMask;
+    [SerializeField] private LayerMask groundGravelMask;
 
     [Header("Testing Stats")]
     [SerializeField] private Vector3 moveDir;
@@ -29,6 +31,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float playerSneakingSpeed;
 
     [SerializeField] private float jumpForce;
+
+    [SerializeField] private bool isOnStone;
+    [SerializeField] private bool isOnGravel;
     #endregion
 
     #region Non-Visible
@@ -49,7 +54,18 @@ public class PlayerController : MonoBehaviour
 
     private float groundDistance = 0.4f;
     private bool isGrounded;
+    private bool isGroundStoned;
+    private bool isGroundGraveled;
     private bool useGravity = true;
+
+    private bool isStoneWalking;
+    private bool isStoneRunning;
+    private bool isGravelWalking;
+    private bool isGravelRunning;
+
+
+
+
     #endregion
 
     private void Awake()
@@ -72,13 +88,18 @@ public class PlayerController : MonoBehaviour
         PlayerRun();
         PlayerSneak();
 
-        // Jump
+        // LayerMask Checks
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        isGroundStoned = Physics.CheckSphere(groundCheck.position, groundDistance, groundStoneMask);
+        isGroundGraveled = Physics.CheckSphere(groundCheck.position, groundDistance, groundGravelMask);
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             Jump();
         }
+
+        // Audio
+        AudioMixing();
     }
 
     void FixedUpdate()
@@ -114,11 +135,12 @@ public class PlayerController : MonoBehaviour
             {
                 animator.SetFloat("Velocity", 0.5f);
             }
-            
+
         }
         else
         {
             isMoving = false;
+
             animator.SetFloat("Velocity", 0);
         }
     }
@@ -145,8 +167,6 @@ public class PlayerController : MonoBehaviour
         {
             currentPlayerSpeed = playerSneakingSpeed;
             isSneaking = true;
-
-            // No footsteps
         }
         else
         {
@@ -160,5 +180,75 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
+    #region Audio
+    private void AudioMixing()
+    {
+        if (isGroundStoned && !isGroundGraveled)
+        {
+            isOnStone = true;
 
+            if (isMoving && !isStoneRunning)
+            {
+                isStoneWalking = true;
+                AudioManager.Instance.PlayRandom("StoneWalk", 3);
+            }
+
+            if (isRunning && !isStoneWalking)
+            {
+                isStoneRunning = true;
+                AudioManager.Instance.PlayRandom("StoneRun", 4);
+                AudioManager.Instance.Play("BreathingRun");
+            }
+        }
+        else
+        {
+            isOnStone = false;
+        }
+        
+        if (isGroundGraveled && !isGroundStoned)
+        {
+            isOnGravel = true;
+
+            if (isMoving && !isGravelRunning)
+            {
+                isGravelWalking = true;
+                AudioManager.Instance.PlayRandom("GravelWalk", 1);
+            }
+
+            if (isRunning && !isGravelWalking)
+            {
+                isGravelRunning = true;
+                AudioManager.Instance.PlayRandom("GravelRun", 2);
+                AudioManager.Instance.Play("BreathingRun");
+            }
+        }
+        else
+        {
+            isOnGravel = false;
+        }
+
+
+        if (!isOnStone)
+        {
+            AudioManager.Instance.Stop("StoneWalk");
+            AudioManager.Instance.Stop("StoneRun");
+            AudioManager.Instance.Stop("BreathingRun");
+        }
+        if (!isOnGravel)
+        {
+            AudioManager.Instance.Stop("GravelWalk");
+            AudioManager.Instance.Stop("GravelRun");
+            AudioManager.Instance.Stop("BreathingRun");
+        }
+        if (!isMoving || isSneaking)
+        {
+            AudioManager.Instance.Stop("GravelWalk");
+            AudioManager.Instance.Stop("GravelRun");
+            AudioManager.Instance.Stop("StoneWalk");
+            AudioManager.Instance.Stop("StoneRun");
+            AudioManager.Instance.Stop("BreathingRun");
+        }
+
+    }
+    #endregion 
 }
