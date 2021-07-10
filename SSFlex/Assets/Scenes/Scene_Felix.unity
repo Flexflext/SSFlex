@@ -1932,7 +1932,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 632057445}
-  weapon: 1
+  weapon: 0
   currentGun: {fileID: 1851738708}
   primaryGun: {fileID: 0}
   secondaryGun: {fileID: 0}
@@ -2724,7 +2724,7 @@ MonoBehaviour:
   currentAmmo: 1000
   maxAmmo: 1000
   isAiming: 0
-  spreadRadius: 3
+  spreadRadius: 0
   spreadRadiusAimed: 0
   spreadRange: 50
   adsMultiplier: 0.4
@@ -3404,6 +3404,9 @@ MonoBehaviour:
   - {x: -1, y: 0}
   - {x: 1, y: 0}
   - {x: 0, y: 1}
+  - {x: 0, y: -1}
+  - {x: 0, y: -1}
+  - {x: 0, y: -1}
   - {x: 0, y: -1}
 --- !u!1 &1992212583
 GameObject:
