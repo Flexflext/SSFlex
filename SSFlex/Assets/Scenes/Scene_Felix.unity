@@ -1932,7 +1932,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 632057445}
-  weapon: 2
+  weapon: 1
   currentGun: {fileID: 1851738708}
   primaryGun: {fileID: 0}
   secondaryGun: {fileID: 0}
@@ -2026,7 +2026,7 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: 51afaf765f906de4f916dac9aba2690a, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.17
+  m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -2325,8 +2325,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1179963989}
   m_LocalRotation: {x: -0, y: -0.70710677, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 2.73, y: 3.49, z: 2.063}
-  m_LocalScale: {x: 7.6572356, y: 10, z: 12}
+  m_LocalPosition: {x: -5.391, y: 29.38, z: -1.394}
+  m_LocalScale: {x: 0.7433075, y: 61.786186, z: 109.972244}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 8
@@ -3594,14 +3594,14 @@ MonoBehaviour:
   crossHairTarget: {fileID: 1280569499}
   muzzle: {fileID: 1034588515}
   spreadPattern:
-  - {x: 0, y: 0}
-  - {x: -1, y: 0}
-  - {x: 1, y: 0}
-  - {x: 0, y: 1}
-  - {x: 0, y: -1}
-  - {x: 0, y: -1}
-  - {x: 0, y: -1}
-  - {x: 0, y: -1}
+  - {x: 0.25, y: 0}
+  - {x: -0.25, y: 0}
+  - {x: 0.25, y: 0.5}
+  - {x: -0.25, y: 0.5}
+  - {x: 0.25, y: -0.5}
+  - {x: -0.25, y: -0.5}
+  - {x: -0.5, y: 0}
+  - {x: 0.5, y: 0}
 --- !u!1 &1992212583
 GameObject:
   m_ObjectHideFlags: 0
