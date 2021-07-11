@@ -17,10 +17,17 @@ public class PlayerController : MonoBehaviour
 
     [Header("References")]
 
+    // Layers
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private LayerMask stoneGroundedMask;
     [SerializeField] private LayerMask gravelGroundedMask;
+
+    // Photon
     [SerializeField] private GameObject cameraHolder;
+    [SerializeField] private GameObject firstPersonShotgun;
+    [SerializeField] private GameObject firstPersonMesh;
+    [SerializeField] private GameObject thirdPersonMesh;
+    [SerializeField] private Animator thirdPersonAnimator;
 
     [Header("Testing Stats")]
     [SerializeField] private Vector3 moveDir;
@@ -32,7 +39,7 @@ public class PlayerController : MonoBehaviour
     // Non-visible References
     private PlayerShooting shooting;
     private Rigidbody rb;
-    private Animator animator;
+    private Animator fpsAnimator;
     private PhotonView photonView;
 
     // Non-visible Stats
@@ -41,6 +48,8 @@ public class PlayerController : MonoBehaviour
     public float MovementMultiplier { get { return movementMultiplier; } set { movementMultiplier = Mathf.Clamp01(value); } }
 
     private bool isMoving, isRunning, isSneaking;
+
+    private Vector2 input;
 
     // Jump
     private bool isGrounded, isStoneGrounded, isGravelGrounded;
@@ -53,17 +62,28 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         shooting = GetComponent<PlayerShooting>();
-        animator = GetComponentInChildren<Animator>();
+        fpsAnimator = GetComponentInChildren<Animator>();
         photonView = GetComponent<PhotonView>();
     }
 
     private void Start()
     {
+        // Visualization for oneself:
+        // Client - Only Arms and Weapon.
+        // Other Clients - Whole 3rdPerson Body with animations.
+        if (photonView.IsMine)
+        {
+            Destroy(thirdPersonMesh.gameObject);
+        }
+
+        // To seperate the camera control and the rigidbody of multiple players.
         if (!photonView.IsMine)
         {
             Debug.Log("Camera kinda works");
             Destroy(cameraHolder.gameObject);
             Destroy(rb);
+            Destroy(firstPersonMesh.gameObject);
+            Destroy(firstPersonShotgun);
         }
         
 
@@ -72,6 +92,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        // To seperate the controlls of musltiple players.
         if (!photonView.IsMine)
         {
             Debug.Log("Player kinda works");
@@ -79,15 +100,10 @@ public class PlayerController : MonoBehaviour
         }
 
         // Movement
-        MoveDirection();
-
+        PlayerMoving();
+        PlayerMovingAnimator();
         PlayerRun();
         PlayerSneak();
-
-        // LayerMask Checks
-        //isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        //isStoneGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, stoneGroundedMask);
-        //isGravelGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, gravelGroundedMask);
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
@@ -118,7 +134,7 @@ public class PlayerController : MonoBehaviour
     }
 
     #region Movement
-    private void MoveDirection()
+    private void PlayerMoving()
     {
         float hor = Input.GetAxisRaw("Horizontal");
         float ver = Input.GetAxisRaw("Vertical");
@@ -133,11 +149,11 @@ public class PlayerController : MonoBehaviour
 
             if (isRunning)
             {
-                animator.SetFloat("Velocity", 1f);
+                fpsAnimator.SetFloat("Velocity", 1f);
             }
             else
             {
-                animator.SetFloat("Velocity", 0.5f);
+                fpsAnimator.SetFloat("Velocity", 0.5f);
             }
 
         }
@@ -145,8 +161,17 @@ public class PlayerController : MonoBehaviour
         {
             isMoving = false;
 
-            animator.SetFloat("Velocity", 0);
+            fpsAnimator.SetFloat("Velocity", 0);
         }
+    }
+
+    private void PlayerMovingAnimator()
+    {
+        input.x = Input.GetAxis("Horizontal");
+        input.y = Input.GetAxis("Vertical");
+
+        thirdPersonAnimator.SetFloat("InputX", input.x);
+        thirdPersonAnimator.SetFloat("InputY", input.y);
     }
 
     private void PlayerRun()
@@ -154,6 +179,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift) && isMoving == true && !shooting.ImAiming)
         {
             isRunning = true;
+            thirdPersonAnimator.SetBool("isRunning", true);
             shooting.InterruptReload();
             currentPlayerSpeed = playerRunSpeed;
         }
@@ -161,6 +187,7 @@ public class PlayerController : MonoBehaviour
         {
             currentPlayerSpeed = playerWalkingSpeed * movementMultiplier;
             isRunning = false;
+            thirdPersonAnimator.SetBool("isRunning", false);
         }
     }
 
