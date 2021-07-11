@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-[RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
     // This script is responsible for:
@@ -15,73 +15,69 @@ public class PlayerController : MonoBehaviour
     // - Movement Animations
     // - Movement Audio
 
-    #region Visible
     [Header("References")]
-    [SerializeField] private Transform groundCheck;
+
     [SerializeField] private LayerMask groundMask;
-    [SerializeField] private LayerMask groundStoneMask;
-    [SerializeField] private LayerMask groundGravelMask;
+    [SerializeField] private LayerMask stoneGroundedMask;
+    [SerializeField] private LayerMask gravelGroundedMask;
+    [SerializeField] private GameObject cameraHolder;
 
     [Header("Testing Stats")]
     [SerializeField] private Vector3 moveDir;
 
-    [SerializeField] private float currentPlayerSpeed;
-    [SerializeField] private float playerWalkingSpeed;
-    [SerializeField] private float playerRunSpeed;
-    [SerializeField] private float playerSneakingSpeed;
-
+    [SerializeField] private float currentPlayerSpeed, playerWalkingSpeed, playerRunSpeed, playerSneakingSpeed;
     [SerializeField] private float jumpForce;
+    [SerializeField] private bool isOnStone, isOnGravel;
 
-    [SerializeField] private bool isOnStone;
-    [SerializeField] private bool isOnGravel;
-    #endregion
-
-    #region Non-Visible
     // Non-visible References
-
     private PlayerShooting shooting;
     private Rigidbody rb;
     private Animator animator;
+    private PhotonView photonView;
 
     // Non-visible Stats
-
+    // Movement
     private float movementMultiplier = 1;
     public float MovementMultiplier { get { return movementMultiplier; } set { movementMultiplier = Mathf.Clamp01(value); } }
 
-    private bool isMoving;
-    private bool isRunning;
-    private bool isSneaking;
+    private bool isMoving, isRunning, isSneaking;
 
-    private float groundDistance = 0.4f;
-    private bool isGrounded;
-    private bool isGroundStoned;
-    private bool isGroundGraveled;
+    // Jump
+    private bool isGrounded, isStoneGrounded, isGravelGrounded;
     private bool useGravity = true;
 
-    private bool isStoneWalking;
-    private bool isStoneRunning;
-    private bool isGravelWalking;
-    private bool isGravelRunning;
+    private bool isStoneWalking, isStoneRunning, isGravelWalking, isGravelRunning;
 
-
-
-
-    #endregion
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         shooting = GetComponent<PlayerShooting>();
         animator = GetComponentInChildren<Animator>();
+        photonView = GetComponent<PhotonView>();
     }
 
     private void Start()
     {
+        if (!photonView.IsMine)
+        {
+            Debug.Log("Camera kinda works");
+            Destroy(cameraHolder.gameObject);
+            Destroy(rb);
+        }
+        
+
         currentPlayerSpeed = playerWalkingSpeed;
     }
 
     private void Update()
     {
+        if (!photonView.IsMine)
+        {
+            Debug.Log("Player kinda works");
+            return;
+        }
+
         // Movement
         MoveDirection();
 
@@ -89,9 +85,9 @@ public class PlayerController : MonoBehaviour
         PlayerSneak();
 
         // LayerMask Checks
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        isGroundStoned = Physics.CheckSphere(groundCheck.position, groundDistance, groundStoneMask);
-        isGroundGraveled = Physics.CheckSphere(groundCheck.position, groundDistance, groundGravelMask);
+        //isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        //isStoneGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, stoneGroundedMask);
+        //isGravelGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, gravelGroundedMask);
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
@@ -104,6 +100,13 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!photonView.IsMine)
+        {
+            Debug.Log("Player kinda works");
+            return;
+        }
+
+
         rb.velocity = new Vector3(moveDir.x * currentPlayerSpeed * Time.fixedDeltaTime, rb.velocity.y, moveDir.z * currentPlayerSpeed * Time.fixedDeltaTime);
 
         rb.useGravity = false;
@@ -111,9 +114,10 @@ public class PlayerController : MonoBehaviour
         {
             rb.AddForce(Physics.gravity * (rb.mass * rb.mass));
         }
+
     }
 
-    #region OnGround_MovementPatterns
+    #region Movement
     private void MoveDirection()
     {
         float hor = Input.GetAxisRaw("Horizontal");
@@ -178,13 +182,28 @@ public class PlayerController : MonoBehaviour
     {
         rb.AddForce(new Vector3(0, jumpForce));
     }
+
+    public void SetIsGroundedState(bool _isGrounded)
+    {
+        isGrounded = _isGrounded;
+    }
+
+    public void SetIsStoneGroundedState(bool _isStoneGrounded)
+    {
+        isStoneGrounded = _isStoneGrounded;
+    }
+    public void SetIsGravelGroundedState(bool _isGravelGrounded)
+    {
+        isGravelGrounded = _isGravelGrounded;
+    }
     #endregion
 
     #region Audio
     private void AudioMixing()
     {
-        if (isGroundStoned && !isGroundGraveled)
+        if (isStoneGrounded && !isGravelGrounded)
         {
+            Debug.Log("isonstone");
             isOnStone = true;
 
             if (isMoving && !isStoneRunning)
@@ -205,7 +224,7 @@ public class PlayerController : MonoBehaviour
             isOnStone = false;
         }
         
-        if (isGroundGraveled && !isGroundStoned)
+        if (isGravelGrounded && !isStoneGrounded)
         {
             isOnGravel = true;
 
