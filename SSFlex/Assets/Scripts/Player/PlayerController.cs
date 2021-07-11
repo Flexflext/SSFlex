@@ -24,8 +24,8 @@ public class PlayerController : MonoBehaviour
 
     // Photon
     [SerializeField] private GameObject cameraHolder;
-    [SerializeField] private GameObject firstPersonShotgun;
-    [SerializeField] private GameObject firstPersonMesh;
+    //[SerializeField] private GameObject firstPersonShotgun;
+    //[SerializeField] private GameObject firstPersonMesh;
     [SerializeField] private GameObject thirdPersonMesh;
     [SerializeField] private Animator thirdPersonAnimator;
 
@@ -82,8 +82,8 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Camera kinda works");
             Destroy(cameraHolder.gameObject);
             Destroy(rb);
-            Destroy(firstPersonMesh.gameObject);
-            Destroy(firstPersonShotgun);
+            //Destroy(firstPersonMesh.gameObject);
+            //Destroy(firstPersonShotgun);
         }
         
 
