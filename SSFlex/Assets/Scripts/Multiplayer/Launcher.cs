@@ -74,6 +74,14 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         Player[] players = PhotonNetwork.PlayerList;
 
+
+        // Deletes all former playerLists so if master client leaves a former room and
+        // creates a new one, all former clients should be cleared.
+        foreach (Transform child in playerListContent)
+        {
+            Destroy(child.gameObject);
+        }
+
         for (int i = 0; i < players.Count(); i++)
         {
             Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(players[i]);
@@ -123,6 +131,13 @@ public class Launcher : MonoBehaviourPunCallbacks
         // Instantiates roomListItemPrefabs in the roomLstContainer and calls the setup Method with the roomInfo.
         for (int i = 0; i < _roomList.Count; i++)
         {
+            // Prevents former rooms to still exist and only continues if the room which the master client has left
+            // is actually removed.
+            if (_roomList[i].RemovedFromList)
+            {
+                continue;
+            }
+
             Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(_roomList[i]);
         }
        
