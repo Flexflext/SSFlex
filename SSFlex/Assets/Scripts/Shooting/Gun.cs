@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class Gun : MonoBehaviour
 {
@@ -172,7 +174,7 @@ public class Gun : MonoBehaviour
     /// Check what Dmg to Do and to what
     /// </summary>
     /// <param name="_gameobject"></param>
-    public void  HitAnything(GameObject _gameobject)
+    public void HitAnything(GameObject _gameobject)
     {
         Debug.Log("Hit Smth");
     }
