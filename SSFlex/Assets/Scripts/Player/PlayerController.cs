@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject cameraHolder;
     [SerializeField] private GameObject firstPersonShotgun;
     [SerializeField] private GameObject firstPersonMesh;
+    [SerializeField] private GameObject thirdPersonShotgun;
     [SerializeField] private GameObject thirdPersonMesh;
     [SerializeField] private Animator thirdPersonAnimator;
 
@@ -74,6 +75,7 @@ public class PlayerController : MonoBehaviour
         if (photonView.IsMine)
         {
             Destroy(thirdPersonMesh.gameObject);
+            Destroy(thirdPersonShotgun);
         }
 
         // To seperate the camera control and the rigidbody of multiple players.
@@ -81,7 +83,6 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Camera kinda works");
             Destroy(cameraHolder.gameObject);
-            Destroy(rb);
             Destroy(firstPersonMesh.gameObject);
             Destroy(firstPersonShotgun);
         }
@@ -104,11 +105,9 @@ public class PlayerController : MonoBehaviour
         PlayerMovingAnimator();
         PlayerRun();
         PlayerSneak();
-
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-        {
-            Jump();
-        }
+        PlayerAimMovement();
+        PlayerJump();
+        
 
         // Audio
         AudioMixing();
@@ -197,17 +196,44 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftControl) && isMoving == true)
         {
             currentPlayerSpeed = playerSneakingSpeed;
+            thirdPersonAnimator.SetBool("isSneaking", true);
             isSneaking = true;
         }
         else
         {
+            thirdPersonAnimator.SetBool("isSneaking", false);
             isSneaking = false;
         }
     }
 
-    private void Jump()
+    private void PlayerAimMovement()
     {
-        rb.AddForce(new Vector3(0, jumpForce));
+        if (isMoving && Input.GetKey(KeyCode.Mouse1))
+        {
+            thirdPersonAnimator.SetBool("isSneaking", true);
+        }
+        else
+        {
+            thirdPersonAnimator.SetBool("isSneaking", false);
+        }
+
+        if (!isMoving && Input.GetKey(KeyCode.Mouse1))
+        {
+            thirdPersonAnimator.SetBool("isAiming", true);
+        }
+        else
+        {
+            thirdPersonAnimator.SetBool("isAiming", false);
+        }
+    }
+
+    private void PlayerJump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            StartCoroutine(JumpAnimatorTimer());
+            rb.AddForce(new Vector3(0, jumpForce));
+        }
     }
 
     public void SetIsGroundedState(bool _isGrounded)
@@ -297,4 +323,11 @@ public class PlayerController : MonoBehaviour
 
     }
     #endregion 
+
+    IEnumerator JumpAnimatorTimer()
+    {
+        thirdPersonAnimator.SetBool("isJumping", true);
+        yield return new WaitForSeconds(0.8f);
+        thirdPersonAnimator.SetBool("isJumping", false);
+    }
 }
