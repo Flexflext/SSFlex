@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class Bullet : MonoBehaviour
 {
@@ -21,7 +22,7 @@ public class Bullet : MonoBehaviour
     private IEnumerator C_TimeTillDestoy(float _time)
     {
         yield return new WaitForSeconds(_time);
-        Destroy(this.gameObject);
+        PhotonNetwork.Destroy(this.gameObject);
     }
 
 
@@ -34,6 +35,6 @@ public class Bullet : MonoBehaviour
         }
 
         Instantiate(impactEffect, transform.position, Quaternion.identity);
-        Destroy(this.gameObject);
+        PhotonNetwork.Destroy(this.gameObject);
     }
 }
