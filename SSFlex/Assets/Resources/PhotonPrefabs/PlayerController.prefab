@@ -865,10 +865,20 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2405612573986075364, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
+      propertyPath: m_InitialEventNameOverriden
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3188031656853597218, guid: fc80979f393058542a06d78eef397530,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3263416985891115444, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
+      propertyPath: m_InitialEventNameOverriden
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3403991243626735586, guid: fc80979f393058542a06d78eef397530,
         type: 3}
@@ -940,15 +950,45 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerGFX
       objectReference: {fileID: 0}
+    - target: {fileID: 7363513681271199167, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
+      propertyPath: m_InitialEventNameOverriden
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7491396502569071293, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
+      propertyPath: m_InitialEventNameOverriden
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7534426429685769330, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
+      propertyPath: m_InitialEventNameOverriden
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7546103507505916493, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
+      propertyPath: m_InitialEventNameOverriden
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7674213116899696559, guid: fc80979f393058542a06d78eef397530,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 8149527128226839777, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
+      propertyPath: m_InitialEventNameOverriden
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8307421828694858632, guid: fc80979f393058542a06d78eef397530,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8802408669902411684, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
+      propertyPath: m_InitialEventNameOverriden
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8815904337595656559, guid: fc80979f393058542a06d78eef397530,
         type: 3}

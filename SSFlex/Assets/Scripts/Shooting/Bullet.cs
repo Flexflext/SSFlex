@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class Bullet : MonoBehaviour
+public class Bullet : MonoBehaviourPunCallbacks
 {
     public System.Action<GameObject> OnHit;
     [SerializeField] private float timeTillDestroy = 4f;
@@ -22,7 +22,10 @@ public class Bullet : MonoBehaviour
     private IEnumerator C_TimeTillDestoy(float _time)
     {
         yield return new WaitForSeconds(_time);
-        PhotonNetwork.Destroy(this.gameObject);
+        if (photonView.IsMine)
+        {
+            PhotonNetwork.Destroy(this.gameObject);
+        }
     }
 
 
@@ -35,6 +38,12 @@ public class Bullet : MonoBehaviour
         }
 
         Instantiate(impactEffect, transform.position, Quaternion.identity);
-        PhotonNetwork.Destroy(this.gameObject);
+
+        if (photonView.IsMine)
+        {
+            PhotonNetwork.Destroy(this.gameObject);
+        }
+        
+        StopAllCoroutines();
     }
 }
