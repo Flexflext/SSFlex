@@ -47,7 +47,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     // When client successfully joined the lobby the client is visualized by "Player + a random number from 0000 to 0999".
     public override void OnJoinedLobby()
     {
-        MenuManager.Instance.OpenMenu("Main");
+        MenuManager.Instance.AdminMainMenu();
         PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
     }
 
@@ -62,13 +62,13 @@ public class Launcher : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(roomNameInputField.text);
 
         // Prevents client to click on other buttons while room is being created.
-        MenuManager.Instance.OpenMenu("Loading");
+        MenuManager.Instance.AdminLoadingMenu();
     }
 
     // Callback for successfully joining the room.
     public override void OnJoinedRoom()
     {
-        MenuManager.Instance.OpenMenu("Room");
+        MenuManager.Instance.AdminFindRoomMenu();
         roomNameText.text = PhotonNetwork.CurrentRoom.Name;
 
         Player[] players = PhotonNetwork.PlayerList;
@@ -99,25 +99,25 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnCreateRoomFailed(short _returnCode, string _message)
     {
         errorText.text = "Room Creation Failed: " + _message;
-        MenuManager.Instance.OpenMenu("Error");
+        MenuManager.Instance.AdminErrorMenu();
     }
 
 
     public void JoinRoom(RoomInfo _info)
     {
         PhotonNetwork.JoinRoom(_info.Name);
-        MenuManager.Instance.OpenMenu("Loading");
+        MenuManager.Instance.AdminLoadingMenu();
     }
 
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
-        MenuManager.Instance.OpenMenu("Loading");
+        MenuManager.Instance.AdminLoadingMenu();
     }
 
     public override void OnLeftRoom()
     {
-        MenuManager.Instance.OpenMenu("Main");
+        MenuManager.Instance.AdminMainMenu();
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> _roomList)

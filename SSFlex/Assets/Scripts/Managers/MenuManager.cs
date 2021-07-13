@@ -6,46 +6,124 @@ public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance;
 
-    [SerializeField] Menu[] menus;
+    [SerializeField]
+    private GameObject mMainMenu;
+    [SerializeField]
+    private GameObject mLoadingScreen;
+    [SerializeField]
+    private GameObject mCreateRoomMenu;
+    [SerializeField]
+    private GameObject mRoomMenu;
+    [SerializeField]
+    private GameObject mErrorMenu;
+    [SerializeField]
+    private GameObject mFindRoomMenu;
+
+    private List<GameObject> mAllMenus;
 
     private void Awake()
     {
         Instance = this;
     }
 
-
-    // Takes a string and opens its menu.
-    public void OpenMenu(string _menuName)
+    private void Start()
     {
-        for (int i = 0; i < menus.Length; i++)
+        mAllMenus = new List<GameObject>()
         {
-            if (menus[i].menuName == _menuName)
-            {
-                menus[i].Open();
-            }
-            else if (menus[i].isOpen)
-            {
-                CloseMenu(menus[i]);
-            }
-        }
+            mMainMenu,
+            mLoadingScreen,
+            mCreateRoomMenu,
+            mRoomMenu,
+            mErrorMenu,
+            mFindRoomMenu
+        };
     }
 
-    // Takes a menu script and opens its menu.
-    public void OpenMenu(Menu _menu)
+
+    public void AdminMainMenu()
     {
-        for (int i = 0; i < menus.Length; i++)
+        if (mMainMenu != null)
         {
-            if (menus[i].isOpen)
-            {
-                CloseMenu(menus[i]);
-            }
+            if (mMainMenu.activeSelf)
+                mMainMenu.SetActive(false);
+            else
+                mMainMenu.SetActive(true);
         }
 
-        _menu.Open();
+        CloseMenu(mMainMenu);
     }
 
-    public void CloseMenu(Menu _menu)
+    public void AdminLoadingMenu()
     {
-        _menu.Close();
+        if (mLoadingScreen != null)
+        {
+            if (mLoadingScreen.activeSelf)
+                mLoadingScreen.SetActive(false);
+            else
+                mLoadingScreen.SetActive(true);
+        }
+
+        CloseMenu(mLoadingScreen);
+    }
+
+    public void AdminCreateRoomMenu()
+    {
+        if (mCreateRoomMenu != null)
+        {
+            if (mCreateRoomMenu.activeSelf)
+                mCreateRoomMenu.SetActive(false);
+            else
+                mCreateRoomMenu.SetActive(true);
+        }
+
+        CloseMenu(mCreateRoomMenu);
+    }
+
+    public void AdminRoomMenu()
+    {
+        if (mRoomMenu != null)
+        {
+            if (mRoomMenu.activeSelf)
+                mRoomMenu.SetActive(false);
+            else
+                mRoomMenu.SetActive(true);
+        }
+
+        CloseMenu(mRoomMenu);
+    }
+
+    public void AdminErrorMenu()
+    {
+        if (mErrorMenu != null)
+        {
+            if (mErrorMenu.activeSelf)
+                mErrorMenu.SetActive(false);
+            else
+                mErrorMenu.SetActive(true);
+        }
+
+        CloseMenu(mErrorMenu);
+    }
+
+    public void AdminFindRoomMenu()
+    {
+        if (mFindRoomMenu != null)
+        {
+            if (mFindRoomMenu.activeSelf)
+                mFindRoomMenu.SetActive(false);
+            else
+                mFindRoomMenu.SetActive(true);
+        }
+
+        CloseMenu(mFindRoomMenu);
+    }
+
+    private void CloseMenu(GameObject _menuToCheck)
+    {
+        //foreach (GameObject menu in mAllMenus)
+        //{
+        //    if (menu != _menuToCheck)
+        //        menu.SetActive(false);
+        //}
     }
 }
