@@ -22,6 +22,7 @@ public class Bullet : MonoBehaviourPunCallbacks
     private IEnumerator C_TimeTillDestoy(float _time)
     {
         yield return new WaitForSeconds(_time);
+
         if (photonView.IsMine)
         {
             PhotonNetwork.Destroy(this.gameObject);
@@ -31,19 +32,18 @@ public class Bullet : MonoBehaviourPunCallbacks
 
     private void OnCollisionEnter(Collision collision)
     {
-        // Check if is not null
-        if (OnHit != null)
-        {
-            OnHit.Invoke(collision.gameObject);
-        }
-
+        StopAllCoroutines();
         Instantiate(impactEffect, transform.position, Quaternion.identity);
 
         if (photonView.IsMine)
         {
+            // Check if is not null
+            if (OnHit != null)
+            {
+                OnHit.Invoke(collision.gameObject);
+            }    
+
             PhotonNetwork.Destroy(this.gameObject);
         }
-        
-        StopAllCoroutines();
     }
 }
