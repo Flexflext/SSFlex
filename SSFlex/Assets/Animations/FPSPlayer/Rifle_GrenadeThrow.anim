@@ -5706,7 +5706,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/ring_01_l/ring_02_l/ring_03_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/ring_01_l/ring_02_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5716,7 +5716,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/ring_01_l/ring_02_l/ring_03_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/ring_01_l/ring_02_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5726,7 +5726,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/ring_01_l/ring_02_l/ring_03_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/ring_01_l/ring_02_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5736,7 +5736,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5746,7 +5746,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5756,37 +5756,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.z
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/ring_01_l/ring_02_l
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.y
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/ring_01_l/ring_02_l
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/ring_01_l/ring_02_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5826,7 +5796,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/index_01_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/pinky_01_l/pinky_02_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5836,7 +5806,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/index_01_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/pinky_01_l/pinky_02_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5846,7 +5816,37 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/index_01_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/pinky_01_l/pinky_02_l
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.z
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.y
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.x
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5886,7 +5886,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/pinky_01_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/middle_01_l/middle_02_l/middle_03_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5896,7 +5896,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/pinky_01_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/middle_01_l/middle_02_l/middle_03_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5906,7 +5906,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/pinky_01_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/middle_01_l/middle_02_l/middle_03_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5916,7 +5916,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/index_01_l/index_02_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/index_01_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5926,7 +5926,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/index_01_l/index_02_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/index_01_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5936,7 +5936,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/index_01_l/index_02_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/index_01_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5946,7 +5946,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/middle_01_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/index_01_l/index_02_l/index_03_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5956,7 +5956,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/middle_01_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/index_01_l/index_02_l/index_03_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5966,7 +5966,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/middle_01_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/index_01_l/index_02_l/index_03_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -6006,36 +6006,6 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/middle_01_l/middle_02_l/middle_03_l
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.y
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/middle_01_l/middle_02_l/middle_03_l
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/middle_01_l/middle_02_l/middle_03_l
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.z
     path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/middle_01_l/middle_02_l
     classID: 4
     script: {fileID: 0}
@@ -6066,7 +6036,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/pinky_01_l/pinky_02_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/middle_01_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -6076,7 +6046,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/pinky_01_l/pinky_02_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/middle_01_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -6086,7 +6056,37 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/pinky_01_l/pinky_02_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/middle_01_l
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.z
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/pinky_01_l
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.y
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/pinky_01_l
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.x
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/pinky_01_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -6156,7 +6156,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/index_01_l/index_02_l/index_03_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/index_01_l/index_02_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -6166,7 +6166,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/index_01_l/index_02_l/index_03_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/index_01_l/index_02_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -6176,7 +6176,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/index_01_l/index_02_l/index_03_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/index_01_l/index_02_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -6216,7 +6216,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/thumb_01_l/thumb_02_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/ring_01_l/ring_02_l/ring_03_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -6226,7 +6226,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/thumb_01_l/thumb_02_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/ring_01_l/ring_02_l/ring_03_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -6236,7 +6236,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/thumb_01_l/thumb_02_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/ring_01_l/ring_02_l/ring_03_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -6666,7 +6666,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/thumb_01_l/thumb_02_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -6676,7 +6676,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/thumb_01_l/thumb_02_l
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -6686,7 +6686,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l
+    path: Rig/Pelvis/Spine_01/Spine_02/Upperarm_l/Lowerarm_l/Hand_l/thumb_01_l/thumb_02_l
     classID: 4
     script: {fileID: 0}
   m_HasGenericRootTransform: 0

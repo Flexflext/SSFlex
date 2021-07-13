@@ -20,9 +20,9 @@ TagManager:
   - TEST_Player
   - Ground
   - Bullet
-  - 
-  - 
-  - 
+  - GroundStone
+  - GroundGravel
+  - 3rdPersonPlayer
   - 
   - 
   - 

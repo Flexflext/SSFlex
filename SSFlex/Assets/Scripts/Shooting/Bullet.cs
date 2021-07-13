@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class Bullet : MonoBehaviourPunCallbacks
 {
     public System.Action<GameObject> OnHit;
     [SerializeField] private float timeTillDestroy = 4f;
@@ -21,19 +22,27 @@ public class Bullet : MonoBehaviour
     private IEnumerator C_TimeTillDestoy(float _time)
     {
         yield return new WaitForSeconds(_time);
-        Destroy(this.gameObject);
+
+
+        Debug.Log("Hier");
+        Destroy(gameObject);
+        //PhotonNetwork.RemoveRPCs(photonView);
+        //PhotonNetwork.Destroy(this.gameObject);
     }
 
 
     private void OnCollisionEnter(Collision collision)
     {
+        StopAllCoroutines();
+        Instantiate(impactEffect, transform.position, Quaternion.identity);
+
+
         // Check if is not null
         if (OnHit != null)
         {
             OnHit.Invoke(collision.gameObject);
         }
 
-        Instantiate(impactEffect, transform.position, Quaternion.identity);
         Destroy(this.gameObject);
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-[RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
     // This script is responsible for:
@@ -15,74 +15,113 @@ public class PlayerController : MonoBehaviour
     // - Movement Animations
     // - Movement Audio
 
-    #region Visible
     [Header("References")]
-    [SerializeField] private Transform groundCheck;
+
+    // Layers
     [SerializeField] private LayerMask groundMask;
+    [SerializeField] private LayerMask stoneGroundedMask;
+    [SerializeField] private LayerMask gravelGroundedMask;
+
+    // Photon
+    [SerializeField] private GameObject cameraHolder;
+    [SerializeField] private GameObject firstPersonShotgun;
+    [SerializeField] private GameObject firstPersonMesh;
+    [SerializeField] private GameObject thirdPersonShotgun;
+    [SerializeField] private GameObject thirdPersonMesh;
+    [SerializeField] private Animator thirdPersonAnimator;
 
     [Header("Testing Stats")]
     [SerializeField] private Vector3 moveDir;
 
-    [SerializeField] private float currentPlayerSpeed;
-    [SerializeField] private float playerWalkingSpeed;
-    [SerializeField] private float playerRunSpeed;
-    [SerializeField] private float playerSneakingSpeed;
-
+    [SerializeField] private float currentPlayerSpeed, playerWalkingSpeed, playerRunSpeed, playerSneakingSpeed;
     [SerializeField] private float jumpForce;
-    #endregion
+    [SerializeField] private bool isOnStone, isOnGravel;
 
-    #region Non-Visible
     // Non-visible References
-
     private PlayerShooting shooting;
     private Rigidbody rb;
-    private Animator animator;
+    private Animator fpsAnimator;
+    private PhotonView photonView;
 
     // Non-visible Stats
-
+    // Movement
     private float movementMultiplier = 1;
     public float MovementMultiplier { get { return movementMultiplier; } set { movementMultiplier = Mathf.Clamp01(value); } }
 
-    private bool isMoving;
-    private bool isRunning;
-    private bool isSneaking;
+    private bool isMoving, isRunning, isSneaking;
 
-    private float groundDistance = 0.4f;
-    private bool isGrounded;
+    private Vector2 input;
+
+    // Jump
+    private bool isGrounded, isStoneGrounded, isGravelGrounded;
     private bool useGravity = true;
-    #endregion
+
+    private bool isStoneWalking, isStoneRunning, isGravelWalking, isGravelRunning;
+
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         shooting = GetComponent<PlayerShooting>();
-        animator = GetComponentInChildren<Animator>();
+        fpsAnimator = GetComponentInChildren<Animator>();
+        photonView = GetComponent<PhotonView>();
     }
 
     private void Start()
     {
+        // Visualization First Person View: Oneself
+        // Own player body - Only arms and weapon.
+        // Other player bodies - Whole 3rdPerson body with animations.
+        if (photonView.IsMine)
+        {
+            Destroy(thirdPersonMesh.gameObject);
+            Destroy(thirdPersonShotgun);
+        }
+
+        // To seperate the camera control and the rigidbody of multiple players.
+        // Visualization First Person View: The other clients.
+        // + FPS Body and shotgun on other players are not visible for own player.
+        if (!photonView.IsMine)
+        {
+            Destroy(cameraHolder.gameObject);
+            Destroy(firstPersonMesh.gameObject);
+            Destroy(firstPersonShotgun);
+        }
+
         currentPlayerSpeed = playerWalkingSpeed;
     }
 
     private void Update()
     {
-        // Movement
-        MoveDirection();
+        // To seperate the controls of multiple players.
+        if (!photonView.IsMine)
+        {
+            Debug.Log("Player kinda works");
+            return;
+        }
 
+        // Movement
+        PlayerMoving();
+        PlayerMovingAnimator();
         PlayerRun();
         PlayerSneak();
+        PlayerAimMovement();
+        PlayerJump();
 
-        // Jump
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-        {
-            Jump();
-        }
+        // Audio
+        AudioMixing();
     }
 
     void FixedUpdate()
     {
+        if (!photonView.IsMine)
+        {
+            Debug.Log("Player kinda works");
+            return;
+        }
+
+
         rb.velocity = new Vector3(moveDir.x * currentPlayerSpeed * Time.fixedDeltaTime, rb.velocity.y, moveDir.z * currentPlayerSpeed * Time.fixedDeltaTime);
 
         rb.useGravity = false;
@@ -90,10 +129,11 @@ public class PlayerController : MonoBehaviour
         {
             rb.AddForce(Physics.gravity * (rb.mass * rb.mass));
         }
+
     }
 
-    #region OnGround_MovementPatterns
-    private void MoveDirection()
+    #region Movement
+    private void PlayerMoving()
     {
         float hor = Input.GetAxisRaw("Horizontal");
         float ver = Input.GetAxisRaw("Vertical");
@@ -108,19 +148,29 @@ public class PlayerController : MonoBehaviour
 
             if (isRunning)
             {
-                animator.SetFloat("Velocity", 1f);
+                fpsAnimator.SetFloat("Velocity", 1f);
             }
             else
             {
-                animator.SetFloat("Velocity", 0.5f);
+                fpsAnimator.SetFloat("Velocity", 0.5f);
             }
-            
+
         }
         else
         {
             isMoving = false;
-            animator.SetFloat("Velocity", 0);
+
+            fpsAnimator.SetFloat("Velocity", 0);
         }
+    }
+
+    private void PlayerMovingAnimator()
+    {
+        input.x = Input.GetAxis("Horizontal");
+        input.y = Input.GetAxis("Vertical");
+
+        thirdPersonAnimator.SetFloat("InputX", input.x);
+        thirdPersonAnimator.SetFloat("InputY", input.y);
     }
 
     private void PlayerRun()
@@ -128,6 +178,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift) && isMoving == true && !shooting.ImAiming)
         {
             isRunning = true;
+            thirdPersonAnimator.SetBool("isRunning", true);
             shooting.InterruptReload();
             currentPlayerSpeed = playerRunSpeed;
         }
@@ -135,6 +186,7 @@ public class PlayerController : MonoBehaviour
         {
             currentPlayerSpeed = playerWalkingSpeed * movementMultiplier;
             isRunning = false;
+            thirdPersonAnimator.SetBool("isRunning", false);
         }
     }
 
@@ -144,21 +196,143 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftControl) && isMoving == true)
         {
             currentPlayerSpeed = playerSneakingSpeed;
+            thirdPersonAnimator.SetBool("isSneaking", true);
             isSneaking = true;
-
-            // No footsteps
         }
         else
         {
+            thirdPersonAnimator.SetBool("isSneaking", false);
             isSneaking = false;
         }
     }
 
-    private void Jump()
+    private void PlayerAimMovement()
     {
-        rb.AddForce(new Vector3(0, jumpForce));
+        if (isMoving && Input.GetKey(KeyCode.Mouse1))
+        {
+            thirdPersonAnimator.SetBool("isSneaking", true);
+        }
+        else
+        {
+            thirdPersonAnimator.SetBool("isSneaking", false);
+        }
+
+        if (!isMoving && Input.GetKey(KeyCode.Mouse1))
+        {
+            thirdPersonAnimator.SetBool("isAiming", true);
+        }
+        else
+        {
+            thirdPersonAnimator.SetBool("isAiming", false);
+        }
+    }
+
+    private void PlayerJump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            StartCoroutine(JumpAnimatorTimer());
+            rb.AddForce(new Vector3(0, jumpForce));
+        }
+    }
+
+   
+
+    public void SetIsGroundedState(bool _isGrounded)
+    {
+        isGrounded = _isGrounded;
+    }
+
+    public void SetIsStoneGroundedState(bool _isStoneGrounded)
+    {
+        isStoneGrounded = _isStoneGrounded;
+    }
+    public void SetIsGravelGroundedState(bool _isGravelGrounded)
+    {
+        isGravelGrounded = _isGravelGrounded;
     }
     #endregion
 
+    #region Audio
+    private void AudioMixing()
+    {
+        if (isStoneGrounded && !isGravelGrounded)
+        {
+            Debug.Log("isonstone");
+            isOnStone = true;
 
+            if (isMoving && !isStoneRunning)
+            {
+                isStoneWalking = true;
+                AudioManager.Instance.PlayRandom("StoneWalk", 3);
+            }
+
+            if (isRunning && !isStoneWalking)
+            {
+                isStoneRunning = true;
+                AudioManager.Instance.PlayRandom("StoneRun", 4);
+                AudioManager.Instance.Play("BreathingRun");
+            }
+        }
+        else
+        {
+            isOnStone = false;
+        }
+        
+        if (isGravelGrounded && !isStoneGrounded)
+        {
+            isOnGravel = true;
+
+            if (isMoving && !isGravelRunning)
+            {
+                isGravelWalking = true;
+                AudioManager.Instance.PlayRandom("GravelWalk", 1);
+            }
+
+            if (isRunning && !isGravelWalking)
+            {
+                isGravelRunning = true;
+                AudioManager.Instance.PlayRandom("GravelRun", 2);
+                AudioManager.Instance.Play("BreathingRun");
+            }
+        }
+        else
+        {
+            isOnGravel = false;
+        }
+
+
+        if (!isOnStone)
+        {
+            AudioManager.Instance.Stop("StoneWalk");
+            AudioManager.Instance.Stop("StoneRun");
+            AudioManager.Instance.Stop("BreathingRun");
+        }
+        if (!isOnGravel)
+        {
+            AudioManager.Instance.Stop("GravelWalk");
+            AudioManager.Instance.Stop("GravelRun");
+            AudioManager.Instance.Stop("BreathingRun");
+        }
+        if (!isMoving || isSneaking)
+        {
+            AudioManager.Instance.Stop("GravelWalk");
+            AudioManager.Instance.Stop("GravelRun");
+            AudioManager.Instance.Stop("StoneWalk");
+            AudioManager.Instance.Stop("StoneRun");
+            AudioManager.Instance.Stop("BreathingRun");
+        }
+
+    }
+    #endregion 
+
+    IEnumerator JumpAnimatorTimer()
+    {
+        thirdPersonAnimator.SetBool("isJumping", true);
+        yield return new WaitForSeconds(0.8f);
+        thirdPersonAnimator.SetBool("isJumping", false);
+    }
+
+
+    
 }

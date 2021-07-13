@@ -12,7 +12,7 @@ public class AudioManager : MonoBehaviour
     //          - StopAllLoopingSounds Function so the looping clip can be easily stopped.
 
 
-    public float MasterVolume = 0.1f;
+    public float MasterVolume;
     public Sound[] sounds;
 
     [SerializeField] private AudioMixer MainMixer;
@@ -22,8 +22,11 @@ public class AudioManager : MonoBehaviour
     // Setting up the arrays for random sounds.
     [Space]
     [Header("Arrays for Random Sounds")]
-    //[SerializeField] private AudioClip[] walkOnGravelSounds;  <- Example for remembering purposes.
-    
+    [SerializeField] private AudioClip[] walkOnGravelSounds;
+    [SerializeField] private AudioClip[] runOnGravelSounds;
+    [SerializeField] private AudioClip[] walkOnStoneSounds;
+    [SerializeField] private AudioClip[] runOnStoneSounds;
+
     public static AudioManager Instance;
 
 
@@ -84,12 +87,31 @@ public class AudioManager : MonoBehaviour
 
         switch (index)
         {
+            case 1:
+                int randomnumberofarray = Random.Range(0, walkOnGravelSounds.Length);
+                audioclip = walkOnGravelSounds[randomnumberofarray];
 
-            //case 1:
-            //    int randomnumberofarray = Random.Range(0, walkOnGravelSounds.Length);  <-  Case 1 example exists only for reminding purposes.
-            //    audioclip = walkOnGravelSounds[randomnumberofarray];
+                break;
 
-            //break;
+            case 2:
+                randomnumberofarray = Random.Range(0, runOnGravelSounds.Length);
+                audioclip = runOnGravelSounds[randomnumberofarray];
+
+                break;
+
+            case 3:
+                randomnumberofarray = Random.Range(0, walkOnStoneSounds.Length);
+                audioclip = walkOnStoneSounds[randomnumberofarray];
+
+                break;
+
+            case 4:
+                randomnumberofarray = Random.Range(0, runOnStoneSounds.Length);
+                audioclip = runOnStoneSounds[randomnumberofarray];
+
+                break;
+
+
             default:
                 break;
         }
@@ -130,23 +152,11 @@ public class AudioManager : MonoBehaviour
 
     public void StopAllLoopingSounds()
     {
-        Stop("ForrestAtNight");
+        // Here add looping Sounds or Soundtracks
+
         Stop("GravelWalk");
         Stop("GravelRun");
         Stop("StoneWalk");
         Stop("StoneRun");
-        Stop("MainTheme");
-        Stop("BreathingRun");
-        Stop("BreathingInnerPeace");
-        Stop("BossTrack");
-        Stop("GrapplingGunPull");
-        Stop("Level3Ambience");
-        Stop("Level1Ambience");
-        Stop("Level2Ambience");
-        Stop("MinibossTrack");
-        Stop("EnglishHUBAmbience");
-        Stop("AsianHUBAmbience");
-        Stop("Level3BGAmbience");
-        Stop("Fire");
     }
 }
