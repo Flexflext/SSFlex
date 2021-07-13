@@ -43,9 +43,8 @@ public class Bullet : MonoBehaviourPunCallbacks
             {
                 OnHit.Invoke(collision.gameObject);
             }
-
-            PhotonNetwork.RemoveRPCs(photonView);
-            PhotonNetwork.Destroy(this.gameObject);
         }
+
+        Destroy(this.gameObject);
     }
 }
