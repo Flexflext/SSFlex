@@ -6,7 +6,7 @@ using Photon.Pun;
 using System.IO;
 using Photon.Realtime;
 
-public class Gun : MonoBehaviour
+public class Gun : MonoBehaviourPunCallbacks
 {
     //Bullet Behavior
     [SerializeField] protected bool isShooting;
@@ -72,7 +72,7 @@ public class Gun : MonoBehaviour
     [SerializeField] protected string name;
     public string GunName => name;
 
-    private PhotonView pV;
+    //private PhotonView pV;
 
 
     //Refs
@@ -88,7 +88,7 @@ public class Gun : MonoBehaviour
 
     private void Start()
     {
-        pV = GetComponentInParent<PhotonView>();
+        //pV = GetComponentInParent<PhotonView>();
         playerLook = GetComponentInParent<PlayerLook>();
         currentBulletsInMag = magSize;
         currentReloadTime = 0;
@@ -164,9 +164,9 @@ public class Gun : MonoBehaviour
 
     protected void CreateBullet(Vector3 _pos, Vector3 _direction, float _speed)
     {
-        if (pV.IsMine)
+        if (photonView.IsMine)
         {
-            pV.RPC(("RPC_CreateBullet"), RpcTarget.All, _pos, _direction, _speed);
+            photonView.RPC(("RPC_CreateBullet"), RpcTarget.All, _pos, _direction, _speed);
         }
     }
 
