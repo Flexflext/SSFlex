@@ -72,6 +72,8 @@ public class Gun : MonoBehaviour
     [SerializeField] protected string name;
     public string GunName => name;
 
+    private PhotonView pV;
+
 
     //Refs
     [Space]
@@ -86,6 +88,7 @@ public class Gun : MonoBehaviour
 
     private void Start()
     {
+        pV = GetComponentInParent<PhotonView>();
         playerLook = GetComponentInParent<PlayerLook>();
         currentBulletsInMag = magSize;
         currentReloadTime = 0;
@@ -161,8 +164,17 @@ public class Gun : MonoBehaviour
 
     protected void CreateBullet(Vector3 _pos, Vector3 _direction, float _speed)
     {
+        if (pV.IsMine)
+        {
+            pV.RPC(("RPC_CreateBullet"), RpcTarget.All, _pos, _direction, _speed);
+        }
+    }
+
+    [PunRPC]
+    protected void RPC_CreateBullet(Vector3 _pos, Vector3 _direction, float _speed)
+    {
         //Instantiate Bullet
-        GameObject bullet = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Bullet"), _pos, Quaternion.identity);
+        GameObject bullet = Instantiate(bulletPrefab, _pos, Quaternion.identity);
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         Bullet bulletScript = bullet.GetComponent<Bullet>();
 
