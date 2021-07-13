@@ -25,13 +25,13 @@ public class PlayerGFXChange : MonoBehaviour
 
     private void Awake()
     {
-        ChangePlayerGfx();
+        ChangePlayerGfx(team);
     }
 
 
-    private void ChangePlayerGfx()
+    public void ChangePlayerGfx(Team _team)
     {
-        switch (team)
+        switch (_team)
         {
             case Team.Red:
                 ChangeGfx(robotRed);
