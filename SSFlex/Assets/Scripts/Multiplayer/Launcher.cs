@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun; // Photon's own namespace.
+using Photon.Pun; 
 using TMPro;
 using Photon.Realtime;
 using System.Linq;
@@ -40,15 +40,14 @@ public class Launcher : MonoBehaviourPunCallbacks
     // When client is successfully connected to the master server this will be called.
     public override void OnConnectedToMaster()
     {
-        Debug.Log("Connected to MasterServer");
         PhotonNetwork.JoinLobby();
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
+    // When client successfully joined the lobby the client is visualized by "Player + a random number from 0000 to 0999".
     public override void OnJoinedLobby()
     {
         MenuManager.Instance.OpenMenu("Main");
-        Debug.Log("Joined Lobby");
         PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
     }
 
@@ -90,6 +89,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         startGameButton.SetActive(PhotonNetwork.IsMasterClient);
     }
 
+    // If the master of the room has left but there is still one client in this client will become the master and gets the startgame button.
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
         startGameButton.SetActive(PhotonNetwork.IsMasterClient);
@@ -102,18 +102,17 @@ public class Launcher : MonoBehaviourPunCallbacks
         MenuManager.Instance.OpenMenu("Error");
     }
 
-    public void LeaveRoom()
-    {
-        PhotonNetwork.LeaveRoom();
-        MenuManager.Instance.OpenMenu("Loading");
-    }
 
     public void JoinRoom(RoomInfo _info)
     {
         PhotonNetwork.JoinRoom(_info.Name);
         MenuManager.Instance.OpenMenu("Loading");
+    }
 
-        
+    public void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
+        MenuManager.Instance.OpenMenu("Loading");
     }
 
     public override void OnLeftRoom()
@@ -146,7 +145,6 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player _newPlayer)
     {
         Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(_newPlayer);
-
     }
 
     public void StartGame()

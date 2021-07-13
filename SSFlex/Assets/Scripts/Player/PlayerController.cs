@@ -69,9 +69,9 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        // Visualization for oneself:
-        // Client - Only Arms and Weapon.
-        // Other Clients - Whole 3rdPerson Body with animations.
+        // Visualization First Person View: Oneself
+        // Own player body - Only arms and weapon.
+        // Other player bodies - Whole 3rdPerson body with animations.
         if (photonView.IsMine)
         {
             Destroy(thirdPersonMesh.gameObject);
@@ -79,21 +79,21 @@ public class PlayerController : MonoBehaviour
         }
 
         // To seperate the camera control and the rigidbody of multiple players.
+        // Visualization First Person View: The other clients.
+        // + FPS Body and shotgun on other players are not visible for own player.
         if (!photonView.IsMine)
         {
-            Debug.Log("Camera kinda works");
             Destroy(cameraHolder.gameObject);
             Destroy(firstPersonMesh.gameObject);
             Destroy(firstPersonShotgun);
         }
-        
 
         currentPlayerSpeed = playerWalkingSpeed;
     }
 
     private void Update()
     {
-        // To seperate the controlls of musltiple players.
+        // To seperate the controls of multiple players.
         if (!photonView.IsMine)
         {
             Debug.Log("Player kinda works");
@@ -107,7 +107,7 @@ public class PlayerController : MonoBehaviour
         PlayerSneak();
         PlayerAimMovement();
         PlayerJump();
-        
+
 
         // Audio
         AudioMixing();
@@ -236,6 +236,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+   
+
     public void SetIsGroundedState(bool _isGrounded)
     {
         isGrounded = _isGrounded;
@@ -330,4 +332,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.8f);
         thirdPersonAnimator.SetBool("isJumping", false);
     }
+
+
+    
 }

@@ -14,7 +14,7 @@ public class MenuManager : MonoBehaviour
     }
 
 
-    // Takes a string and open its menu.
+    // Takes a string and opens its menu.
     public void OpenMenu(string _menuName)
     {
         for (int i = 0; i < menus.Length; i++)

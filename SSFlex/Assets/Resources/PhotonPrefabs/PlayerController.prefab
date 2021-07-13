@@ -453,6 +453,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 1370586007883492911}
   weapon: 1
+  thirdPersonAnimator: {fileID: 3253832158568025572}
   currentGun: {fileID: 2703382973323045817}
   primaryGun: {fileID: 0}
   secondaryGun: {fileID: 0}
@@ -630,6 +631,15 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: isJumping
+  - Type: 4
+    SynchronizeType: 2
+    Name: isStabbing
+  - Type: 4
+    SynchronizeType: 2
+    Name: isThrowing
+  - Type: 4
+    SynchronizeType: 2
+    Name: isShotGunShooting
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -792,6 +802,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1370586006681079324, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1370586006739449291, guid: fc80979f393058542a06d78eef397530,
         type: 3}

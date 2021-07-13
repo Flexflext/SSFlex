@@ -15,6 +15,7 @@ public class PlayerShooting : MonoBehaviour
 
     [SerializeField] private Camera cam;
     [SerializeField] private PrimaryWeapon weapon;
+    [SerializeField] private Animator thirdPersonAnimator;
 
     [Header("CurrentGun")]
     [SerializeField] private Gun currentGun;
@@ -88,6 +89,7 @@ public class PlayerShooting : MonoBehaviour
                 StartCoroutine(C_MeeleTimer(meeleTime));
                 //Set Animator
                 animator.SetTrigger("isMeeleing");
+                StartCoroutine(MeleeAnimation());
             }
 
             if (Input.GetKeyDown(KeyCode.Q) && !isGrenadeThrowing && !isMeeleing && canThrowGrenade && !isSwitching)
@@ -97,6 +99,7 @@ public class PlayerShooting : MonoBehaviour
                 StartCoroutine(C_GrenadeTimer(grenadeTime));
                 //Set Animator
                 animator.SetTrigger("GrenadeThrow");
+                StartCoroutine(PlayerGrenadeAnimator());
             }
 
 
@@ -323,10 +326,12 @@ public class PlayerShooting : MonoBehaviour
 
     private IEnumerator C_GrenadeTimer(float _time)
     {
+        
         yield return new WaitForSeconds(_time - _time * 1/3f);
+        
         ThrowGrenade();
         yield return new WaitForSeconds(_time * 1 / 3f);
-
+        
         isGrenadeThrowing = false;
     }
 
@@ -334,6 +339,20 @@ public class PlayerShooting : MonoBehaviour
     {
         yield return new WaitForSeconds(_time);
         canThrowGrenade = true;
+    }
+
+    private IEnumerator PlayerGrenadeAnimator()
+    {
+        thirdPersonAnimator.SetBool("isThrowing", true);
+        yield return new WaitForSeconds(1f);
+        thirdPersonAnimator.SetBool("isThrowing", false);
+    }
+
+    private IEnumerator MeleeAnimation()
+    {
+        thirdPersonAnimator.SetBool("isStabbing", true);
+        yield return new WaitForSeconds(1);
+        thirdPersonAnimator.SetBool("isStabbing", false);
     }
 
     private void OnDrawGizmos()
