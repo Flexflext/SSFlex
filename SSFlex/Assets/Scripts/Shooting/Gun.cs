@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 using Photon.Pun;
+using System.IO;
 using Photon.Realtime;
 
 public class Gun : MonoBehaviour
@@ -161,7 +162,7 @@ public class Gun : MonoBehaviour
     protected void CreateBullet(Vector3 _pos, Vector3 _direction, float _speed)
     {
         //Instantiate Bullet
-        GameObject bullet = Instantiate(bulletPrefab, _pos, Quaternion.identity);
+        GameObject bullet = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Bullet"), _pos, Quaternion.identity);
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         Bullet bulletScript = bullet.GetComponent<Bullet>();
 

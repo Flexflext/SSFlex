@@ -11,7 +11,7 @@ public enum PrimaryWeapon
     Sniper,
 }
 
-public class PlayerShooting : MonoBehaviour
+public class PlayerShooting : MonoBehaviourPunCallbacks
 {
     // Script for Player Shooting input
 
@@ -74,6 +74,11 @@ public class PlayerShooting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
         //Check that the time Scale isnt 0
         if (Time.timeScale == 0)
         {
@@ -251,7 +256,6 @@ public class PlayerShooting : MonoBehaviour
 
     private void SwitchWeapon(Gun _switchtogun, Gun _switchfromgun)
     {
-        animator.SetBool(_switchtogun.GunName, true);
         animator.SetBool(_switchfromgun.GunName, false);
 
         StartCoroutine(C_WeaponSwitch(_switchtogun, _switchfromgun));
@@ -260,6 +264,7 @@ public class PlayerShooting : MonoBehaviour
     private IEnumerator C_WeaponSwitch(Gun _switchtogun, Gun _switchfromgun)
     {
         isSwitching = true;
+        animator.SetBool(_switchtogun.GunName, true);
         yield return new WaitForSeconds(0.25f);
 
         // Sets new Gun as Currentgun
@@ -297,6 +302,11 @@ public class PlayerShooting : MonoBehaviour
     /// </summary>
     private void ThrowGrenade()
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
         Vector3 direction = (crossHairTarget.position - grenadeThrowPosition.position).normalized + Vector3.up / 4;
 
         GameObject grenade = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs","Grenade"), grenadeThrowPosition.position, Quaternion.identity);
