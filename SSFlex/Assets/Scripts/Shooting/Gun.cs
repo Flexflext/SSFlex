@@ -178,6 +178,11 @@ public class Gun : MonoBehaviour
     public void HitAnything(GameObject _gameobject)
     {
         Debug.Log("Hit Smth");
+
+        if (_gameobject.layer == 9)
+        {
+            _gameobject.GetComponent<PlayerHealth>().TakeDamage(dmg);
+        }
     }
 
     /// <summary>
