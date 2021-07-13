@@ -47,7 +47,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     // When client successfully joined the lobby the client is visualized by "Player + a random number from 0000 to 0999".
     public override void OnJoinedLobby()
     {
-        MenuManager.Instance.AdminMainMenu();
+        //MenuManager.Instance.AdminMainMenu();
         PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
     }
 
@@ -68,7 +68,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     // Callback for successfully joining the room.
     public override void OnJoinedRoom()
     {
-        MenuManager.Instance.AdminFindRoomMenu();
+        MenuManager.Instance.AdminRoomMenu();
         roomNameText.text = PhotonNetwork.CurrentRoom.Name;
 
         Player[] players = PhotonNetwork.PlayerList;
