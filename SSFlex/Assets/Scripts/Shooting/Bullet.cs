@@ -36,13 +36,11 @@ public class Bullet : MonoBehaviourPunCallbacks
         StopAllCoroutines();
         Instantiate(impactEffect, transform.position, Quaternion.identity);
 
-        if (photonView.IsMine)
+
+        // Check if is not null
+        if (OnHit != null)
         {
-            // Check if is not null
-            if (OnHit != null)
-            {
-                OnHit.Invoke(collision.gameObject);
-            }
+            OnHit.Invoke(collision.gameObject);
         }
 
         Destroy(this.gameObject);
