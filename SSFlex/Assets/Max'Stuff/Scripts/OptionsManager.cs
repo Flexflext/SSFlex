@@ -10,6 +10,9 @@ using UnityEngine.UI;
 /// </summary>
 public class OptionsManager : MonoBehaviour
 {
+    public float Fov => mFov;
+    public float MouseSensitivity => mMouseSensitivity;
+
     //[SerializeField]
     //private GameObject mPauseMenu;
     //[SerializeField]
@@ -18,9 +21,9 @@ public class OptionsManager : MonoBehaviour
     [SerializeField]
     private AudioMixer mMusicMixer;
     [SerializeField]
-    private AudioMixer mVoiceMixer;
-    [SerializeField]
     private AudioMixer mSFXMixer;
+    //[SerializeField]
+    //private AudioMixer mVoiceMixer;
     //[SerializeField]
     //private AudioVolumen mVolumen;
 
@@ -31,11 +34,20 @@ public class OptionsManager : MonoBehaviour
     private List<string> mResolutionOptions;
 
     [SerializeField]
+    private List<float> mAllowedRefreshRates;
+
+    [SerializeField]
+    private TMP_Dropdown mGraphicDropDown;
+
+    [SerializeField]
     private Slider mMusicSlider;
     [SerializeField]
-    private Slider mVoiceSlider;
-    [SerializeField]
     private Slider mSFXSlider;
+    //[SerializeField]
+    //private Slider mVoiceSlider;
+
+    private float mFov;
+    private float mMouseSensitivity;
 
 
     //private void Awake()
@@ -58,7 +70,7 @@ public class OptionsManager : MonoBehaviour
             int currentResIdx = 0;
             for (int i = 0; i < mResolutions.Length; i++)
             {
-                string option = mResolutions[i].width + " x " + mResolutions[i].height;
+                string option = mResolutions[i].width + " x " + mResolutions[i].height + " x " + mResolutions[i].refreshRate + "Hz";
                 mResolutionOptions.Add(option);
 
                 if (mResolutions[i].width == Screen.currentResolution.width && mResolutions[i].height == Screen.currentResolution.height)
@@ -70,6 +82,8 @@ public class OptionsManager : MonoBehaviour
             mResolutionDropDown.AddOptions(mResolutionOptions);
             mResolutionDropDown.value = currentResIdx;
             mResolutionDropDown.RefreshShownValue();
+
+            mGraphicDropDown.value = (int)QualitySettings.currentLevel;
         }
     }
 
@@ -88,24 +102,24 @@ public class OptionsManager : MonoBehaviour
     //    mSFXSlider.value = mVolumen.SFXVolumen;
     //}
 
-    ///// <summary>
-    ///// Method to adjust the Audio
-    ///// </summary>
-    //public void SetMusicVolumen(float _volume)
-    //{     
-    //    mMusicMixer.SetFloat("Volume", Mathf.Log10(_volume) * 20);
-    //    mVolumen.MusicVolumen = _volume;
-    //}
-    //public void SetVoiceVolumen(float _volume)
-    //{
-    //    mVoiceMixer.SetFloat("Voice", Mathf.Log10(_volume) * 20);
-    //    mVolumen.VoiceVolumen = _volume;
-    //}
-    //public void SetSFXVolumen(float _volume)
-    //{
-    //    mSFXMixer.SetFloat("SFX", Mathf.Log10(_volume) * 20);
-    //    mVolumen.SFXVolumen = _volume;
-    //}
+    /// <summary>
+    /// Method to adjust the Audio
+    /// </summary>
+    public void SetMusicVolumen(float _volume)
+    {
+        //mMusicMixer.SetFloat("Volume", Mathf.Log10(_volume) * 20);
+        //mVolumen.MusicVolumen = _volume;
+    }
+    public void SetVoiceVolumen(float _volume)
+    {
+        //mVoiceMixer.SetFloat("Voice", Mathf.Log10(_volume) * 20);
+        //mVolumen.VoiceVolumen = _volume;
+    }
+    public void SetSFXVolumen(float _volume)
+    {
+        //mSFXMixer.SetFloat("SFX", Mathf.Log10(_volume) * 20);
+        //mVolumen.SFXVolumen = _volume;
+    }
 
     /// <summary>
     /// Method to toggle between fullscreen or windowed
@@ -135,4 +149,20 @@ public class OptionsManager : MonoBehaviour
     {
         Application.Quit();
     }
+
+    public void SetFov(float _value)
+    {
+        mFov = _value;
+    }
+
+    public void SetMouseSensitivity(float _value)
+    {
+        mMouseSensitivity = _value;
+    }
+
+    public void SetGraphicQuality(int _graphicQualityIdx)
+    {
+        QualitySettings.SetQualityLevel(_graphicQualityIdx);
+    }
+
 }

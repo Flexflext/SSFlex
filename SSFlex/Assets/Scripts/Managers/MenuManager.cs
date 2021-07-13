@@ -11,6 +11,8 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     private GameObject mLoadingScreen;
     [SerializeField]
+    private GameObject mOptionsMenu;
+    [SerializeField]
     private GameObject mCreateRoomMenu;
     [SerializeField]
     private GameObject mRoomMenu;
@@ -23,8 +25,12 @@ public class MenuManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(this.gameObject);
     }
+
 
     private void Start()
     {
@@ -32,6 +38,7 @@ public class MenuManager : MonoBehaviour
         {
             mMainMenu,
             mLoadingScreen,
+            mOptionsMenu,
             mCreateRoomMenu,
             mRoomMenu,
             mErrorMenu,
@@ -64,6 +71,17 @@ public class MenuManager : MonoBehaviour
         }
 
         CloseMenu(mLoadingScreen);
+    }
+
+    public void AdmitOptionsMenu()
+    {
+        if (mOptionsMenu != null)
+        {
+            if (mOptionsMenu.activeSelf)
+                mOptionsMenu.SetActive(false);
+            else
+                mOptionsMenu.SetActive(true);
+        }
     }
 
     public void AdminCreateRoomMenu()
@@ -125,5 +143,10 @@ public class MenuManager : MonoBehaviour
             if (menu != _menuToCheck)
                 menu.SetActive(false);
         }
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }

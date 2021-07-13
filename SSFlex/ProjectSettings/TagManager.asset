@@ -7,6 +7,8 @@ TagManager:
   - ClipTag
   - ClipLayer
   - ClipPos
+  - Placeholder
+  - EscapeMenu
   layers:
   - Default
   - TransparentFX
