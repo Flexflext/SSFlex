@@ -503,7 +503,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88869b6f74c039849b0ef710f07012aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: 2
+  team: 0
   robotRed: {fileID: 2100000, guid: 6827a9868b2b76d4a8a819f3c4f00f91, type: 2}
   robotBlue: {fileID: 2100000, guid: e022bd0db23ef4841850ba4b5fd84fe5, type: 2}
   robotYellow: {fileID: 2100000, guid: 301c9d91bd7f81c45b08c50d6882dc8b, type: 2}

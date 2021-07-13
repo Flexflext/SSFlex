@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using System.IO;
 
 public enum PrimaryWeapon 
 { 
@@ -296,7 +298,8 @@ public class PlayerShooting : MonoBehaviour
     private void ThrowGrenade()
     {
         Vector3 direction = (crossHairTarget.position - grenadeThrowPosition.position).normalized + Vector3.up / 4;
-        GameObject grenade = Instantiate(grenadePrefab, grenadeThrowPosition.position, Quaternion.identity);
+
+        GameObject grenade = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs","Grenade"), grenadeThrowPosition.position, Quaternion.identity);
 
         Rigidbody grendadeRb = grenade.GetComponent<Rigidbody>();
 
