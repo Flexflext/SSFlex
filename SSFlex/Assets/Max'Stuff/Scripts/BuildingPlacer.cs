@@ -164,12 +164,14 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     {
         Vector3 hitPos = new Vector3();
 
-        Vector3 crosPos = mMainCam.ScreenToWorldPoint(mCrosshair.transform.position);
+        //Vector3 crosPos = mMainCam.ScreenToWorldPoint(mCrosshair.transform.position);
 
         Vector3 dirVec = new Vector3();
 
         RaycastHit hit;
-        if (Physics.Raycast(crosPos, mMainCam.transform.forward, out hit, 1000, mBuildLayer))
+
+
+        if (Physics.Raycast(mMainCam.transform.position, mMainCam.transform.forward, out hit, 1000, mBuildLayer))
         {
             hitPos = hit.point;
 
@@ -462,7 +464,6 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
             if(mHitSlotToAdd_Face != NormalBuildingInfo.EClipFaceSlots.none)
                 mHitObjInfo.AddClipSlotFace(mHitSlotToAdd_Face);
 
-
             photonView.RPC("RPC_InstantiateClippedObj", RpcTarget.All);
 
         }
@@ -472,6 +473,8 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     [PunRPC]
     private void RPC_InstantiateClippedObj()
     {
+        Debug.LogWarning("BUILD");
+
         GameObject currentBuilding = Instantiate(mCurrentBuilding, mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
         NormalBuildingInfo currenBuildingInfo = currentBuilding.GetComponent<NormalBuildingInfo>();
 
@@ -491,6 +494,8 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     [PunRPC]
     private void RPC_InstantiateNormalObj()
     {
+        
+
         GameObject currentBuilding = Instantiate(mCurrentBuilding, mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
         currentBuilding.GetComponent<NormalBuildingInfo>().AddClipSlotSide(NormalBuildingInfo.EClipSideSlots.down);
     }

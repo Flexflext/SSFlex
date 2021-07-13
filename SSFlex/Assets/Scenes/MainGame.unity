@@ -7835,7 +7835,7 @@ GameObject:
   - component: {fileID: 207015774}
   m_Layer: 12
   m_Name: BuildingArea_Player1
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -38265,7 +38265,7 @@ GameObject:
   - component: {fileID: 1305132458}
   m_Layer: 12
   m_Name: BuildingArea_Player2
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -40667,7 +40667,7 @@ GameObject:
   - component: {fileID: 1388354019}
   m_Layer: 12
   m_Name: BuildingArea_Player3
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -54999,7 +54999,7 @@ GameObject:
   - component: {fileID: 1879438951}
   m_Layer: 12
   m_Name: BuildingArea_Player4
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

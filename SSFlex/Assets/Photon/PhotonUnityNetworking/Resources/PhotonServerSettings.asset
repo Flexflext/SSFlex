@@ -43,6 +43,8 @@ MonoBehaviour:
   - RPC_InstantiateObj
   - RPC_InstantiateClippedObj
   - RPC_InstantiateNormalObj
+  - RPC_Subscribe
+  - RPC_UnSubscribe
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
