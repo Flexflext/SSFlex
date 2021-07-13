@@ -25,6 +25,8 @@ public class Bullet : MonoBehaviourPunCallbacks
 
         if (photonView.IsMine)
         {
+            Debug.Log("Hier");
+            PhotonNetwork.RemoveRPCs(photonView);
             PhotonNetwork.Destroy(this.gameObject);
         }
     }
@@ -41,8 +43,9 @@ public class Bullet : MonoBehaviourPunCallbacks
             if (OnHit != null)
             {
                 OnHit.Invoke(collision.gameObject);
-            }    
+            }
 
+            PhotonNetwork.RemoveRPCs(photonView);
             PhotonNetwork.Destroy(this.gameObject);
         }
     }
