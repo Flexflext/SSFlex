@@ -40,6 +40,9 @@ MonoBehaviour:
   - RespawnSpaceship
   - RPC_TakeDamage
   - RPC_CreateBullet
+  - RPC_InstantiateObj
+  - RPC_InstantiateClippedObj
+  - RPC_InstantiateNormalObj
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

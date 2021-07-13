@@ -4799,6 +4799,7 @@ GameObject:
   - component: {fileID: 3364571376291258373}
   - component: {fileID: 3364571376291258372}
   - component: {fileID: 429896678859764832}
+  - component: {fileID: -1541530893802446591}
   m_Layer: 8
   m_Name: NormalWall
   m_TagString: ClipTag
@@ -4906,6 +4907,28 @@ MonoBehaviour:
   mDamagedParticle: {fileID: 7723176751868799872}
   mBuildParticle: {fileID: 1564331782}
   mColourStartValue: 0.3
+--- !u!114 &-1541530893802446591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3364571376291258370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1001 &141436015
 PrefabInstance:
   m_ObjectHideFlags: 0

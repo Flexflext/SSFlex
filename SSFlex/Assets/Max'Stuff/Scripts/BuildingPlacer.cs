@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class BuildingPlacer : MonoBehaviour
+public class BuildingPlacer : MonoBehaviourPunCallbacks
 {
     public float MaxBuildHeight => mMaxBuildHeight;
     public bool IsClipped => mIsClipped;
@@ -60,6 +61,7 @@ public class BuildingPlacer : MonoBehaviour
     private GameObject mCurrentPlaceholder;
     private List<GameObject> mAllPlaceholder;
 
+
     [SerializeField]
     private Camera mMainCam;
 
@@ -86,6 +88,9 @@ public class BuildingPlacer : MonoBehaviour
 
     private void Start()
     {
+        if (!photonView.IsMine)
+            return;
+
         mAllBuildings = new List<GameObject>()
         {
             mNormalWall,
@@ -113,6 +118,9 @@ public class BuildingPlacer : MonoBehaviour
 
     private void Update()
     {
+        if (!photonView.IsMine)
+            return;
+
         Debug.Log(mIsClipped);
 
         ChangeBuildType();
@@ -128,7 +136,7 @@ public class BuildingPlacer : MonoBehaviour
         {
             mCurrentPlaceholder.SetActive(true);
 
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (Input.GetKeyDown(KeyCode.LeftAlt))
             {
                 if (mRotFloat <= 0)
                     mRotFloat += 90f;
@@ -438,12 +446,7 @@ public class BuildingPlacer : MonoBehaviour
             mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.none;
             Debug.Log("No valid Clip Pos");
         }
-
-
-
-
-
-        
+ 
 
         SetClippedBuildingRotation();
         SetClippedBuildingPos(posToSet);
@@ -459,21 +462,37 @@ public class BuildingPlacer : MonoBehaviour
             if(mHitSlotToAdd_Face != NormalBuildingInfo.EClipFaceSlots.none)
                 mHitObjInfo.AddClipSlotFace(mHitSlotToAdd_Face);
 
-            GameObject currentBuilding = Instantiate(mCurrentBuilding, mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
-            NormalBuildingInfo currenBuildingInfo = currentBuilding.GetComponent<NormalBuildingInfo>();
 
-            if(mCurrentSlotToAdd_Side != NormalBuildingInfo.EClipSideSlots.none)
-                currenBuildingInfo.AddClipSlotSide(mCurrentSlotToAdd_Side);
+            photonView.RPC("RPC_InstantiateClippedObj", RpcTarget.All);
 
-            if (mCurrentSlotToAdd_Face != NormalBuildingInfo.EClipFaceSlots.none)
-                currenBuildingInfo.AddClipSlotFace(mCurrentSlotToAdd_Face);
-
-            if (mHitSlotToAdd_Side == NormalBuildingInfo.EClipSideSlots.up && mCurrentSlotToAdd_Side == NormalBuildingInfo.EClipSideSlots.down || mHitObjInfo.IsFirstFloor)
-            {
-                if(mHitSlotToAdd_Side != NormalBuildingInfo.EClipSideSlots.down)
-                    currenBuildingInfo.SetFirstFloor();
-            }
         }
+    }
+
+    
+    [PunRPC]
+    private void RPC_InstantiateClippedObj()
+    {
+        GameObject currentBuilding = Instantiate(mCurrentBuilding, mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
+        NormalBuildingInfo currenBuildingInfo = currentBuilding.GetComponent<NormalBuildingInfo>();
+
+        if (mCurrentSlotToAdd_Side != NormalBuildingInfo.EClipSideSlots.none)
+            currenBuildingInfo.AddClipSlotSide(mCurrentSlotToAdd_Side);
+
+        if (mCurrentSlotToAdd_Face != NormalBuildingInfo.EClipFaceSlots.none)
+            currenBuildingInfo.AddClipSlotFace(mCurrentSlotToAdd_Face);
+
+        if (mHitSlotToAdd_Side == NormalBuildingInfo.EClipSideSlots.up && mCurrentSlotToAdd_Side == NormalBuildingInfo.EClipSideSlots.down || mHitObjInfo.IsFirstFloor)
+        {
+            if (mHitSlotToAdd_Side != NormalBuildingInfo.EClipSideSlots.down)
+                currenBuildingInfo.SetFirstFloor();
+        }
+    }
+
+    [PunRPC]
+    private void RPC_InstantiateNormalObj()
+    {
+        GameObject currentBuilding = Instantiate(mCurrentBuilding, mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
+        currentBuilding.GetComponent<NormalBuildingInfo>().AddClipSlotSide(NormalBuildingInfo.EClipSideSlots.down);
     }
 
     private void SetClippedBuildingRotation( )
@@ -504,8 +523,7 @@ public class BuildingPlacer : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && mPlaceholderScript.ValidPosition)
         {
-            GameObject currentBuilding = Instantiate(mCurrentBuilding, mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
-            currentBuilding.GetComponent<NormalBuildingInfo>().AddClipSlotSide(NormalBuildingInfo.EClipSideSlots.down);
+            photonView.RPC("RPC_InstantiateNormalObj", RpcTarget.All);
         }
     }
 

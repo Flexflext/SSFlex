@@ -120,10 +120,10 @@ public class MenuManager : MonoBehaviour
 
     private void CloseMenu(GameObject _menuToCheck)
     {
-        foreach (GameObject menu in mAllMenus)
-        {
-            if (menu != _menuToCheck)
-                menu.SetActive(false);
-        }
+        //foreach (GameObject menu in mAllMenus)
+        //{
+        //    if (menu != _menuToCheck)
+        //        menu.SetActive(false);
+        //}
     }
 }
