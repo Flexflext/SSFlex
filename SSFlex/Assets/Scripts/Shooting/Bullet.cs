@@ -1,7 +1,7 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
 
 public class Bullet : MonoBehaviourPunCallbacks
 {
@@ -23,12 +23,11 @@ public class Bullet : MonoBehaviourPunCallbacks
     {
         yield return new WaitForSeconds(_time);
 
-        if (photonView.IsMine)
-        {
-            Debug.Log("Hier");
-            //PhotonNetwork.RemoveRPCs(photonView);
-            //PhotonNetwork.Destroy(this.gameObject);
-        }
+
+        Debug.Log("Hier");
+        Destroy(gameObject);
+        //PhotonNetwork.RemoveRPCs(photonView);
+        //PhotonNetwork.Destroy(this.gameObject);
     }
 
 
@@ -45,8 +44,8 @@ public class Bullet : MonoBehaviourPunCallbacks
                 OnHit.Invoke(collision.gameObject);
             }
 
-            //PhotonNetwork.RemoveRPCs(photonView);
-            //PhotonNetwork.Destroy(this.gameObject);
+            PhotonNetwork.RemoveRPCs(photonView);
+            PhotonNetwork.Destroy(this.gameObject);
         }
     }
 }
