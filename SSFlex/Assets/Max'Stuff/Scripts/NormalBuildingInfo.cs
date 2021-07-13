@@ -44,9 +44,6 @@ public class NormalBuildingInfo : MonoBehaviour
 
     private bool mIsFirstFloor;
 
-
-
-
     [SerializeField]
     private LayerMask mBuildLayer;
 
@@ -72,11 +69,6 @@ public class NormalBuildingInfo : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TakeDamage(2);
-        }
-
         //Debug.DrawRay(mMeshRenderer.bounds.center, transform.right * (mMeshRenderer.bounds.extents.x + mExtendMod));
     }
 

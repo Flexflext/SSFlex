@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using System.IO;
 
 public class BuildingPlacer : MonoBehaviourPunCallbacks
 {
@@ -107,6 +108,7 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         };
         mCurrentPlaceholder = mNormalWallPlaceholder;
         mCurrentBuilding = mNormalWall;
+        mPlaceholderScript = mCurrentPlaceholder.GetComponent<PlaceholderScript>();
 
         mCurrentCollider = mNormalWall.GetComponentInChildren<Collider>();
         mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.none;
@@ -464,41 +466,25 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
             if(mHitSlotToAdd_Face != NormalBuildingInfo.EClipFaceSlots.none)
                 mHitObjInfo.AddClipSlotFace(mHitSlotToAdd_Face);
 
-            photonView.RPC("RPC_InstantiateClippedObj", RpcTarget.All);
+            string objToBuild = mPlaceholderScript.ObjName;
 
+            GameObject currentBuilding = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", objToBuild), mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
+            NormalBuildingInfo currenBuildingInfo = currentBuilding.GetComponent<NormalBuildingInfo>();
+
+            if (mCurrentSlotToAdd_Side != NormalBuildingInfo.EClipSideSlots.none)
+                currenBuildingInfo.AddClipSlotSide(mCurrentSlotToAdd_Side);
+
+            if (mCurrentSlotToAdd_Face != NormalBuildingInfo.EClipFaceSlots.none)
+                currenBuildingInfo.AddClipSlotFace(mCurrentSlotToAdd_Face);
+
+            if (mHitSlotToAdd_Side == NormalBuildingInfo.EClipSideSlots.up && mCurrentSlotToAdd_Side == NormalBuildingInfo.EClipSideSlots.down || mHitObjInfo.IsFirstFloor)
+            {
+                if (mHitSlotToAdd_Side != NormalBuildingInfo.EClipSideSlots.down)
+                    currenBuildingInfo.SetFirstFloor();
+            }
         }
     }
 
-    
-    [PunRPC]
-    private void RPC_InstantiateClippedObj()
-    {
-        Debug.LogWarning("BUILD");
-
-        GameObject currentBuilding = Instantiate(mCurrentBuilding, mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
-        NormalBuildingInfo currenBuildingInfo = currentBuilding.GetComponent<NormalBuildingInfo>();
-
-        if (mCurrentSlotToAdd_Side != NormalBuildingInfo.EClipSideSlots.none)
-            currenBuildingInfo.AddClipSlotSide(mCurrentSlotToAdd_Side);
-
-        if (mCurrentSlotToAdd_Face != NormalBuildingInfo.EClipFaceSlots.none)
-            currenBuildingInfo.AddClipSlotFace(mCurrentSlotToAdd_Face);
-
-        if (mHitSlotToAdd_Side == NormalBuildingInfo.EClipSideSlots.up && mCurrentSlotToAdd_Side == NormalBuildingInfo.EClipSideSlots.down || mHitObjInfo.IsFirstFloor)
-        {
-            if (mHitSlotToAdd_Side != NormalBuildingInfo.EClipSideSlots.down)
-                currenBuildingInfo.SetFirstFloor();
-        }
-    }
-
-    [PunRPC]
-    private void RPC_InstantiateNormalObj()
-    {
-        
-
-        GameObject currentBuilding = Instantiate(mCurrentBuilding, mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
-        currentBuilding.GetComponent<NormalBuildingInfo>().AddClipSlotSide(NormalBuildingInfo.EClipSideSlots.down);
-    }
 
     private void SetClippedBuildingRotation( )
     {
@@ -528,7 +514,10 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && mPlaceholderScript.ValidPosition)
         {
-            photonView.RPC("RPC_InstantiateNormalObj", RpcTarget.All);
+            string objToBuild = mPlaceholderScript.ObjName;
+
+            GameObject currentBuilding = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", objToBuild), mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
+            currentBuilding.GetComponent<NormalBuildingInfo>().AddClipSlotSide(NormalBuildingInfo.EClipSideSlots.down);
         }
     }
 
@@ -556,6 +545,7 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
             {
                 placeholder.SetActive(true);
                 mCurrentPlaceholder = placeholder;
+                mPlaceholderScript = placeholder.GetComponent<PlaceholderScript>();
             }
             else
                 placeholder.SetActive(false);

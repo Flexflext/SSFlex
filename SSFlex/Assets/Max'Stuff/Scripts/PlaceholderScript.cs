@@ -6,8 +6,13 @@ public class PlaceholderScript : MonoBehaviour
 {
     public BuildingDimensions.EBuildingDimensions CurrentDimension => mCurrentDimension;
     public bool ValidPosition => mValidPosition;
+    public string ObjName => mObjName;
+
 
     private bool mValidPosition = true;
+
+    [SerializeField]
+    private string mObjName;
 
     [SerializeField]
     private MeshRenderer mMeshRenderer;

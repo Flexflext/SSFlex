@@ -185,6 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ff6fb856a72b25478eb71babf34f046, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mObjName: HalfWall
   mMeshRenderer: {fileID: 960442414}
   mBuildPlacer: {fileID: 279627001}
   mValidMaterial: {fileID: 2100000, guid: fefd3e03a314e40469adeb978d9e5549, type: 2}
@@ -365,6 +366,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ff6fb856a72b25478eb71babf34f046, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mObjName: NormalStairs
   mMeshRenderer: {fileID: 1206471800}
   mBuildPlacer: {fileID: 279627001}
   mValidMaterial: {fileID: 2100000, guid: fefd3e03a314e40469adeb978d9e5549, type: 2}
@@ -479,6 +481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ff6fb856a72b25478eb71babf34f046, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mObjName: NormalWall
   mMeshRenderer: {fileID: 1558243590}
   mBuildPlacer: {fileID: 279627001}
   mValidMaterial: {fileID: 2100000, guid: fefd3e03a314e40469adeb978d9e5549, type: 2}
@@ -593,6 +596,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ff6fb856a72b25478eb71babf34f046, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mObjName: NormalGate
   mMeshRenderer: {fileID: 1792141536}
   mBuildPlacer: {fileID: 279627001}
   mValidMaterial: {fileID: 2100000, guid: fefd3e03a314e40469adeb978d9e5549, type: 2}
@@ -1237,7 +1241,7 @@ MonoBehaviour:
   mClipThreshold_Up: 0.35
   mBuildLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 4352
   mCrosshair: {fileID: 0}
   mBuildPoint: {fileID: 376500126}
   mNormalWall: {fileID: 3364571376291258370, guid: 69ef0c102c6396645be2b7695b8081c7,
