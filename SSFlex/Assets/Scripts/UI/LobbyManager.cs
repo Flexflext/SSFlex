@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Photon.Realtime;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
@@ -18,12 +19,15 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject selectYellowButton;
     [SerializeField] private GameObject selectGreenButton;
 
-    //private string playerName;
+    [SerializeField] private GameObject startGameButton;
 
-    //private void Update()
-    //{
-    //    playerRed.text = playerName;
-    //}
+    private void Start()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            startGameButton.SetActive(true);
+        }
+    }
 
     public void ChangeTeam(int _teamnum)
     {
@@ -31,21 +35,31 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         {
             case 1:
                 RoomManager.Instance.ChangeTeam(Team.Red);
-
-                photonView.RPC("DisplayTeam", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
+                selectBlueButton.SetActive(false);
+                selectYellowButton.SetActive(false);
+                selectGreenButton.SetActive(false);
+                photonView.RPC("DisplayTeamRed", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
                 break;
             case 2:
                 RoomManager.Instance.ChangeTeam(Team.Blue);
-                photonView.RPC("DisplayTeam", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
+                selectRedButton.SetActive(false);
+                selectYellowButton.SetActive(false);
+                selectGreenButton.SetActive(false);
+                photonView.RPC("DisplayTeamBlue", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
                 break;
             case 3:
                 RoomManager.Instance.ChangeTeam(Team.Yellow);
-
-                photonView.RPC("DisplayTeam", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
+                selectBlueButton.SetActive(false);
+                selectRedButton.SetActive(false);
+                selectGreenButton.SetActive(false);
+                photonView.RPC("DisplayTeamYellow", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
                 break;
             case 4:
                 RoomManager.Instance.ChangeTeam(Team.Green);
-                photonView.RPC("DisplayTeam", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
+                selectBlueButton.SetActive(false);
+                selectRedButton.SetActive(false);
+                selectYellowButton.SetActive(false);
+                photonView.RPC("DisplayTeamGreen", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
                 break;
 
             default:
@@ -54,13 +68,58 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     }
 
 
+    public void ReturnMenu()
+    {
+        PhotonNetwork.LeaveRoom();
+        MenuManager.Instance.AdminLoadingMenu();
+    }
+
+    public void StartGame()
+    {
+        PhotonNetwork.LoadLevel(2);
+    }
+
+    // If the master of the room has left but there is still one client in this client will become the master and gets the startgame button.
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        startGameButton.SetActive(PhotonNetwork.IsMasterClient);
+    }
+
+    public override void OnLeftRoom()
+    {
+        MenuManager.Instance.AdminMainMenu();
+    }
+
+
+    #region RPC Calls
 
     [PunRPC]
-    private void DisplayTeam(string _name)
+    private void DisplayTeamRed(string _name)
     {
         playerRed.text = _name;
         selectRedButton.SetActive(false);
     }
 
+    [PunRPC]
+    private void DisplayTeamBlue(string _name)
+    {
+        playerBlue.text = _name;
+        selectBlueButton.SetActive(false);
+    }
 
+    [PunRPC]
+    private void DisplayTeamYellow(string _name)
+    {
+        playerYellow.text = _name;
+        selectYellowButton.SetActive(false);
+    }
+
+    [PunRPC]
+    private void DisplayTeamGreen(string _name)
+    {
+        playerGreen.text = _name;
+        selectGreenButton.SetActive(false);
+    }
+
+    #endregion
 }

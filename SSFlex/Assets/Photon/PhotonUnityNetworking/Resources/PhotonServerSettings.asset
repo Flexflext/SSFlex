@@ -46,6 +46,10 @@ MonoBehaviour:
   - RPC_Subscribe
   - RPC_UnSubscribe
   - DisplayTeam
+  - DisplayTeamBlue
+  - DisplayTeamGreen
+  - DisplayTeamRed
+  - DisplayTeamYellow
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

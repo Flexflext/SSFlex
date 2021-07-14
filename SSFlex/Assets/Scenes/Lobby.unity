@@ -3031,7 +3031,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 784330618}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1453810796}
+        m_MethodName: StartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &784330618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3523,7 +3534,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 4
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -3776,7 +3787,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1113295744}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1453810796}
+        m_MethodName: ReturnMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1113295744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5922,6 +5944,7 @@ MonoBehaviour:
   selectBlueButton: {fileID: 243416236}
   selectYellowButton: {fileID: 1092419739}
   selectGreenButton: {fileID: 1098030666}
+  startGameButton: {fileID: 784330615}
 --- !u!114 &1453810797
 MonoBehaviour:
   m_ObjectHideFlags: 0

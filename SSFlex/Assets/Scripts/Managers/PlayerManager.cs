@@ -28,6 +28,11 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void ChangeTeam(Team _team)
+    {
+        team = _team;
+    }
+
     private void CreateController()
     {
         // Instatntiates the PlayerController and sets its Spawnpoint.
