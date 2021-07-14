@@ -103,8 +103,6 @@ public class MineableObject : MonoBehaviourPunCallbacks
         if (mCollider.enabled)
             mCollider.enabled = false;
 
-       // Debug.Log(mMinedAnimClipLenght);
-
         if (mMinedAnimClipLenght <= 0)
             Destroy(gameObject);
         else
