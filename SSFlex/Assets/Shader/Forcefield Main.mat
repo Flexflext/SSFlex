@@ -29,14 +29,14 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_17405470: 2
+    - Vector1_17405470: -0.7
     - Vector1_1E5B9457: 0.5
-    - Vector1_44DA1763: 3.86
-    - Vector1_6C78398D: 3.42
+    - Vector1_44DA1763: 13.45
+    - Vector1_6C78398D: -0.46
     - Vector1_8007D3D: 1
     - Vector1_8CC702C3: -1
-    - Vector1_B7AF2A94: 0
-    - Vector1_C2C369D: 0.2
+    - Vector1_B7AF2A94: 0.04
+    - Vector1_C2C369D: -0.39
     - Vector1_EC4A279: 0.5
     - Vector1_EE0A1D8B: 1
     m_Colors:

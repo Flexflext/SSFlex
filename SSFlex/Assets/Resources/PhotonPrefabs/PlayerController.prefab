@@ -1568,6 +1568,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1370586006943107614, guid: fc80979f393058542a06d78eef397530,
         type: 3}
+      propertyPath: camTransform
+      value: 
+      objectReference: {fileID: 1370586007386524113}
+    - target: {fileID: 1370586006943107614, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
       propertyPath: crossHairTarget
       value: 
       objectReference: {fileID: 1370586006440095953}
