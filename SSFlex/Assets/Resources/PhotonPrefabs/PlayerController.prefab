@@ -979,8 +979,8 @@ GameObject:
   - component: {fileID: 1370586008316802725}
   - component: {fileID: 1370586008316802746}
   - component: {fileID: 5609322861684964203}
-  - component: {fileID: 1370586008316802745}
   - component: {fileID: -4470319555703973738}
+  - component: {fileID: 1370586008316802745}
   - component: {fileID: 1370586008316802744}
   - component: {fileID: -1493995520272024769}
   - component: {fileID: -8049491682966140267}
@@ -1120,20 +1120,6 @@ MonoBehaviour:
   robots:
   - {fileID: 7552176119729213148}
   - {fileID: 3919714516974720712}
---- !u!136 &1370586008316802745
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1370586008316802727}
-  m_Material: {fileID: 13400000, guid: 51afaf765f906de4f916dac9aba2690a, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &-4470319555703973738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1150,6 +1136,20 @@ MonoBehaviour:
   shield: 100
   timeUntilShieldRegen: 5
   regenPerSecond: 10
+--- !u!136 &1370586008316802745
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1370586008316802727}
+  m_Material: {fileID: 13400000, guid: 51afaf765f906de4f916dac9aba2690a, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &1370586008316802744
 Rigidbody:
   m_ObjectHideFlags: 0

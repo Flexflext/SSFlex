@@ -38,28 +38,28 @@ public class LobbyManager : MonoBehaviourPunCallbacks
                 selectBlueButton.SetActive(false);
                 selectYellowButton.SetActive(false);
                 selectGreenButton.SetActive(false);
-                photonView.RPC("DisplayTeamRed", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
+                photonView.RPC("DisplayTeamRed", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.NickName);
                 break;
             case 2:
                 RoomManager.Instance.ChangeTeam(Team.Blue);
                 selectRedButton.SetActive(false);
                 selectYellowButton.SetActive(false);
                 selectGreenButton.SetActive(false);
-                photonView.RPC("DisplayTeamBlue", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
+                photonView.RPC("DisplayTeamBlue", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.NickName);
                 break;
             case 3:
                 RoomManager.Instance.ChangeTeam(Team.Yellow);
                 selectBlueButton.SetActive(false);
                 selectRedButton.SetActive(false);
                 selectGreenButton.SetActive(false);
-                photonView.RPC("DisplayTeamYellow", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
+                photonView.RPC("DisplayTeamYellow", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.NickName);
                 break;
             case 4:
                 RoomManager.Instance.ChangeTeam(Team.Green);
                 selectBlueButton.SetActive(false);
                 selectRedButton.SetActive(false);
                 selectYellowButton.SetActive(false);
-                photonView.RPC("DisplayTeamGreen", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
+                photonView.RPC("DisplayTeamGreen", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.NickName);
                 break;
 
             default:
