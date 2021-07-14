@@ -31,31 +31,21 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         {
             case 1:
                 RoomManager.Instance.ChangeTeam(Team.Red);
-                if (photonView.IsMine)
-                {
-                    photonView.RPC("DisplayTeam", RpcTarget.All,PhotonNetwork.LocalPlayer.NickName);
-                }
+
+                photonView.RPC("DisplayTeam", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
                 break;
             case 2:
                 RoomManager.Instance.ChangeTeam(Team.Blue);
-                if (photonView.IsMine)
-                {
-                    photonView.RPC("DisplayTeam", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
-                }
+                photonView.RPC("DisplayTeam", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
                 break;
             case 3:
                 RoomManager.Instance.ChangeTeam(Team.Yellow);
-                if (photonView.IsMine)
-                {
-                    photonView.RPC("DisplayTeam", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
-                }
+
+                photonView.RPC("DisplayTeam", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
                 break;
             case 4:
                 RoomManager.Instance.ChangeTeam(Team.Green);
-                if (photonView.IsMine)
-                {
-                    photonView.RPC("DisplayTeam", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
-                }
+                photonView.RPC("DisplayTeam", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
                 break;
 
             default:
