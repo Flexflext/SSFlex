@@ -14,6 +14,9 @@ public class PlayerManager : MonoBehaviour
     private Vector3 player4SpawnPoint = new Vector3(0, 5, 90);
 
     private Team team;
+    GameObject player;
+
+    private Dictionary<int, Team> playerIdTeam;
 
     private void Awake()
     {
@@ -28,11 +31,15 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void ChangeTeam(Team _team)
+    {
+        team = _team;
+    }
+
     private void CreateController()
     {
         // Instatntiates the PlayerController and sets its Spawnpoint.
-        GameObject player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), player1SpawnPoint, Quaternion.identity);
-
+        player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), player1SpawnPoint, Quaternion.identity);
 
         switch (team)
         {
@@ -55,7 +62,5 @@ public class PlayerManager : MonoBehaviour
             default:
                 break;
         }
-
-        
     }
 }

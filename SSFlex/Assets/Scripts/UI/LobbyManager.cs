@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Photon.Realtime;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
@@ -18,49 +19,115 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject selectYellowButton;
     [SerializeField] private GameObject selectGreenButton;
 
-    //private string playerName;
+    [SerializeField] private GameObject startGameButton;
 
-    //private void Update()
-    //{
-    //    playerRed.text = playerName;
-    //}
+    [SerializeField] private Dictionary<int, Team> playerIdTeam = new Dictionary<int, Team>();
+
+
+    private Team team;
+
+    private void Start()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            startGameButton.SetActive(true);
+        }
+    }
 
     public void ChangeTeam(int _teamnum)
     {
         switch (_teamnum)
         {
             case 1:
-                RoomManager.Instance.ChangeTeam(Team.Red);
-
-                photonView.RPC("DisplayTeam", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
+                team = Team.Red;
+                selectBlueButton.SetActive(false);
+                selectYellowButton.SetActive(false);
+                selectGreenButton.SetActive(false);
                 break;
             case 2:
-                RoomManager.Instance.ChangeTeam(Team.Blue);
-                photonView.RPC("DisplayTeam", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
+                team = Team.Blue;                
+                selectRedButton.SetActive(false);
+                selectYellowButton.SetActive(false);
+                selectGreenButton.SetActive(false);
                 break;
             case 3:
-                RoomManager.Instance.ChangeTeam(Team.Yellow);
-
-                photonView.RPC("DisplayTeam", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
+                team = Team.Yellow;
+                selectBlueButton.SetActive(false);
+                selectRedButton.SetActive(false);
+                selectGreenButton.SetActive(false);
                 break;
             case 4:
-                RoomManager.Instance.ChangeTeam(Team.Green);
-                photonView.RPC("DisplayTeam", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
+                team = Team.Green;
+                selectBlueButton.SetActive(false);
+                selectRedButton.SetActive(false);
+                selectYellowButton.SetActive(false);
                 break;
 
             default:
                 break;
         }
+
+        RoomManager.Instance.ChangeTeam(team);
+        photonView.RPC("DisplayTeam", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.NickName, _teamnum, PhotonNetwork.LocalPlayer.ActorNumber);
     }
 
 
+    public void ReturnMenu()
+    {
+        PhotonNetwork.LeaveRoom();
+        MenuManager.Instance.AdminLoadingMenu();
+    }
+
+    public void StartGame()
+    {
+        
+        PhotonNetwork.LoadLevel(2);
+    }
+
+    // If the master of the room has left but there is still one client in this client will become the master and gets the startgame button.
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        startGameButton.SetActive(PhotonNetwork.IsMasterClient);
+    }
+
+    public override void OnLeftRoom()
+    {
+        MenuManager.Instance.AdminMainMenu();
+    }
+
+
+    #region RPC Calls
 
     [PunRPC]
-    private void DisplayTeam(string _name)
+    private void DisplayTeam(string _name, int _team, int _id)
     {
-        playerRed.text = _name;
-        selectRedButton.SetActive(false);
+
+        switch (_team)
+        {
+            case 1:
+                playerRed.text = _name;
+                selectRedButton.SetActive(false);
+                playerIdTeam.Add(_id, Team.Red);
+                break;
+            case 2:
+                playerBlue.text = _name;
+                selectBlueButton.SetActive(false);
+                playerIdTeam.Add(_id, Team.Blue);
+                break;
+            case 3:
+                playerYellow.text = _name;
+                selectYellowButton.SetActive(false);
+                playerIdTeam.Add(_id, Team.Yellow);
+                break;
+            case 4:
+                playerGreen.text = _name;
+                selectGreenButton.SetActive(false);
+                playerIdTeam.Add(_id, Team.Green);
+                break;
+            default:
+                break;
+        }
     }
 
-
+    #endregion
 }
