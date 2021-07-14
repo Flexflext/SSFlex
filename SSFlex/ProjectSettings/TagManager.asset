@@ -9,6 +9,8 @@ TagManager:
   - ClipPos
   - Placeholder
   - EscapeMenu
+  - Blocker
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -25,7 +27,7 @@ TagManager:
   - GroundStone
   - GroundGravel
   - 3rdPersonPlayer
-  - 
+  - ResourceLayer
   - 
   - 
   - 

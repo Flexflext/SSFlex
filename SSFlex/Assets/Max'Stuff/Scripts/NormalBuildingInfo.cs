@@ -19,53 +19,53 @@ public class NormalBuildingInfo : MonoBehaviour
         none
     }
 
-
-
     public List<EClipSideSlots> OccupiedSideSlots => mOccupiedSideSlots;
     public List<EClipFaceSlots> OccupiedFaceSlots => mOccupiedFaceSlots;
-    public BuildingDimensions.EBuildingDimensions CurrentDimension => mCurrentDimension;
+
+    public AvailableBuildingDimensions.BuildingDimensions.EBuildingDimensions CurrentDimension => mCurrentDimension;
+
     public bool IsFirstFloor => mIsFirstFloor;
 
 
-    private List<EClipSideSlots> mOccupiedSideSlots;
-
-    private List<EClipFaceSlots> mOccupiedFaceSlots;
-
+    [Header("Healt, Damage colour change value and clolour start value upon being damaged")]
     [SerializeField]
     private float mHealth;
+    [SerializeField]
+    private float mColourDamageValue;
+    [SerializeField]
+    private float mColourStartValue;
+    // used to extend the reach of the raycast to find a neighbour
+    [SerializeField]
+    private float mExtendMod;
 
+    [Header("The default occupied slots of the Building")]
     [SerializeField]
     private EClipSideSlots mDefaultSideSlot;
     [SerializeField]
     private EClipFaceSlots mDefaultFaceSlot;
-
+    [Header("The dimension that provides the actual scale of the Building")]
     [SerializeField]
-    private BuildingDimensions.EBuildingDimensions mCurrentDimension;
+    private AvailableBuildingDimensions.BuildingDimensions.EBuildingDimensions mCurrentDimension;
 
-    private bool mIsFirstFloor;
-
+    [Header("Components")]
+    [SerializeField]
+    private MeshRenderer mMeshRenderer;
     [SerializeField]
     private LayerMask mBuildLayer;
 
-    [SerializeField]
-    private float mExtendMod;
-
-    [SerializeField]
-    private MeshRenderer mMeshRenderer;
-
-    [SerializeField]
-    private float mColourDamageValue;
-
+    [Header("Particle Systems")]
     [SerializeField]
     private ParticleSystem mDamagedParticle;
     [SerializeField]
     private ParticleSystem mBuildParticle;
 
     private Color mDamagedColour;
-    private float mRFloat;
 
-    [SerializeField]
-    private float mColourStartValue;
+    private List<EClipSideSlots> mOccupiedSideSlots;
+    private List<EClipFaceSlots> mOccupiedFaceSlots;
+
+    private float mRFloat;
+    private bool mIsFirstFloor;
 
     private void Update()
     {

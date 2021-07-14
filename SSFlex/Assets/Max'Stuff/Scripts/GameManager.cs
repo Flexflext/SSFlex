@@ -6,14 +6,21 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    public bool PreparationPhase => mPreparationPhase;
 
-    private float mFov;
-    private float mMouseSensitivity;
+    [Header("The lenght of the Preparation Phase")]
+    [SerializeField]
+    private float mMaxPreparationTime;
+    private float mPreparationTimer;
 
     private OptionsManager mOptions;
     private GameObject mEscapeMenu;
 
     private Scene mCurrentScene;
+
+    private float mFov;
+    private float mMouseSensitivity;
+    private bool mPreparationPhase = true;
 
     private void Awake()
     {
@@ -26,22 +33,34 @@ public class GameManager : MonoBehaviour
         Instance = this;
 
         mCurrentScene = SceneManager.GetActiveScene();
+        mPreparationTimer = mMaxPreparationTime;
     }
 
 
     private void Update()
     {
+        if(mPreparationPhase)
+            CountPrepPhase();
+
         GetOptions();
 
-        if (mEscapeMenu == null && mCurrentScene != SceneManager.GetSceneByName("MainMenu") && mCurrentScene != SceneManager.GetSceneByName("Lobby"))
-        {
-            mEscapeMenu = GameObject.FindGameObjectWithTag("EscapeMenu");
-            mEscapeMenu.SetActive(false);
-            mOptions.gameObject.SetActive(false);
-        }
+        //if (mEscapeMenu == null && mCurrentScene != SceneManager.GetSceneByName("MainMenu") || mCurrentScene != SceneManager.GetSceneByName("Lobby"))
+        //{
+        //    mEscapeMenu = GameObject.FindGameObjectWithTag("EscapeMenu");
+        //    mEscapeMenu.SetActive(false);
+        //    mOptions.gameObject.SetActive(false);
+        //}
 
         if (Input.GetKeyDown(KeyCode.Escape) && mEscapeMenu != null)
             ToggleEscapeMenu();
+    }
+
+    private void CountPrepPhase()
+    {
+        mPreparationTimer -= Time.deltaTime;
+
+        if (mPreparationTimer <= 0)
+            mPreparationPhase = false;
     }
 
     private void ToggleEscapeMenu()
