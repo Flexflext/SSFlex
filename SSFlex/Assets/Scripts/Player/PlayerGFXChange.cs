@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+using Photon.Realtime;
 
 public enum Team
 {
@@ -10,7 +13,7 @@ public enum Team
     Green,
 }
 
-public class PlayerGFXChange : MonoBehaviour
+public class PlayerGFXChange : MonoBehaviourPunCallbacks
 {
     [SerializeField] private Team team;
 
@@ -48,7 +51,23 @@ public class PlayerGFXChange : MonoBehaviour
             default:
                 break;
         }
+
+        if (photonView.IsMine)
+        {
+            Hashtable hash = new Hashtable();
+            hash.Add("TeamIndex", _team);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        }
     }
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        if (!photonView.IsMine && targetPlayer == photonView.Owner)
+        {
+            ChangePlayerGfx((Team)changedProps["TeamIndex"]);
+        }
+    }
+
 
     private void ChangeGfx(Material _mat)
     {
