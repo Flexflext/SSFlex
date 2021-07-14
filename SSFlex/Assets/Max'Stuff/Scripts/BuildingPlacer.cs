@@ -3,41 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using System.IO;
+using AvailableBuildingDimensions;
 
 public class BuildingPlacer : MonoBehaviourPunCallbacks
 {
-    public float MaxBuildHeight => mMaxBuildHeight;
-    public bool IsClipped => mIsClipped;
     public GameObject HitObj => mHitObj;
 
+    public float MaxBuildHeight => mMaxBuildHeight;
+    public bool IsClipped => mIsClipped;
+    public bool IsInBuildMode => mIsInBuildMode;
+    public bool IsInMineMode => mIsInMineMode;
+
+
+    [Header("Max Build Range")]
     [SerializeField]
     private float mMaxBuildRange;
 
-    private bool mIsClipped;
-    private bool mIsInBuildMode;
-
-    private int mBuidlIdx = 1;
-
-    private float mRotFloat;
-    private float mRelativeHitDot;
-
+    // Max Height to build
     [SerializeField]
     private float mMaxBuildHeight;
-
+    // The threshhold for up, down, left, right used to determined if the buildings has to clipped by checking the equivalent dot product
     [SerializeField]
     private float mClipThreshold_Side;
     [SerializeField]
     private float mClipThreshold_Up;
 
+    [Header("Components")]
+    [SerializeField]
+    private GameObject mBuildPoint;
+    [SerializeField]
+    private Camera mMainCam;
     [SerializeField]
     private LayerMask mBuildLayer;
 
-    [SerializeField]
-    private RectTransform mCrosshair;
 
-    [SerializeField]
-    private GameObject mBuildPoint;
-
+    [Header("Prefabs for Buildings")]
     [SerializeField]
     private GameObject mNormalWall;
     [SerializeField]
@@ -46,10 +46,11 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     private GameObject mHalfWall;
     [SerializeField]
     private GameObject mNormalStairs;
-
+    
     private GameObject mCurrentBuilding;
     private List<GameObject> mAllBuildings;
 
+    [Header("Placeholder for Buildings")]
     [SerializeField]
     private GameObject mNormalWallPlaceholder;
     [SerializeField]
@@ -58,22 +59,11 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     private GameObject mHalfWallPlaceholder;
     [SerializeField]
     private GameObject mNormalStairsPlaceholder;
-
-    private GameObject mCurrentPlaceholder;
-    private List<GameObject> mAllPlaceholder;
-
-
-    [SerializeField]
-    private Camera mMainCam;
-
     [SerializeField]
     private PlaceholderScript mPlaceholderScript;
 
-    private GameObject mHitObj;
-
-    private NormalBuildingInfo mHitObjInfo;
-
-    private Collider mCurrentCollider;
+    private GameObject mCurrentPlaceholder;
+    private List<GameObject> mAllPlaceholder;
 
     private NormalBuildingInfo.EClipSideSlots mHitSlotToAdd_Side;
     private NormalBuildingInfo.EClipSideSlots mCurrentSlotToAdd_Side;
@@ -83,14 +73,34 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
 
     private BuildingDimensions.EBuildingDimensions mHitObjDimension;
     private BuildingDimensions.EBuildingDimensions mCurrentDimension;
+    private BuildingDimensions mAvailableDimensions;
+
+
+    private NormalBuildingInfo mHitObjInfo;
+    private Collider mCurrentCollider;
+    private GameObject mHitObj;
+
+
+
+    private float mRotFloat;
+    private float mRelativeHitDot;
+
+    private int mBuidlIdx = 1;
+    private bool mIsInMineMode = true;
+
+    private bool mIsInBuildMode;
+    private bool mIsClipped;
 
     private float mDotProductSide;
     private float mDotProductUp;
 
+    private float mResourceAmount;
     private void Start()
     {
         if (!photonView.IsMine)
             return;
+
+        mAvailableDimensions = new BuildingDimensions();
 
         mAllBuildings = new List<GameObject>()
         {
@@ -123,13 +133,16 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         if (!photonView.IsMine)
             return;
 
-        Debug.Log(mIsClipped);
 
-        ChangeBuildType();
-
-        ManageBuildingClip();
-
-        ManageBuildMode();
+        if (GameManager.Instance.PreparationPhase)
+        {
+            ManageBuildMode();
+            ManageBuildingClip();
+            ChangeModeType();
+            ChangeBuildType();
+        }
+        else if (mIsInBuildMode && !GameManager.Instance.PreparationPhase)
+            mIsInBuildMode = false;
     }
 
     private void ManageBuildMode()
@@ -166,17 +179,15 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     {
         Vector3 hitPos = new Vector3();
 
-        //Vector3 crosPos = mMainCam.ScreenToWorldPoint(mCrosshair.transform.position);
-
         Vector3 dirVec = new Vector3();
 
         RaycastHit hit;
 
+        Debug.Log("DDDD");
 
         if (Physics.Raycast(mMainCam.transform.position, mMainCam.transform.forward, out hit, 1000, mBuildLayer))
         {
             hitPos = hit.point;
-
 
             if (Vector3.Distance(transform.position, hitPos) <= mMaxBuildRange)
                 mBuildPoint.transform.position = new Vector3(hitPos.x, hitPos.y, hitPos.z);
@@ -208,7 +219,7 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
             mIsClipped = false;
         }
 
-        //Debug.Log(mIsClipped);
+        Debug.Log(mIsClipped);
     }
 
     private void GetClippedBuildingPos_Side()
@@ -231,8 +242,8 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         mHitObjDimension = mHitObjInfo.CurrentDimension;
         mCurrentDimension = mCurrentPlaceholder.GetComponent<PlaceholderScript>().CurrentDimension;
 
-        Vector3 hitObjSize = BuildingDimensions.Instance.mBuildingDimensions[(int)mHitObjDimension] / 2;
-        Vector3 currentObjSize = BuildingDimensions.Instance.mBuildingDimensions[(int)mCurrentDimension] / 2;
+        Vector3 hitObjSize = mAvailableDimensions.mBuildingDimensions[(int)mHitObjDimension] / 2;
+        Vector3 currentObjSize = mAvailableDimensions.mBuildingDimensions[(int)mCurrentDimension] / 2;
         Vector3 totalPlaceAdj = hitObjSize + currentObjSize;
 
         Vector3 posToSet = new Vector3();
@@ -468,7 +479,10 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
 
             string objToBuild = mPlaceholderScript.ObjName;
 
-            GameObject currentBuilding = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", objToBuild), mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
+            GameObject currentBuilding = Instantiate(mCurrentBuilding, mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
+
+            //GameObject currentBuilding = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", objToBuild), mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
+
             NormalBuildingInfo currenBuildingInfo = currentBuilding.GetComponent<NormalBuildingInfo>();
 
             if (mCurrentSlotToAdd_Side != NormalBuildingInfo.EClipSideSlots.none)
@@ -514,18 +528,36 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && mPlaceholderScript.ValidPosition)
         {
-            string objToBuild = mPlaceholderScript.ObjName;
+            GameObject currentBuilding = Instantiate(mCurrentBuilding, mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
 
-            GameObject currentBuilding = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", objToBuild), mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
+
+            //string objToBuild = mPlaceholderScript.ObjName;
+
+            //GameObject currentBuilding = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", objToBuild), mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
             currentBuilding.GetComponent<NormalBuildingInfo>().AddClipSlotSide(NormalBuildingInfo.EClipSideSlots.down);
         }
     }
 
-    private void ChangeBuildType()
+    private void ChangeModeType()
     {
         if (Input.GetKeyDown(KeyCode.B))
-            mIsInBuildMode = true;
+        {
+            if (!mIsInBuildMode && mIsInMineMode)
+            {
+                mIsInMineMode = false;
+                mIsInBuildMode = true;
+            }
+            else
+            {
+                mIsInMineMode = true;
+                mIsInBuildMode = false;
+            }
+        }
+          
+    }
 
+    private void ChangeBuildType()
+    {
         if (Input.GetKeyDown(KeyCode.E))
         {
             TogglePlaceholder(mAllPlaceholder[mBuidlIdx]);

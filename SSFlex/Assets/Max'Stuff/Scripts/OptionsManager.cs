@@ -18,6 +18,7 @@ public class OptionsManager : MonoBehaviour
     //[SerializeField]
     //private GameObject mGameOverScreen;
 
+    [Header("Audio Components")]
     [SerializeField]
     private AudioMixer mMusicMixer;
     [SerializeField]
@@ -27,18 +28,18 @@ public class OptionsManager : MonoBehaviour
     //[SerializeField]
     //private AudioVolumen mVolumen;
 
+    [Header("Resolution Components")]
     [SerializeField]
     private TMP_Dropdown mResolutionDropDown;
     [SerializeField]
     private Resolution[] mResolutions;
     private List<string> mResolutionOptions;
 
-    [SerializeField]
-    private List<float> mAllowedRefreshRates;
-
+    [Header("Graphic Components")]
     [SerializeField]
     private TMP_Dropdown mGraphicDropDown;
 
+    [Header("Audio Slider")]
     [SerializeField]
     private Slider mMusicSlider;
     [SerializeField]
