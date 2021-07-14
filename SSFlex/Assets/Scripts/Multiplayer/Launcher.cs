@@ -149,6 +149,12 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void StartGame()
     {
+        PhotonNetwork.LoadLevel(2);
+    }
+
+    public void StartLobby()
+    {
         PhotonNetwork.LoadLevel(1);
+
     }
 }

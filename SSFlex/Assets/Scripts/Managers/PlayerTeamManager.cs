@@ -16,8 +16,10 @@ public class PlayerTeamManager : MonoBehaviourPunCallbacks
 
     public int Subscribe(PlayerController _controller)
     {
-        photonView.RPC("RPC_Subscribe", RpcTarget.AllViaServer, _controller);
+
+        photonView.RPC("RPC_Subscribe", RpcTarget.AllBuffered, _controller);
         return playerList.Count;
+
     }
 
     [PunRPC]

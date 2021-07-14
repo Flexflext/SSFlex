@@ -45,6 +45,7 @@ MonoBehaviour:
   - RPC_InstantiateNormalObj
   - RPC_Subscribe
   - RPC_UnSubscribe
+  - DisplayTeam
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

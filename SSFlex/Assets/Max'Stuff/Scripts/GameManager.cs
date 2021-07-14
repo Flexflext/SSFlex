@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     {
         GetOptions();
 
-        if (mEscapeMenu == null && mCurrentScene != SceneManager.GetSceneByName("MainMenu"))
+        if (mEscapeMenu == null && mCurrentScene != SceneManager.GetSceneByName("MainMenu") && mCurrentScene != SceneManager.GetSceneByName("Lobby"))
         {
             mEscapeMenu = GameObject.FindGameObjectWithTag("EscapeMenu");
             mEscapeMenu.SetActive(false);

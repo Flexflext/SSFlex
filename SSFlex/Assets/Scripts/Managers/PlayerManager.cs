@@ -13,6 +13,8 @@ public class PlayerManager : MonoBehaviour
     private Vector3 player3SpawnPoint = new Vector3(0, 5, -90);
     private Vector3 player4SpawnPoint = new Vector3(0, 5, 90);
 
+    private Team team;
+
     private void Awake()
     {
         photonView = GetComponent<PhotonView>();
@@ -32,23 +34,21 @@ public class PlayerManager : MonoBehaviour
         GameObject player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), player1SpawnPoint, Quaternion.identity);
 
 
-        int teamNum = PlayerTeamManager.Instance.Subscribe(player.GetComponent<PlayerController>());
-
-        switch (teamNum)
+        switch (team)
         {
-            case 1:
+            case Team.Blue:
                 player.GetComponent<PlayerGFXChange>().ChangePlayerGfx(Team.Blue);
                 player.transform.position = player2SpawnPoint;
                 break;
-            case 2:
+            case Team.Red:
                 player.GetComponent<PlayerGFXChange>().ChangePlayerGfx(Team.Red);
                 player.transform.position = player1SpawnPoint;
                 break;
-            case 3:
+            case Team.Yellow:
                 player.GetComponent<PlayerGFXChange>().ChangePlayerGfx(Team.Yellow);
                 player.transform.position = player3SpawnPoint;
                 break;
-            case 4:
+            case Team.Green:
                 player.GetComponent<PlayerGFXChange>().ChangePlayerGfx(Team.Green);
                 player.transform.position = player4SpawnPoint;
                 break;

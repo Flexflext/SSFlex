@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine.SceneManagement;
 using System.IO;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
     public static RoomManager Instance;
+
+    private Team myTeam;
 
     private void Awake()
     {
@@ -37,10 +40,15 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     void OnSceneLoaded (Scene _scene, LoadSceneMode _loadSceneMode)
     {
-        if (_scene.buildIndex == 1) // MainGameScene
+        if (_scene.buildIndex == 2) // MainGameScene
         {
             // Instantiates the PlayerManager
             PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
         }
+    }
+
+    public void ChangeTeam(Team _team)
+    {
+        myTeam = _team;
     }
 }
