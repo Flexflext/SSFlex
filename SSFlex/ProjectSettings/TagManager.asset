@@ -11,6 +11,10 @@ TagManager:
   - EscapeMenu
   - Blocker
   - Ground
+  - AmmoPistol
+  - AmmoSniper
+  - AmmoAR
+  - AmmoShotgun
   layers:
   - Default
   - TransparentFX

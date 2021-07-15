@@ -374,6 +374,26 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         thirdPersonAnimator.SetBool("isStabbing", false);
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("AmmoPistol"))
+        {
+            Pistol.CurrentAmmo += 100;
+        }
+        else if (other.CompareTag("AmmoShotgun"))
+        {
+            Shotgun.CurrentAmmo += 50;
+        }
+        else if (other.CompareTag("AmmoAR"))
+        {
+            AR.CurrentAmmo += 200;
+        }
+        else if (other.CompareTag("AmmoSniper"))
+        {
+            Sniper.CurrentAmmo += 20;
+        }
+    }
+
     private void OnDrawGizmos()
     {
         //Gizmos.DrawSphere(swordPosition.position, range);
