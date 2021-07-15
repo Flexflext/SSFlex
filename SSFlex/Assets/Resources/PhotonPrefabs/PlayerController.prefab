@@ -186,13 +186,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mObjName: HalfWall
+  mBuildingValue: 0
   mMeshRenderer: {fileID: 960442414}
   mBuildPlacer: {fileID: 279627001}
-  mValidMaterial: {fileID: 2100000, guid: fefd3e03a314e40469adeb978d9e5549, type: 2}
-  mUnvalidMaterial: {fileID: 2100000, guid: 1beefccdfb0a3c448819827966d6bbda, type: 2}
+  mMiner: {fileID: 0}
   mBuildLayer:
     serializedVersion: 2
     m_Bits: 256
+  mValidMaterial: {fileID: 2100000, guid: fefd3e03a314e40469adeb978d9e5549, type: 2}
+  mUnvalidMaterial: {fileID: 2100000, guid: 1beefccdfb0a3c448819827966d6bbda, type: 2}
   mCurrentDimension: 2
 --- !u!1 &1206471796
 GameObject:
@@ -367,13 +369,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mObjName: NormalStairs
+  mBuildingValue: 0
   mMeshRenderer: {fileID: 1206471800}
   mBuildPlacer: {fileID: 279627001}
-  mValidMaterial: {fileID: 2100000, guid: fefd3e03a314e40469adeb978d9e5549, type: 2}
-  mUnvalidMaterial: {fileID: 2100000, guid: 1beefccdfb0a3c448819827966d6bbda, type: 2}
+  mMiner: {fileID: 0}
   mBuildLayer:
     serializedVersion: 2
     m_Bits: 256
+  mValidMaterial: {fileID: 2100000, guid: fefd3e03a314e40469adeb978d9e5549, type: 2}
+  mUnvalidMaterial: {fileID: 2100000, guid: 1beefccdfb0a3c448819827966d6bbda, type: 2}
   mCurrentDimension: 3
 --- !u!1 &1558243586
 GameObject:
@@ -482,13 +486,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mObjName: NormalWall
+  mBuildingValue: 0
   mMeshRenderer: {fileID: 1558243590}
   mBuildPlacer: {fileID: 279627001}
-  mValidMaterial: {fileID: 2100000, guid: fefd3e03a314e40469adeb978d9e5549, type: 2}
-  mUnvalidMaterial: {fileID: 2100000, guid: 1beefccdfb0a3c448819827966d6bbda, type: 2}
+  mMiner: {fileID: 0}
   mBuildLayer:
     serializedVersion: 2
     m_Bits: 256
+  mValidMaterial: {fileID: 2100000, guid: fefd3e03a314e40469adeb978d9e5549, type: 2}
+  mUnvalidMaterial: {fileID: 2100000, guid: 1beefccdfb0a3c448819827966d6bbda, type: 2}
   mCurrentDimension: 1
 --- !u!1 &1792141532
 GameObject:
@@ -597,13 +603,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mObjName: NormalGate
+  mBuildingValue: 0
   mMeshRenderer: {fileID: 1792141536}
   mBuildPlacer: {fileID: 279627001}
-  mValidMaterial: {fileID: 2100000, guid: fefd3e03a314e40469adeb978d9e5549, type: 2}
-  mUnvalidMaterial: {fileID: 2100000, guid: 1beefccdfb0a3c448819827966d6bbda, type: 2}
+  mMiner: {fileID: 0}
   mBuildLayer:
     serializedVersion: 2
     m_Bits: 256
+  mValidMaterial: {fileID: 2100000, guid: fefd3e03a314e40469adeb978d9e5549, type: 2}
+  mUnvalidMaterial: {fileID: 2100000, guid: 1beefccdfb0a3c448819827966d6bbda, type: 2}
   mCurrentDimension: 1
 --- !u!1 &1370586006386704495
 GameObject:
@@ -1261,11 +1269,11 @@ MonoBehaviour:
   mMaxBuildHeight: 10
   mClipThreshold_Side: 1.5
   mClipThreshold_Up: 0.35
+  mBuildPoint: {fileID: 376500126}
+  mMainCam: {fileID: 1370586007883492911}
   mBuildLayer:
     serializedVersion: 2
     m_Bits: 4352
-  mCrosshair: {fileID: 0}
-  mBuildPoint: {fileID: 376500126}
   mNormalWall: {fileID: 3364571376291258370, guid: 69ef0c102c6396645be2b7695b8081c7,
     type: 3}
   mNormalGate: {fileID: 3806148165169973074, guid: 1276e75881ee0d746baaded5b54a68b5,
@@ -1278,7 +1286,6 @@ MonoBehaviour:
   mNormalGatePlaceholder: {fileID: 1792141532}
   mHalfWallPlaceholder: {fileID: 960442410}
   mNormalStairsPlaceholder: {fileID: 1456365993}
-  mMainCam: {fileID: 1370586007883492911}
   mPlaceholderScript: {fileID: 0}
 --- !u!114 &5142913524348809988
 MonoBehaviour:
