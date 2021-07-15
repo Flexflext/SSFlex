@@ -46,19 +46,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0469cd952befbdf419421c2dd8346511, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mHealth: 0
+  mHealth: 50
+  mColourDamageValue: 0.1
+  mColourStartValue: 0.3
+  mExtendMod: 2
   mDefaultSideSlot: 0
   mDefaultFaceSlot: 0
   mCurrentDimension: 3
+  mMeshRenderer: {fileID: 7348549123263843697}
   mBuildLayer:
     serializedVersion: 2
     m_Bits: 256
-  mExtendMod: 2
-  mMeshRenderer: {fileID: 7348549123263843697}
-  mColourDamageValue: 0.1
   mDamagedParticle: {fileID: 7348549122408204699}
   mBuildParticle: {fileID: 7348549123642125707}
-  mColourStartValue: 0.3
 --- !u!114 &-3384630984509980109
 MonoBehaviour:
   m_ObjectHideFlags: 0

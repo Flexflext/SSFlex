@@ -58,28 +58,39 @@ public class PlaceholderScript : MonoBehaviour
 
         if (transform.position.y > mBuildPlacer.MaxBuildHeight)
             mValidPosition = false;
-        else if (!mBuildPlacer.IsClipped && transform.position.y >= mAvailableDimensions.mBuildingDimensions[(int)mCurrentDimension].y / 2)
+        else if (!mBuildPlacer.IsClipped && transform.position.y > mAvailableDimensions.mBuildingDimensions[(int)mCurrentDimension].y / 2)
             mValidPosition = false;
         else if (mResourceAmount > mBuildingValue)
         {
-            Collider[] overlapColl = Physics.OverlapBox(transform.position, mAvailableDimensions.mBuildingDimensions[(int)mCurrentDimension] / 2, transform.rotation);
+            Collider[] overlapColl = Physics.OverlapBox(transform.position, mAvailableDimensions.mBuildingDimensions[(int)mCurrentDimension] / 2.85f, transform.rotation);
 
 
             for (int i = 0; i < overlapColl.Length; i++)
             {
                 if (overlapColl[i].gameObject.CompareTag("ClipTag") && overlapColl[i].gameObject != this.gameObject && mBuildPlacer.HitObj != null && overlapColl[i].gameObject != mBuildPlacer.HitObj)
                 {
+                    Debug.Log("DD"); ;
                     mValidPosition = false;
-                    Debug.LogWarning("DDDDDDDDDDDDDDD");
+                    return;
+                }
+                else if (overlapColl[i].gameObject.CompareTag("ClipTag") && overlapColl[i].gameObject != this.gameObject && mBuildPlacer.HitObj == null)
+                {
+                    Debug.Log("DD"); ;
+
+                    mValidPosition = false;
                     return;
                 }
                 else if (overlapColl[i].gameObject.CompareTag("Blocker"))
                 {
+                    Debug.Log("DD"); ;
+
                     mValidPosition = false;
                     return;
                 }
                 else if (overlapColl[i].gameObject.CompareTag("Player"))
                 {
+                    Debug.Log("DD"); ;
+
                     mValidPosition = false;
                     return;
                 }
