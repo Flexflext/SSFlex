@@ -4789,7 +4789,7 @@ Transform:
   m_GameObject: {fileID: 3806148165169973074}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.2483213, y: 0.00000011920929, z: 8.997022}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 2, z: 1}
   m_Children:
   - {fileID: 1430861888034786173}
   m_Father: {fileID: 0}
@@ -4910,19 +4910,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0469cd952befbdf419421c2dd8346511, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mHealth: 0
+  mHealth: 150
+  mColourDamageValue: 0.05
+  mColourStartValue: 0.3
+  mExtendMod: 2
   mDefaultSideSlot: 4
   mDefaultFaceSlot: 2
-  mCurrentDimension: 1
+  mCurrentDimension: 2
+  mMeshRenderer: {fileID: 3806148165167525128}
   mBuildLayer:
     serializedVersion: 2
     m_Bits: 256
-  mExtendMod: 2
-  mMeshRenderer: {fileID: 3806148165167525128}
-  mColourDamageValue: 0.05
   mDamagedParticle: {fileID: 9091149418170137838}
   mBuildParticle: {fileID: 1902005492681824868}
-  mColourStartValue: 0.3
 --- !u!95 &526064286
 Animator:
   serializedVersion: 3

@@ -79,10 +79,9 @@ public class NormalBuildingInfo : MonoBehaviour
     }
     private void Start()
     {
-        if (mOccupiedSideSlots.Contains(EClipSideSlots.up))
-            GetNeighboursSide();
-        //if (mOccupiedSideSlots.Contains(EClipSideSlots.down))
-        //    GetNeighboursUp();
+        GetNeighboursSide();
+        GetNeighboursUp();
+
 
         mBuildParticle.Play();
 
@@ -133,19 +132,24 @@ public class NormalBuildingInfo : MonoBehaviour
         RaycastHit hitRight;
         RaycastHit hitLeft;
 
-        //Debug.Log("Edgecase");
 
         if (Physics.Raycast(mMeshRenderer.bounds.center, transform.right, out hitRight, mMeshRenderer.bounds.extents.x + mExtendMod, mBuildLayer))
         {
-            //Debug.Log("Hit right");
-            mOccupiedSideSlots.Add(EClipSideSlots.right);
-            hitRight.collider.gameObject.GetComponent<NormalBuildingInfo>().AddClipSlotSide(EClipSideSlots.left);
+            if (hitRight.collider.CompareTag("ClipTag"))
+            {
+                mOccupiedSideSlots.Add(EClipSideSlots.right);
+                hitRight.collider.gameObject.GetComponent<NormalBuildingInfo>().AddClipSlotSide(EClipSideSlots.left);
+            }
+            
         }
         if (Physics.Raycast(mMeshRenderer.bounds.center, -transform.right, out hitLeft, mMeshRenderer.bounds.extents.x + mExtendMod, mBuildLayer))
         {
-            //Debug.Log("Hit left");
-            mOccupiedSideSlots.Add(EClipSideSlots.left);
-            hitLeft.collider.gameObject.GetComponent<NormalBuildingInfo>().AddClipSlotSide(EClipSideSlots.right);
+            if (hitLeft.collider.CompareTag("ClipTag"))
+            {
+                mOccupiedSideSlots.Add(EClipSideSlots.left);
+                hitLeft.collider.gameObject.GetComponent<NormalBuildingInfo>().AddClipSlotSide(EClipSideSlots.right);
+            }
+            
         }
     }
 
@@ -154,19 +158,24 @@ public class NormalBuildingInfo : MonoBehaviour
         RaycastHit hitUp;
         RaycastHit hitDown;
 
-        //Debug.Log("Edgecase");
 
         if (Physics.Raycast(mMeshRenderer.bounds.center, transform.up, out hitUp, mMeshRenderer.bounds.extents.x + mExtendMod, mBuildLayer))
         {
-            //Debug.Log("Hit up");
-            mOccupiedSideSlots.Add(EClipSideSlots.up);
-            hitUp.collider.gameObject.GetComponent<NormalBuildingInfo>().AddClipSlotSide(EClipSideSlots.down);
+            if (hitUp.collider.CompareTag("ClipTag"))
+            {
+                mOccupiedSideSlots.Add(EClipSideSlots.up);
+                hitUp.collider.gameObject.GetComponent<NormalBuildingInfo>().AddClipSlotSide(EClipSideSlots.down);
+            }
+            
         }
+
         if (Physics.Raycast(mMeshRenderer.bounds.center, -transform.up, out hitDown, mMeshRenderer.bounds.extents.x + mExtendMod, mBuildLayer))
         {
-            //Debug.Log("Hit down");
-            mOccupiedSideSlots.Add(EClipSideSlots.down);
-            hitDown.collider.gameObject.GetComponent<NormalBuildingInfo>().AddClipSlotSide(EClipSideSlots.up);
+            if (hitDown.collider.CompareTag("ClipTag"))
+            {
+                mOccupiedSideSlots.Add(EClipSideSlots.down);
+                hitDown.collider.gameObject.GetComponent<NormalBuildingInfo>().AddClipSlotSide(EClipSideSlots.up);
+            }          
         }
     }
 }
