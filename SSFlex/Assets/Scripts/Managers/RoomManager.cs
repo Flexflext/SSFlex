@@ -12,15 +12,21 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     private Team myTeam;
 
+    Scene mCurrentScene;
+
     private void Awake()
     {
-        if (Instance)
-        {
-            Destroy(gameObject);
+        if (!photonView.IsMine)
             return;
-        }
-        DontDestroyOnLoad(gameObject);
-        Instance = this;
+
+        mCurrentScene = SceneManager.GetActiveScene();
+
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(this.gameObject);
+
+        DontDestroyOnLoad(this.gameObject);
     }
 
 
@@ -40,6 +46,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     void OnSceneLoaded (Scene _scene, LoadSceneMode _loadSceneMode)
     {
+
         if (_scene.buildIndex == 2) // MainGameScene
         {
             // Instantiates the PlayerManager
