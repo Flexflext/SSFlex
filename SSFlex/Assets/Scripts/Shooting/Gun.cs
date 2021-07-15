@@ -178,7 +178,11 @@ public class Gun : MonoBehaviourPunCallbacks
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         Bullet bulletScript = bullet.GetComponent<Bullet>();
 
-        bulletScript.OnHit += HitAnything;
+        if (!photonView.IsMine)
+        {
+            bulletScript.OnHit += HitAnything;
+        }
+
         rb.AddForce(_direction * _speed);
     }
 
@@ -191,7 +195,7 @@ public class Gun : MonoBehaviourPunCallbacks
     {
         Debug.Log("Hit Smth");
 
-        if (_gameobject.layer == 9)
+        if (_gameobject.layer == 14)
         {
             _gameobject.GetComponent<PlayerHealth>().TakeDamage(dmg);
         }

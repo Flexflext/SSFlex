@@ -18,6 +18,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     [SerializeField] private Camera cam;
     [SerializeField] private PrimaryWeapon weapon;
     [SerializeField] private Animator thirdPersonAnimator;
+    [SerializeField] private GameObject farmTool;
 
     [Header("CurrentGun")]
     [SerializeField] private Gun currentGun;
@@ -234,8 +235,11 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     }
 
-    private void ChooseGun()
+    public void ChooseGun()
     {
+        farmMode = false;
+        farmTool.SetActive(false);
+        animator.SetBool("Farm", false);
         secondaryGun = Pistol;
 
         switch (weapon)

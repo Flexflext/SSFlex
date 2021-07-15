@@ -28,8 +28,8 @@ TagManager:
   - GroundGravel
   - 3rdPersonPlayer
   - ResourceLayer
-  - 
-  - 
+  - PlayerHead
+  - BulletIgnore
   - 
   - 
   - 
