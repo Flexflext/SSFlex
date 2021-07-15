@@ -10057,8 +10057,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mAllKitNames:
   - Assault
-  - Camper
   - Trench Fighter
+  - Camper
   mDefaultKit: 0
   mText_KitName: {fileID: 1669376664}
   mPhotonView: {fileID: 1323967002}
@@ -14190,8 +14190,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mAllKitNames:
   - Assault
-  - Camper
   - Trench Fighter
+  - Camper
   mDefaultKit: 0
   mText_KitName: {fileID: 2597753631659897424}
   mPhotonView: {fileID: 2033189133}
@@ -14508,8 +14508,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mAllKitNames:
   - Assault
-  - Camper
   - Trench Fighter
+  - Camper
   mDefaultKit: 0
   mText_KitName: {fileID: 2597753631368371348}
   mPhotonView: {fileID: 650482944}
@@ -15030,8 +15030,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mAllKitNames:
   - Assault
-  - Camper
   - Trench Fighter
+  - Camper
   mDefaultKit: 0
   mText_KitName: {fileID: 2597753632852053925}
   mPhotonView: {fileID: 116728332}

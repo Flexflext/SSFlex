@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ResourceMiner : MonoBehaviour
 {
-    public float ResourceAmount => mCurrentResourceAmount;
+    public int ResourceAmount => mCurrentResourceAmount;
     public bool Mining => mIsMining;
 
     [Header("Max mining distance and speed")]
@@ -25,7 +25,7 @@ public class ResourceMiner : MonoBehaviour
     private MineableObject mHitObj;
 
     private bool mIsMining;
-    private float mCurrentResourceAmount = 100;
+    private int mCurrentResourceAmount = 100;
 
     private void Update()
     {
@@ -59,5 +59,10 @@ public class ResourceMiner : MonoBehaviour
             mIsMining = false;
             mHitObj = null;
         }
+    }
+
+    public void SubtractResource(int _toSubtract)
+    {
+        mCurrentResourceAmount -= _toSubtract;
     }
 }

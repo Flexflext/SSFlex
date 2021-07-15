@@ -5,8 +5,9 @@ using AvailableBuildingDimensions;
 
 public class PlaceholderScript : MonoBehaviour
 {
-    public AvailableBuildingDimensions.BuildingDimensions.EBuildingDimensions CurrentDimension => mCurrentDimension;
+    public BuildingDimensions.EBuildingDimensions CurrentDimension => mCurrentDimension;
     public bool ValidPosition => mValidPosition;
+    public int BuildingValue => mBuildingValue;
     public string ObjName => mObjName;
 
     [Header("Building name and Cost")]
@@ -38,7 +39,7 @@ public class PlaceholderScript : MonoBehaviour
 
     // Position Validation bool
     private bool mValidPosition = true;
-    private float mResourceValue;
+    private int mResourceAmount;
 
     private void Start()
     {
@@ -52,16 +53,14 @@ public class PlaceholderScript : MonoBehaviour
         else if(mMeshRenderer.material != mValidMaterial)
             mMeshRenderer.material = mValidMaterial;
 
-        mResourceValue = mMiner.ResourceAmount;
-
-        //if (transform.position.y >= mBuildPlacer.MaxBuildHeight)
-        //    mValidPosition = false;
-
-        //if (!mBuildPlacer.IsClipped && transform.position.y > transform.position.y + transform.localScale.y / 2)
-        //    mValidPosition = false;
+        mResourceAmount = mMiner.ResourceAmount;
 
 
-        if (mResourceValue > mBuildingValue)
+        if (transform.position.y > mBuildPlacer.MaxBuildHeight)
+            mValidPosition = false;
+        else if (!mBuildPlacer.IsClipped && transform.position.y >= mAvailableDimensions.mBuildingDimensions[(int)mCurrentDimension].y / 2)
+            mValidPosition = false;
+        else if (mResourceAmount > mBuildingValue)
         {
             Collider[] overlapColl = Physics.OverlapBox(transform.position, mAvailableDimensions.mBuildingDimensions[(int)mCurrentDimension] / 2, transform.rotation);
 

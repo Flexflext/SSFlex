@@ -34,6 +34,8 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     [SerializeField]
     private Camera mMainCam;
     [SerializeField]
+    private ResourceMiner mMiner;
+    [SerializeField]
     private LayerMask mBuildLayer;
 
 
@@ -183,8 +185,6 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
 
         RaycastHit hit;
 
-        Debug.Log("DDDD");
-
         if (Physics.Raycast(mMainCam.transform.position, mMainCam.transform.forward, out hit, 1000, mBuildLayer))
         {
             hitPos = hit.point;
@@ -219,7 +219,7 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
             mIsClipped = false;
         }
 
-        Debug.Log(mIsClipped);
+        Debug.Log(mCurrentSlotToAdd_Side);
     }
 
     private void GetClippedBuildingPos_Side()
@@ -438,21 +438,43 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
 
             if (mDotProductSide < mClipThreshold_Side && mDotProductSide > -mClipThreshold_Side)
             {
-                if (mDotProductUp >= mClipThreshold_Up && mHitObj.transform.position.y - hitObjSize.y / 2 > 0 && !mHitObjInfo.OccupiedSideSlots.Contains(NormalBuildingInfo.EClipSideSlots.down) && mHitObjInfo.IsFirstFloor)
+                if(mHitObj.transform.localEulerAngles.y >= 180)
                 {
-                    posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(0, -totalPlaceAdj.y, 0));
+                    if (mDotProductUp >= mClipThreshold_Up && mHitObj.transform.position.y - hitObjSize.y / 2 > 0 && !mHitObjInfo.OccupiedSideSlots.Contains(NormalBuildingInfo.EClipSideSlots.down) && mHitObjInfo.IsFirstFloor)
+                    {
+                        posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(0, -totalPlaceAdj.y, 0));
 
-                    mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.up;
-                    mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.down;
+                        mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.down;
+                        mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.up;
+                    }
+
+                    if (mDotProductUp <= -mClipThreshold_Up && !mHitObjInfo.OccupiedSideSlots.Contains(NormalBuildingInfo.EClipSideSlots.up))
+                    {
+                        posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(0, totalPlaceAdj.y, 0));
+
+                        mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.up;
+                        mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.down;
+                    }
                 }
-
-                if (mDotProductUp <= -mClipThreshold_Up && !mHitObjInfo.OccupiedSideSlots.Contains(NormalBuildingInfo.EClipSideSlots.up))
+                else
                 {
-                    posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(0, totalPlaceAdj.y, 0));
+                    if (mDotProductUp >= mClipThreshold_Up && mHitObj.transform.position.y - hitObjSize.y / 2 > 0 && !mHitObjInfo.OccupiedSideSlots.Contains(NormalBuildingInfo.EClipSideSlots.down) && mHitObjInfo.IsFirstFloor)
+                    {
+                        posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(0, -totalPlaceAdj.y, 0));
 
-                    mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.down;
-                    mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.up;
+                        mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.up;
+                        mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.down;
+                    }
+
+                    if (mDotProductUp <= -mClipThreshold_Up && !mHitObjInfo.OccupiedSideSlots.Contains(NormalBuildingInfo.EClipSideSlots.up))
+                    {
+                        posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(0, totalPlaceAdj.y, 0));
+
+                        mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.down;
+                        mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.up;
+                    }
                 }
+                
             }
         }
         else
@@ -482,8 +504,9 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
             GameObject currentBuilding = Instantiate(mCurrentBuilding, mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
 
             //GameObject currentBuilding = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", objToBuild), mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
-
             NormalBuildingInfo currenBuildingInfo = currentBuilding.GetComponent<NormalBuildingInfo>();
+
+            mMiner.SubtractResource(mPlaceholderScript.BuildingValue);
 
             if (mCurrentSlotToAdd_Side != NormalBuildingInfo.EClipSideSlots.none)
                 currenBuildingInfo.AddClipSlotSide(mCurrentSlotToAdd_Side);
@@ -516,14 +539,14 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     private void SetBuildingNormal(Vector3 _posToSet)
     {
         float posHeightY = 0;
-        posHeightY = mCurrentPlaceholder.transform.localScale.y / 2;
+        posHeightY = mBuildPoint.transform.position.y;
 
         float posX = Mathf.Round(_posToSet.x);
         float posY = Mathf.Round(_posToSet.y);
         float posZ = Mathf.Round(_posToSet.z);
         Vector3 actualPos = new Vector3(posX, posY, posZ);
 
-        mCurrentPlaceholder.transform.position = new Vector3(actualPos.x, 0 , actualPos.z);
+        mCurrentPlaceholder.transform.position = new Vector3(actualPos.x, actualPos.y, actualPos.z);
         mCurrentPlaceholder.transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + mRotFloat, transform.eulerAngles.z);
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && mPlaceholderScript.ValidPosition)
@@ -531,10 +554,12 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
             GameObject currentBuilding = Instantiate(mCurrentBuilding, mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
 
 
-            //string objToBuild = mPlaceholderScript.ObjName;
+            string objToBuild = mPlaceholderScript.ObjName;
 
             //GameObject currentBuilding = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", objToBuild), mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
             currentBuilding.GetComponent<NormalBuildingInfo>().AddClipSlotSide(NormalBuildingInfo.EClipSideSlots.down);
+            //Debug.Log(mPlaceholderScript.BuildingValue);
+            mMiner.SubtractResource(mPlaceholderScript.BuildingValue);
         }
     }
 

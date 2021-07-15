@@ -59,7 +59,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     private bool isSwitching;
 
-    [SerializeField] private bool farmMode = true;
+    [SerializeField] private bool farmMode;
 
 
     private void Start()
@@ -68,7 +68,9 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         playerLook = GetComponent<PlayerLook>();
         controller = GetComponent<PlayerController>();
 
-        ChooseGun();
+        //ChooseGun();
+
+        farmMode = true;
     }
 
     // Update is called once per frame

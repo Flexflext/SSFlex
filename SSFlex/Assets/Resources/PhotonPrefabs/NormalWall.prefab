@@ -4896,18 +4896,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mHealth: 0
+  mColourDamageValue: 0.1
+  mColourStartValue: 0.3
+  mExtendMod: 2
   mDefaultSideSlot: 4
   mDefaultFaceSlot: 2
   mCurrentDimension: 1
+  mMeshRenderer: {fileID: 3364571376291258373}
   mBuildLayer:
     serializedVersion: 2
     m_Bits: 256
-  mExtendMod: 2
-  mMeshRenderer: {fileID: 3364571376291258373}
-  mColourDamageValue: 0.1
   mDamagedParticle: {fileID: 7723176751868799872}
   mBuildParticle: {fileID: 1564331782}
-  mColourStartValue: 0.3
 --- !u!114 &-1541530893802446591
 MonoBehaviour:
   m_ObjectHideFlags: 0

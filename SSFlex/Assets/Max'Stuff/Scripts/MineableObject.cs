@@ -8,7 +8,7 @@ public class MineableObject : MonoBehaviourPunCallbacks
 {
     [Header("The value of the object and the time it takes to mine it")]
     [SerializeField]
-    private float mResourceValue;
+    private int mResourceValue;
     [SerializeField]
     private float mMaxMineDuration;
     private float mCurrentMineDuration;
@@ -53,7 +53,6 @@ public class MineableObject : MonoBehaviourPunCallbacks
         if (mWasMined)
             ResourceHasBeenMined();
 
-        Debug.Log(mMiner);
     }
 
     private void MineProgress()
@@ -76,7 +75,7 @@ public class MineableObject : MonoBehaviourPunCallbacks
         }
     }
 
-    public float MineResource(float _mineSpeed, ResourceMiner _miner)
+    public int MineResource(float _mineSpeed, ResourceMiner _miner)
     {
         if(mMiner != _miner)
         {
