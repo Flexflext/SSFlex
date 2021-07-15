@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Photon.Pun;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+using Photon.Realtime;
 
-public class WeaponKitSlider : MonoBehaviour
+public class WeaponKitSlider : MonoBehaviourPunCallbacks
 {
-    public enum EKits
-    {
-        rifle,
-        sniper,
-        shotgun,
-        count
-    }
-
-    public int CurrentKitIdx => mCurrentKitPos;
+    public PrimaryWeapon CurrentKitIdx => mCurrentKitPos;
 
     [Header("The names of the different kits")]
     [SerializeField]
@@ -22,11 +17,15 @@ public class WeaponKitSlider : MonoBehaviour
 
     [Header("The default kit the Player has at the start")]
     [SerializeField]
-    private EKits mDefaultKit;
+    private PrimaryWeapon mDefaultKit;
 
     [Header("The Kit name text")]
     [SerializeField]
     private TextMeshProUGUI mText_KitName;
+
+
+    [SerializeField]
+    private PhotonView mPhotonView;
 
     [SerializeField]
     private AudioClip mButtonClickSound;
@@ -34,64 +33,92 @@ public class WeaponKitSlider : MonoBehaviour
     [SerializeField]
     private GameObject mRiflePlaceholder;
     [SerializeField]
-    private GameObject mSniperPlaceholder;
-    [SerializeField]
     private GameObject mShotgunPlaceholder;
+    [SerializeField]
+    private GameObject mSniperPlaceholder;
 
     private GameObject mCurrentPlaceholder;
     private List<GameObject> mAllPlaceholder;
 
-    private int mCurrentKitPos;
+    private PrimaryWeapon mCurrentKitPos;
+
+
 
     private void Start()
     {
         mAllPlaceholder = new List<GameObject>()
         {
             mRiflePlaceholder,
-            mSniperPlaceholder,
-            mShotgunPlaceholder
+            mShotgunPlaceholder,
+            mSniperPlaceholder
         };
 
-        DisplayCurrentKit(mAllPlaceholder[mCurrentKitPos]);
+        DisplayCurrentKit((int)mCurrentKitPos);
     }
 
     private void Update()
     {
+        if (!mPhotonView.IsMine)
+            return;
+
         if (Input.GetKeyDown(KeyCode.L))
             OnClickLeft();
     }
 
-    private void DisplayCurrentKit(GameObject _currentKit)
+    private void DisplayCurrentKit(int _currentKitIdx)
     {
-        foreach (GameObject placeholder in mAllPlaceholder)
+        if (!mPhotonView.IsMine)
+            return;
+
+
+        for (int i = 0; i < mAllPlaceholder.Count; i++)
         {
-            if (placeholder == _currentKit)
+            if (i == _currentKitIdx)
             {
-                placeholder.SetActive(true);
-                mText_KitName.text = mAllKitNames[mCurrentKitPos];
+                mAllPlaceholder[i].SetActive(true);
+                mText_KitName.text = mAllKitNames[(int)mCurrentKitPos];
             }
             else
-                placeholder.SetActive(false);
+                mAllPlaceholder[i].SetActive(false);
+
+        }
+
+        Hashtable hash = new Hashtable();
+        hash.Add("weaponKey", (int)mCurrentKitPos);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+    }
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        if (!mPhotonView.IsMine && targetPlayer == mPhotonView.Owner)
+        {
+            DisplayCurrentKit((int)changedProps["weaponKey"]);
         }
     }
 
     public void OnClickRight()
     {
+        if (!mPhotonView.IsMine)
+            return;
+
         mCurrentKitPos++;
-        if (mCurrentKitPos >= (int)EKits.count)
+        if ((int)mCurrentKitPos >= (int)PrimaryWeapon.Sniper + 1)
             mCurrentKitPos = 0;
 
-        DisplayCurrentKit(mAllPlaceholder[mCurrentKitPos]);
+        DisplayCurrentKit((int)mCurrentKitPos);
 
     }
 
     public void OnClickLeft()
-    {   
+    {
+        if (!mPhotonView.IsMine)
+            return;
+
         mCurrentKitPos--;
 
         if (mCurrentKitPos < 0)
-            mCurrentKitPos = (int)EKits.count - 1;
+            mCurrentKitPos = PrimaryWeapon.Sniper;
 
-        DisplayCurrentKit(mAllPlaceholder[mCurrentKitPos]);
+        DisplayCurrentKit((int)mCurrentKitPos);
     }
 }
