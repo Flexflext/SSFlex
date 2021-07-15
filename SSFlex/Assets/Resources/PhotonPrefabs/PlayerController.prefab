@@ -108,7 +108,7 @@ Transform:
   m_GameObject: {fileID: 960442410}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children: []
   m_Father: {fileID: 1309661637}
   m_RootOrder: 2
@@ -525,7 +525,7 @@ Transform:
   m_GameObject: {fileID: 1792141532}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 1309661637}
   m_RootOrder: 1
@@ -1285,6 +1285,7 @@ MonoBehaviour:
   mMaxBuildHeight: 10
   mClipThreshold_Side: 1.5
   mClipThreshold_Up: 0.35
+  mThicknessAdj: 0
   mBuildPoint: {fileID: 376500126}
   mMainCam: {fileID: 1370586007883492911}
   mMiner: {fileID: 1918742738}

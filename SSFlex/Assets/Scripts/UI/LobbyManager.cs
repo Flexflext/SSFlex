@@ -114,6 +114,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.LeaveRoom();
         MenuManager.Instance.AdminLoadingMenu();
+
     }
 
     public void StartGame()
@@ -129,7 +130,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
-        MenuManager.Instance.AdminMainMenu();
+        MenuManager.Instance.LoadMainMenu();
     }
 
 
