@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -9649,6 +9649,7 @@ MonoBehaviour:
   selectBlueButton: {fileID: 243416236}
   selectYellowButton: {fileID: 1092419739}
   selectGreenButton: {fileID: 1098030666}
+  startGameButton: {fileID: 784330615}
 --- !u!114 &1453810797
 MonoBehaviour:
   m_ObjectHideFlags: 0
