@@ -205,8 +205,9 @@ public class Gun : MonoBehaviourPunCallbacks
             _gameobject.GetComponent<PlayerHealth>().TakeDamage(dmg);
             PlayerHud.Instance.DisplayDmgToPlayer();
         }
-        else
+        else if (_gameobject.layer == 8)
         {
+            _gameobject.GetComponent<NormalBuildingInfo>().TakeDamage(dmg);
             PlayerHud.Instance.DisplayDmgToObj();
         }
     }

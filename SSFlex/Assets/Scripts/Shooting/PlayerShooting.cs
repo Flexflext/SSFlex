@@ -30,6 +30,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     [SerializeField] private Transform crossHairTarget;
     [SerializeField] private float regenTime;
     [SerializeField] private float grenadeSpeed;
+    [SerializeField] private float maxGrenadeDmg;
     [SerializeField] private GameObject grenadePrefab;
     private bool canThrowGrenade = true;
     //Animation
@@ -330,6 +331,8 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
         grendadeRb.AddForce(direction * grenadeSpeed, ForceMode.Impulse);
 
+        grenade.GetComponent<Grenade>().HitAnything += HitAnything;
+
         canThrowGrenade = false;
         StartCoroutine(C_GrenadeRegenTimer(regenTime));
     }
@@ -361,6 +364,30 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(_time * 1 / 3f);
         
         isGrenadeThrowing = false;
+    }
+
+    /// <summary>
+    /// Check what Dmg to Do and to what
+    /// </summary>
+    /// <param name="_gameobject"></param>
+    public void HitAnything(GameObject _gameobject, float _percent)
+    {
+        Debug.Log("Hit Smth with grenade");
+
+        float grenadeDmg = maxGrenadeDmg * _percent;
+
+
+
+        if (_gameobject.layer == 9)
+        {
+            _gameobject.GetComponent<PlayerHealth>()?.TakeDamage(grenadeDmg);
+            PlayerHud.Instance.DisplayDmgToPlayer();
+        }
+        else if (_gameobject.layer == 8)
+        {
+            _gameobject.GetComponent<NormalBuildingInfo>()?.TakeDamage(grenadeDmg);
+            PlayerHud.Instance.DisplayDmgToObj();
+        }
     }
 
     private IEnumerator C_GrenadeRegenTimer(float _time)
