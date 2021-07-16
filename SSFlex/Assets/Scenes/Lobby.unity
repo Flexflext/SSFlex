@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -866,7 +866,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 116728331}
   sceneViewId: 5
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -1619,6 +1620,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 2597753631756127268}
+        m_MethodName: SetView
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1453810797}
+          m_ObjectArgumentAssemblyTypeName: Photon.Pun.PhotonView, PhotonUnityNetworking
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &243416239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2219,10 +2231,7 @@ RectTransform:
   - {fileID: 235527911}
   - {fileID: 48947534}
   - {fileID: 1144947758}
-  - {fileID: 1549735147}
-  - {fileID: 2597753631756127267}
-  - {fileID: 2597753632051880679}
-  - {fileID: 2597753632715649494}
+  - {fileID: 1495643882}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4334,7 +4343,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 650482945}
   sceneViewId: 4
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -5173,6 +5183,17 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1549735148}
+        m_MethodName: SetView
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1453810797}
+          m_ObjectArgumentAssemblyTypeName: Photon.Pun.PhotonView, PhotonUnityNetworking
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -9427,7 +9448,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 1323967003}
   sceneViewId: 2
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -9969,6 +9991,58 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1490734777}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1495643881
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1495643882}
+  - component: {fileID: 1495643883}
+  m_Layer: 5
+  m_Name: C_WeaponSlider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1495643882
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495643881}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1549735147}
+  - {fileID: 2597753631756127267}
+  - {fileID: 2597753632051880679}
+  - {fileID: 2597753632715649494}
+  m_Father: {fileID: 408284276}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1495643883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495643881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d5a6f62e090e2a49aa57b0a284bb7d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1496417546
 GameObject:
   m_ObjectHideFlags: 0
@@ -10035,8 +10109,8 @@ RectTransform:
   m_Children:
   - {fileID: 750430761}
   - {fileID: 1669376663}
-  m_Father: {fileID: 408284276}
-  m_RootOrder: 3
+  m_Father: {fileID: 1495643882}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90.00001}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -10061,8 +10135,8 @@ MonoBehaviour:
   - Camper
   mDefaultKit: 0
   mText_KitName: {fileID: 1669376664}
-  mPhotonView: {fileID: 1323967002}
   mButtonClickSound: {fileID: 0}
+  mLobbyMangager: {fileID: 1453810796}
   mRiflePlaceholder: {fileID: 3424158946800387762}
   mShotgunPlaceholder: {fileID: 1364696693}
   mSniperPlaceholder: {fileID: 1220139469}
@@ -14168,8 +14242,8 @@ RectTransform:
   m_Children:
   - {fileID: 2597753632550793953}
   - {fileID: 2597753631659897439}
-  m_Father: {fileID: 408284276}
-  m_RootOrder: 4
+  m_Father: {fileID: 1495643882}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90.00001}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -14194,8 +14268,8 @@ MonoBehaviour:
   - Camper
   mDefaultKit: 0
   mText_KitName: {fileID: 2597753631659897424}
-  mPhotonView: {fileID: 2033189133}
   mButtonClickSound: {fileID: 0}
+  mLobbyMangager: {fileID: 1453810796}
   mRiflePlaceholder: {fileID: 259780665}
   mShotgunPlaceholder: {fileID: 935257356}
   mSniperPlaceholder: {fileID: 2086788157}
@@ -14512,8 +14586,8 @@ MonoBehaviour:
   - Camper
   mDefaultKit: 0
   mText_KitName: {fileID: 2597753631368371348}
-  mPhotonView: {fileID: 650482944}
   mButtonClickSound: {fileID: 0}
+  mLobbyMangager: {fileID: 1453810796}
   mRiflePlaceholder: {fileID: 948338971}
   mShotgunPlaceholder: {fileID: 181822247}
   mSniperPlaceholder: {fileID: 1456447966}
@@ -14547,8 +14621,8 @@ RectTransform:
   m_Children:
   - {fileID: 2597753632322182181}
   - {fileID: 2597753631368371355}
-  m_Father: {fileID: 408284276}
-  m_RootOrder: 5
+  m_Father: {fileID: 1495643882}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90.00001}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -15034,8 +15108,8 @@ MonoBehaviour:
   - Camper
   mDefaultKit: 0
   mText_KitName: {fileID: 2597753632852053925}
-  mPhotonView: {fileID: 116728332}
   mButtonClickSound: {fileID: 0}
+  mLobbyMangager: {fileID: 1453810796}
   mRiflePlaceholder: {fileID: 501106588}
   mShotgunPlaceholder: {fileID: 1133486678}
   mSniperPlaceholder: {fileID: 1035771517}
@@ -15052,8 +15126,8 @@ RectTransform:
   m_Children:
   - {fileID: 2597753631895359252}
   - {fileID: 2597753632852053930}
-  m_Father: {fileID: 408284276}
-  m_RootOrder: 6
+  m_Father: {fileID: 1495643882}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90.00001}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
