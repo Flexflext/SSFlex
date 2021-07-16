@@ -27,7 +27,7 @@ public class WaypointFollower : MonoBehaviour
         else mWaypointIdx++;
 
         if (mWaypointIdx >= mWaypoints.Count)
-            mWaypointIdx = 1;
+            mWaypointIdx = 0;
 
         Debug.Log(mWaypoints[mWaypointIdx]);
     }
