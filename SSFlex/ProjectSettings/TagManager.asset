@@ -15,6 +15,7 @@ TagManager:
   - AmmoSniper
   - AmmoAR
   - AmmoShotgun
+  - TEST
   layers:
   - Default
   - TransparentFX

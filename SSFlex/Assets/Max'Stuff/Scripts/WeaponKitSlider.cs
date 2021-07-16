@@ -6,11 +6,10 @@ using TMPro;
 using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Photon.Realtime;
+using System.IO;
 
 public class WeaponKitSlider : MonoBehaviourPunCallbacks
 {
-    public PrimaryWeapon CurrentKitIdx => mCurrentKitPos;
-
     [Header("The names of the different kits")]
     [SerializeField]
     private List<string> mAllKitNames;
@@ -23,12 +22,13 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
     [SerializeField]
     private TextMeshProUGUI mText_KitName;
 
-
-    [SerializeField]
-    private PhotonView mPhotonView;
-
     [SerializeField]
     private AudioClip mButtonClickSound;
+
+    [SerializeField]
+    private LobbyManager mLobbyMangager;
+
+    private PhotonView mPhotonView;
 
     [SerializeField]
     private GameObject mRiflePlaceholder;
@@ -42,10 +42,13 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
 
     private PrimaryWeapon mCurrentKitPos;
 
-
-
     private void Start()
     {
+
+        
+
+
+
         mAllPlaceholder = new List<GameObject>()
         {
             mRiflePlaceholder,
@@ -56,20 +59,23 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
         DisplayCurrentKit((int)mCurrentKitPos);
     }
 
+    public override void OnEnable()
+    {
+        base.OnEnable();
+
+        GameObject pv = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "LobbyPlayer"), transform.position, transform.rotation);
+        mPhotonView = pv.GetComponent<PhotonView>();
+    }
+
     private void Update()
     {
-        if (!mPhotonView.IsMine)
-            return;
-
         if (Input.GetKeyDown(KeyCode.L))
             OnClickLeft();
     }
 
     private void DisplayCurrentKit(int _currentKitIdx)
     {
-        if (!mPhotonView.IsMine)
-            return;
-
+      
 
         for (int i = 0; i < mAllPlaceholder.Count; i++)
         {
@@ -83,23 +89,33 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
 
         }
 
-        Hashtable hash = new Hashtable();
-        hash.Add("weaponKey", (int)mCurrentKitPos);
-        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+
+        if (mPhotonView.IsMine)
+        {
+
+            Hashtable hash = new Hashtable();
+            hash.Add("weaponKey", (int)mCurrentKitPos);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        }    
     }
+
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
+        Debug.Log(mPhotonView.IsMine);
+
         if (!mPhotonView.IsMine && targetPlayer == mPhotonView.Owner)
         {
             DisplayCurrentKit((int)changedProps["weaponKey"]);
+            Debug.Log("OnPlayerPropertiesUpdate");
         }
     }
 
     public void OnClickRight()
     {
-        if (!mPhotonView.IsMine)
-            return;
+
+
+        Debug.Log("Click Righ");
 
         mCurrentKitPos++;
         if ((int)mCurrentKitPos >= (int)PrimaryWeapon.Sniper + 1)
@@ -107,12 +123,12 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
 
         DisplayCurrentKit((int)mCurrentKitPos);
 
+        GameManager.Instance.SetStartWeapon(mCurrentKitPos);
     }
 
     public void OnClickLeft()
     {
-        if (!mPhotonView.IsMine)
-            return;
+        Debug.Log("Click Left");
 
         mCurrentKitPos--;
 
@@ -120,5 +136,7 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
             mCurrentKitPos = PrimaryWeapon.Sniper;
 
         DisplayCurrentKit((int)mCurrentKitPos);
+
+        GameManager.Instance.SetStartWeapon(mCurrentKitPos);
     }
 }

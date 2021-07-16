@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public bool PreparationPhase => mPreparationPhase;
+    public PrimaryWeapon StartWeapon => mStartWeapon;
 
     [Header("The lenght of the Preparation Phase")]
     [SerializeField]
@@ -23,6 +24,8 @@ public class GameManager : MonoBehaviour
     private bool mPreparationPhase = true;
 
     private Scene mCurrentScene;
+
+    private PrimaryWeapon mStartWeapon;
 
     private void Awake()
     {
@@ -55,10 +58,16 @@ public class GameManager : MonoBehaviour
         }
 
 
+
         GetOptions();
 
         if (Input.GetKeyDown(KeyCode.Escape) && mEscapeMenu != null)
             ToggleEscapeMenu();
+    }
+
+    public void SetStartWeapon(PrimaryWeapon _startWeapon)
+    {
+        mStartWeapon = _startWeapon;
     }
 
     private void CountPrepPhase()

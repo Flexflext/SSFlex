@@ -69,6 +69,8 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         playerLook = GetComponent<PlayerLook>();
         controller = GetComponent<PlayerController>();
 
+        weapon = GameManager.Instance.StartWeapon;
+
         ChooseGun();
 
         farmMode = false;
