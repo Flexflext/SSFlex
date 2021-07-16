@@ -2963,120 +2963,140 @@ MonoBehaviour:
     Clip: {fileID: 8300000, guid: 12e073ab2c7054940aee493081984ec5, type: 3}
     Volume: 0.1
     Pitch: 1
+    SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: GravelRun
     Clip: {fileID: 0}
     Volume: 0.1
     Pitch: 1.2
+    SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: StoneWalk
     Clip: {fileID: 0}
     Volume: 0.1
     Pitch: 1
+    SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: StoneRun
     Clip: {fileID: 0}
     Volume: 0.1
     Pitch: 1.2
+    SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: BreathingRun
     Clip: {fileID: 8300000, guid: c961e1ee537854a4e888a1fff8515c22, type: 3}
     Volume: 0.1
     Pitch: 1
+    SpatialBlend: 0
     Loop: 1
     Source: {fileID: 0}
   - Name: GrenadeExplosion
     Clip: {fileID: 8300000, guid: 3054a4ecc721d4b4887efb3bcfd0816c, type: 3}
     Volume: 0.1
     Pitch: 0.8
+    SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: ShootAR
     Clip: {fileID: 8300000, guid: 7eefe4f3f37d1274cbfffbd92e4c327b, type: 3}
     Volume: 0.1
     Pitch: 1
+    SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: ShootPistol
     Clip: {fileID: 8300000, guid: 3e7f9e3c6e2d2fe4dba8d649f258cd9a, type: 3}
     Volume: 0.1
     Pitch: 1
+    SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: ShootShotgun
     Clip: {fileID: 8300000, guid: c0eda1bc636fc244fb391e8c27ee1ae5, type: 3}
     Volume: 0.1
     Pitch: 1
+    SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: ShootSniper
     Clip: {fileID: 8300000, guid: e81be30ab78ff46478e6f928a0434213, type: 3}
     Volume: 0.1
     Pitch: 1
+    SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: LaserStart
     Clip: {fileID: 8300000, guid: 728fd049608b1d440b03ccb9d85b7af4, type: 3}
     Volume: 0.1
     Pitch: 1
+    SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: Laser
     Clip: {fileID: 8300000, guid: 76dc650760cf1f5448f6bc871282b008, type: 3}
     Volume: 0.1
     Pitch: 1
+    SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: LaserEnd
     Clip: {fileID: 8300000, guid: 48071fe1f7a4872469cda89a144c93c5, type: 3}
     Volume: 0.1
     Pitch: 1
+    SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: 
     Clip: {fileID: 0}
     Volume: 0
     Pitch: 0
+    SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: 
     Clip: {fileID: 0}
     Volume: 0
     Pitch: 0
+    SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: 
     Clip: {fileID: 0}
     Volume: 0
     Pitch: 0
+    SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: 
     Clip: {fileID: 0}
     Volume: 0
     Pitch: 0
+    SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: 
     Clip: {fileID: 0}
     Volume: 0
     Pitch: 0
+    SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: 
     Clip: {fileID: 0}
     Volume: 0
     Pitch: 0
+    SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: 
     Clip: {fileID: 0}
     Volume: 0
     Pitch: 0
+    SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   MainMixer: {fileID: 24100000, guid: 4ee0ca3552036d14684ddfb241abe092, type: 2}
@@ -8154,7 +8174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f62028fe350031d448d8d4c78a56d7d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMaxPreparationTime: 60
+  mMaxPreparationTime: 1
   mEscapeMenu: {fileID: 0}
 --- !u!4 &1578601756
 Transform:

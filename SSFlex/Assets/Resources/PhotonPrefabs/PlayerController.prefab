@@ -1719,6 +1719,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1370586008103240521}
     m_Modifications:
     - target: {fileID: 152028411, guid: fc80979f393058542a06d78eef397530, type: 3}
+      propertyPath: gunName
+      value: AR
+      objectReference: {fileID: 0}
+    - target: {fileID: 152028411, guid: fc80979f393058542a06d78eef397530, type: 3}
       propertyPath: crossHairTarget
       value: 
       objectReference: {fileID: 1370586006440095953}
@@ -1739,6 +1743,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1370586006739449291, guid: fc80979f393058542a06d78eef397530,
         type: 3}
+      propertyPath: gunName
+      value: Sniper
+      objectReference: {fileID: 0}
+    - target: {fileID: 1370586006739449291, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
       propertyPath: crossHairTarget
       value: 
       objectReference: {fileID: 1370586006440095953}
@@ -1746,6 +1755,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1370586006943107614, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
+      propertyPath: gunName
+      value: Shotgun
       objectReference: {fileID: 0}
     - target: {fileID: 1370586006943107614, guid: fc80979f393058542a06d78eef397530,
         type: 3}
@@ -1771,6 +1785,11 @@ PrefabInstance:
         type: 3}
       propertyPath: dmg
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1370586008147488376, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
+      propertyPath: gunName
+      value: Pistol
       objectReference: {fileID: 0}
     - target: {fileID: 1370586008147488376, guid: fc80979f393058542a06d78eef397530,
         type: 3}
