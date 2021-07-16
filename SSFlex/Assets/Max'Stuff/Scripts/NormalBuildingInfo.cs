@@ -19,53 +19,53 @@ public class NormalBuildingInfo : MonoBehaviour
         none
     }
 
-
-
     public List<EClipSideSlots> OccupiedSideSlots => mOccupiedSideSlots;
     public List<EClipFaceSlots> OccupiedFaceSlots => mOccupiedFaceSlots;
-    public BuildingDimensions.EBuildingDimensions CurrentDimension => mCurrentDimension;
+
+    public AvailableBuildingDimensions.BuildingDimensions.EBuildingDimensions CurrentDimension => mCurrentDimension;
+
     public bool IsFirstFloor => mIsFirstFloor;
 
 
-    private List<EClipSideSlots> mOccupiedSideSlots;
-
-    private List<EClipFaceSlots> mOccupiedFaceSlots;
-
+    [Header("Healt, Damage colour change value and clolour start value upon being damaged")]
     [SerializeField]
     private float mHealth;
+    [SerializeField]
+    private float mColourDamageValue;
+    [SerializeField]
+    private float mColourStartValue;
+    // used to extend the reach of the raycast to find a neighbour
+    [SerializeField]
+    private float mExtendMod;
 
+    [Header("The default occupied slots of the Building")]
     [SerializeField]
     private EClipSideSlots mDefaultSideSlot;
     [SerializeField]
     private EClipFaceSlots mDefaultFaceSlot;
-
+    [Header("The dimension that provides the actual scale of the Building")]
     [SerializeField]
-    private BuildingDimensions.EBuildingDimensions mCurrentDimension;
+    private AvailableBuildingDimensions.BuildingDimensions.EBuildingDimensions mCurrentDimension;
 
-    private bool mIsFirstFloor;
-
+    [Header("Components")]
+    [SerializeField]
+    private MeshRenderer mMeshRenderer;
     [SerializeField]
     private LayerMask mBuildLayer;
 
-    [SerializeField]
-    private float mExtendMod;
-
-    [SerializeField]
-    private MeshRenderer mMeshRenderer;
-
-    [SerializeField]
-    private float mColourDamageValue;
-
+    [Header("Particle Systems")]
     [SerializeField]
     private ParticleSystem mDamagedParticle;
     [SerializeField]
     private ParticleSystem mBuildParticle;
 
     private Color mDamagedColour;
-    private float mRFloat;
 
-    [SerializeField]
-    private float mColourStartValue;
+    private List<EClipSideSlots> mOccupiedSideSlots;
+    private List<EClipFaceSlots> mOccupiedFaceSlots;
+
+    private float mRFloat;
+    private bool mIsFirstFloor;
 
     private void Update()
     {
@@ -79,10 +79,9 @@ public class NormalBuildingInfo : MonoBehaviour
     }
     private void Start()
     {
-        if (mOccupiedSideSlots.Contains(EClipSideSlots.up))
-            GetNeighboursSide();
-        //if (mOccupiedSideSlots.Contains(EClipSideSlots.down))
-        //    GetNeighboursUp();
+        GetNeighboursSide();
+        GetNeighboursUp();
+
 
         mBuildParticle.Play();
 
@@ -133,19 +132,24 @@ public class NormalBuildingInfo : MonoBehaviour
         RaycastHit hitRight;
         RaycastHit hitLeft;
 
-        //Debug.Log("Edgecase");
 
         if (Physics.Raycast(mMeshRenderer.bounds.center, transform.right, out hitRight, mMeshRenderer.bounds.extents.x + mExtendMod, mBuildLayer))
         {
-            //Debug.Log("Hit right");
-            mOccupiedSideSlots.Add(EClipSideSlots.right);
-            hitRight.collider.gameObject.GetComponent<NormalBuildingInfo>().AddClipSlotSide(EClipSideSlots.left);
+            if (hitRight.collider.CompareTag("ClipTag"))
+            {
+                mOccupiedSideSlots.Add(EClipSideSlots.right);
+                hitRight.collider.gameObject.GetComponent<NormalBuildingInfo>().AddClipSlotSide(EClipSideSlots.left);
+            }
+            
         }
         if (Physics.Raycast(mMeshRenderer.bounds.center, -transform.right, out hitLeft, mMeshRenderer.bounds.extents.x + mExtendMod, mBuildLayer))
         {
-            //Debug.Log("Hit left");
-            mOccupiedSideSlots.Add(EClipSideSlots.left);
-            hitLeft.collider.gameObject.GetComponent<NormalBuildingInfo>().AddClipSlotSide(EClipSideSlots.right);
+            if (hitLeft.collider.CompareTag("ClipTag"))
+            {
+                mOccupiedSideSlots.Add(EClipSideSlots.left);
+                hitLeft.collider.gameObject.GetComponent<NormalBuildingInfo>().AddClipSlotSide(EClipSideSlots.right);
+            }
+            
         }
     }
 
@@ -154,19 +158,24 @@ public class NormalBuildingInfo : MonoBehaviour
         RaycastHit hitUp;
         RaycastHit hitDown;
 
-        //Debug.Log("Edgecase");
 
         if (Physics.Raycast(mMeshRenderer.bounds.center, transform.up, out hitUp, mMeshRenderer.bounds.extents.x + mExtendMod, mBuildLayer))
         {
-            //Debug.Log("Hit up");
-            mOccupiedSideSlots.Add(EClipSideSlots.up);
-            hitUp.collider.gameObject.GetComponent<NormalBuildingInfo>().AddClipSlotSide(EClipSideSlots.down);
+            if (hitUp.collider.CompareTag("ClipTag"))
+            {
+                mOccupiedSideSlots.Add(EClipSideSlots.up);
+                hitUp.collider.gameObject.GetComponent<NormalBuildingInfo>().AddClipSlotSide(EClipSideSlots.down);
+            }
+            
         }
+
         if (Physics.Raycast(mMeshRenderer.bounds.center, -transform.up, out hitDown, mMeshRenderer.bounds.extents.x + mExtendMod, mBuildLayer))
         {
-            //Debug.Log("Hit down");
-            mOccupiedSideSlots.Add(EClipSideSlots.down);
-            hitDown.collider.gameObject.GetComponent<NormalBuildingInfo>().AddClipSlotSide(EClipSideSlots.up);
+            if (hitDown.collider.CompareTag("ClipTag"))
+            {
+                mOccupiedSideSlots.Add(EClipSideSlots.down);
+                hitDown.collider.gameObject.GetComponent<NormalBuildingInfo>().AddClipSlotSide(EClipSideSlots.up);
+            }          
         }
     }
 }

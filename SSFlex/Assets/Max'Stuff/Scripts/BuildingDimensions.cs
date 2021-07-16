@@ -2,34 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingDimensions : MonoBehaviour
+namespace AvailableBuildingDimensions
 {
-    public static BuildingDimensions Instance;
-
-    public enum EBuildingDimensions
+    /// <summary>
+    /// Class to save the actual size of the Buildings that ought to be build
+    /// </summary>
+    public class BuildingDimensions : MonoBehaviour
     {
-        cube,
-        normalWall,
-        halfWall,
-        normalStairs
-    }
+        public enum EBuildingDimensions
+        {
+            cube,
+            normalWall,
+            normalGate,
+            halfWall,
+            normalStairs
+        }
 
-    public readonly Vector3[] mBuildingDimensions =
-    {
+        public readonly Vector3[] mBuildingDimensions =
+        {
         new Vector3(1f, 1f, 1f),
-        new Vector3(5.2f, 5.1f, 2.2f),
+        new Vector3(5.25f, 5.1f, 2.2f),
+        new Vector3(5f, 4.9f, 2.2f),
         new Vector3(3.95f, 1f, 0.4f),
         new Vector3(3.6f, 4.9f,7.8f)
-    };
-
-    private void Awake()
-    {
-        if (Instance)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        DontDestroyOnLoad(gameObject);
-        Instance = this;
+        };  
     }
 }

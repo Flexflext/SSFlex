@@ -9,6 +9,12 @@ TagManager:
   - ClipPos
   - Placeholder
   - EscapeMenu
+  - Blocker
+  - Ground
+  - AmmoPistol
+  - AmmoSniper
+  - AmmoAR
+  - AmmoShotgun
   layers:
   - Default
   - TransparentFX
@@ -25,9 +31,9 @@ TagManager:
   - GroundStone
   - GroundGravel
   - 3rdPersonPlayer
-  - 
-  - 
-  - 
+  - ResourceLayer
+  - PlayerHead
+  - BulletIgnore
   - 
   - 
   - 

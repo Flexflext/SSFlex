@@ -5,6 +5,9 @@ using UnityEngine;
 public class ShotGun : Gun
 {
     [SerializeField] protected Vector2[] spreadPattern;
+    [SerializeField] protected Transform camTransform;
+    
+
 
     protected override void FireBullet()
     {
@@ -49,8 +52,8 @@ public class ShotGun : Gun
                 Vector3 spreadRangePos = muzzle.position + direction * spreadRange;
 
                 // Add a Random Poition in the SpreadRadius
-                spreadRangePos += transform.root.up * spreadPattern[i].y * spreadRadius;
-                spreadRangePos += transform.root.right * spreadPattern[i].x * spreadRadius;
+                spreadRangePos += camTransform.up * spreadPattern[i].y * spreadRadius;
+                spreadRangePos += camTransform.right * spreadPattern[i].x * spreadRadius;
 
                 // Set a new Velocity dependend on the BulletSpeed
                 velocity = (spreadRangePos - muzzle.position).normalized;
@@ -62,8 +65,8 @@ public class ShotGun : Gun
                 Vector3 spreadRangePos = muzzle.position + direction * spreadRange;
 
                 // Add a Random Poition in the Aimed SpreadRadius
-                spreadRangePos += transform.root.up * spreadPattern[i].y * spreadRadiusAimed;
-                spreadRangePos += transform.root.right * spreadPattern[i].x * spreadRadiusAimed;
+                spreadRangePos += camTransform.up * spreadPattern[i].y * spreadRadiusAimed;
+                spreadRangePos += camTransform.right * spreadPattern[i].x * spreadRadiusAimed;
 
                 velocity = (spreadRangePos - muzzle.position).normalized;
             }

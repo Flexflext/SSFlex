@@ -3,41 +3,45 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using System.IO;
+using AvailableBuildingDimensions;
 
 public class BuildingPlacer : MonoBehaviourPunCallbacks
 {
-    public float MaxBuildHeight => mMaxBuildHeight;
-    public bool IsClipped => mIsClipped;
     public GameObject HitObj => mHitObj;
 
+    public float MaxBuildHeight => mMaxBuildHeight;
+    public bool IsClipped => mIsClipped;
+    public bool IsInBuildMode => mIsInBuildMode;
+    public bool IsInMineMode => mIsInMineMode;
+
+
+    [Header("Max Build Range")]
     [SerializeField]
     private float mMaxBuildRange;
 
-    private bool mIsClipped;
-    private bool mIsInBuildMode;
-
-    private int mBuidlIdx = 1;
-
-    private float mRotFloat;
-    private float mRelativeHitDot;
-
+    // Max Height to build
     [SerializeField]
     private float mMaxBuildHeight;
-
+    // The threshhold for up, down, left, right used to determined if the buildings has to clipped by checking the equivalent dot product
     [SerializeField]
     private float mClipThreshold_Side;
     [SerializeField]
     private float mClipThreshold_Up;
+    [SerializeField]
+    private float mThicknessAdj;
 
+    [Header("Components")]
+    [SerializeField]
+    private GameObject mBuildPoint;
+    [SerializeField]
+    private Camera mMainCam;
+    [SerializeField]
+    private ResourceMiner mMiner;
     [SerializeField]
     private LayerMask mBuildLayer;
 
-    [SerializeField]
-    private RectTransform mCrosshair;
 
-    [SerializeField]
-    private GameObject mBuildPoint;
-
+    [Header("Prefabs for Buildings")]
     [SerializeField]
     private GameObject mNormalWall;
     [SerializeField]
@@ -46,10 +50,11 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     private GameObject mHalfWall;
     [SerializeField]
     private GameObject mNormalStairs;
-
+    
     private GameObject mCurrentBuilding;
     private List<GameObject> mAllBuildings;
 
+    [Header("Placeholder for Buildings")]
     [SerializeField]
     private GameObject mNormalWallPlaceholder;
     [SerializeField]
@@ -58,22 +63,11 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     private GameObject mHalfWallPlaceholder;
     [SerializeField]
     private GameObject mNormalStairsPlaceholder;
-
-    private GameObject mCurrentPlaceholder;
-    private List<GameObject> mAllPlaceholder;
-
-
-    [SerializeField]
-    private Camera mMainCam;
-
     [SerializeField]
     private PlaceholderScript mPlaceholderScript;
 
-    private GameObject mHitObj;
-
-    private NormalBuildingInfo mHitObjInfo;
-
-    private Collider mCurrentCollider;
+    private GameObject mCurrentPlaceholder;
+    private List<GameObject> mAllPlaceholder;
 
     private NormalBuildingInfo.EClipSideSlots mHitSlotToAdd_Side;
     private NormalBuildingInfo.EClipSideSlots mCurrentSlotToAdd_Side;
@@ -83,14 +77,34 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
 
     private BuildingDimensions.EBuildingDimensions mHitObjDimension;
     private BuildingDimensions.EBuildingDimensions mCurrentDimension;
+    private BuildingDimensions mAvailableDimensions;
+
+
+    private NormalBuildingInfo mHitObjInfo;
+    private Collider mCurrentCollider;
+    private GameObject mHitObj;
+
+
+
+    private float mRotFloat;
+    private float mRelativeHitDot;
+
+    private int mBuidlIdx = 1;
+    private bool mIsInMineMode = true;
+
+    private bool mIsInBuildMode;
+    private bool mIsClipped;
 
     private float mDotProductSide;
     private float mDotProductUp;
 
+    private float mResourceAmount;
     private void Start()
     {
         if (!photonView.IsMine)
             return;
+
+        mAvailableDimensions = new BuildingDimensions();
 
         mAllBuildings = new List<GameObject>()
         {
@@ -123,13 +137,15 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         if (!photonView.IsMine)
             return;
 
-        Debug.Log(mIsClipped);
-
-        ChangeBuildType();
-
-        ManageBuildingClip();
-
-        ManageBuildMode();
+        if (GameManager.Instance.PreparationPhase)
+        {
+            ManageBuildMode();
+            ManageBuildingClip();
+            ChangeModeType();
+            ChangeBuildType();
+        }
+        else if (mIsInBuildMode && !GameManager.Instance.PreparationPhase)
+            mIsInBuildMode = false;
     }
 
     private void ManageBuildMode()
@@ -166,17 +182,13 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     {
         Vector3 hitPos = new Vector3();
 
-        //Vector3 crosPos = mMainCam.ScreenToWorldPoint(mCrosshair.transform.position);
-
         Vector3 dirVec = new Vector3();
 
         RaycastHit hit;
 
-
         if (Physics.Raycast(mMainCam.transform.position, mMainCam.transform.forward, out hit, 1000, mBuildLayer))
         {
             hitPos = hit.point;
-
 
             if (Vector3.Distance(transform.position, hitPos) <= mMaxBuildRange)
                 mBuildPoint.transform.position = new Vector3(hitPos.x, hitPos.y, hitPos.z);
@@ -207,8 +219,6 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
             mHitObj = null;
             mIsClipped = false;
         }
-
-        //Debug.Log(mIsClipped);
     }
 
     private void GetClippedBuildingPos_Side()
@@ -231,15 +241,22 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         mHitObjDimension = mHitObjInfo.CurrentDimension;
         mCurrentDimension = mCurrentPlaceholder.GetComponent<PlaceholderScript>().CurrentDimension;
 
-        Vector3 hitObjSize = BuildingDimensions.Instance.mBuildingDimensions[(int)mHitObjDimension] / 2;
-        Vector3 currentObjSize = BuildingDimensions.Instance.mBuildingDimensions[(int)mCurrentDimension] / 2;
+        Vector3 hitObjSize = mAvailableDimensions.mBuildingDimensions[(int)mHitObjDimension] / 2;
+        Vector3 currentObjSize = mAvailableDimensions.mBuildingDimensions[(int)mCurrentDimension] / 2;
+
+        float hitX = hitObjSize.x * HitObj.transform.localScale.x;
+        float hitY = hitObjSize.y * HitObj.transform.localScale.y;
+        float hitZ = hitObjSize.z * HitObj.transform.localScale.z;
+        hitObjSize = new Vector3(hitX, hitY, hitZ);
+
+        float currentX = hitObjSize.x * mCurrentBuilding.transform.localScale.x;
+        float currentY = hitObjSize.y * mCurrentBuilding.transform.localScale.y;
+        float currentZ = hitObjSize.z * mCurrentBuilding.transform.localScale.z;
+        currentObjSize = new Vector3(currentX, currentY, currentZ);
+
         Vector3 totalPlaceAdj = hitObjSize + currentObjSize;
 
         Vector3 posToSet = new Vector3();
-
-        //Vector3 hitObjSize = mHitObjCollider.transform.localScale / 2;
-        //Vector3 currentObjSize = mNormalWall.transform.localScale / 2;
-        //Vector3 totalPlaceAdj = hitObjSize + currentObjSize;
 
 
         if (mDotProductSide < mClipThreshold_Side && mDotProductSide > -mClipThreshold_Side && mDotProductUp < mClipThreshold_Up && mDotProductUp > -mClipThreshold_Up)
@@ -248,13 +265,14 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
             {
                 if (mRelativeHitDot <= 0 && !mHitObjInfo.OccupiedFaceSlots.Contains(NormalBuildingInfo.EClipFaceSlots.front))
                 {
-                    posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(0, 0, totalPlaceAdj.z / 2));
+                    posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(0, 0, totalPlaceAdj.z / mThicknessAdj));
                     mHitSlotToAdd_Face = NormalBuildingInfo.EClipFaceSlots.front;
                     mCurrentSlotToAdd_Face = NormalBuildingInfo.EClipFaceSlots.behind;
+
                 }
                 else if (mRelativeHitDot > 0 && !mHitObjInfo.OccupiedFaceSlots.Contains(NormalBuildingInfo.EClipFaceSlots.behind))
                 {
-                    posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(0, 0, -totalPlaceAdj.z / 2));
+                    posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(0, 0, -totalPlaceAdj.z / mThicknessAdj));
                     mHitSlotToAdd_Face = NormalBuildingInfo.EClipFaceSlots.behind;
                     mCurrentSlotToAdd_Face = NormalBuildingInfo.EClipFaceSlots.front;
                 }
@@ -268,13 +286,13 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
             {
                 if (mRelativeHitDot <= 0 && !mHitObjInfo.OccupiedFaceSlots.Contains(NormalBuildingInfo.EClipFaceSlots.behind))
                 {
-                    posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(0, 0, -totalPlaceAdj.z / 2));
+                    posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(0, 0, -totalPlaceAdj.z / mThicknessAdj));
                     mHitSlotToAdd_Face = NormalBuildingInfo.EClipFaceSlots.behind;
                     mCurrentSlotToAdd_Face = NormalBuildingInfo.EClipFaceSlots.front;
                 }
                 else if(mRelativeHitDot > 0 && !mHitObjInfo.OccupiedFaceSlots.Contains(NormalBuildingInfo.EClipFaceSlots.front))
                 {
-                    posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(0, 0, totalPlaceAdj.z / 2));
+                    posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(0, 0, totalPlaceAdj.z / mThicknessAdj));
                     mHitSlotToAdd_Face = NormalBuildingInfo.EClipFaceSlots.front;
                     mCurrentSlotToAdd_Face = NormalBuildingInfo.EClipFaceSlots.behind;
                 }
@@ -300,8 +318,8 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
                     if (!mHitObjInfo.OccupiedSideSlots.Contains(NormalBuildingInfo.EClipSideSlots.left))
                     {
                         posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(-totalPlaceAdj.x, 0, 0));
-                        mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.left;
-                        mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.right;
+                        //mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.left;
+                        //mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.right;
 
 
                     }
@@ -321,15 +339,15 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
                         if (mRelativeHitDot < 0 && !mHitObjInfo.OccupiedSideSlots.Contains(NormalBuildingInfo.EClipSideSlots.left))
                         {
                             posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(-totalPlaceAdj.x / 2, 0, -totalPlaceAdj.z));
-                            mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.left;
-                            mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.right;
+                            //mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.left;
+                            //mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.right;
                             //Debug.Log("- links vorne");
                         }
                         if (mRelativeHitDot > 0 && !mHitObjInfo.OccupiedSideSlots.Contains(NormalBuildingInfo.EClipSideSlots.right))
                         {
                             posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(-totalPlaceAdj.x / 2, 0, totalPlaceAdj.z));
-                            mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.right;
-                            mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.left;
+                            //mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.right;
+                            //mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.left;
                             //Debug.Log("- rechts hinten");
                         }
                     }
@@ -338,15 +356,15 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
                         if (mRelativeHitDot < 0 && !mHitObjInfo.OccupiedSideSlots.Contains(NormalBuildingInfo.EClipSideSlots.right))
                         {
                             posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(-totalPlaceAdj.x / 2, 0, totalPlaceAdj.z));
-                            mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.right;
-                            mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.left;
+                            //mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.right;
+                            //mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.left;
                             //Debug.Log("+ recht hinter");
                         }
                         if (mRelativeHitDot > 0 && !mHitObjInfo.OccupiedSideSlots.Contains(NormalBuildingInfo.EClipSideSlots.left))
                         {
                             posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(-totalPlaceAdj.x / 2, 0, -totalPlaceAdj.z));
-                            mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.left;
-                            mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.right;
+                            //mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.left;
+                            //mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.right;
                             //Debug.Log("+ links vorne");
                         }
                     }
@@ -367,8 +385,8 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
                     if (!mHitObjInfo.OccupiedSideSlots.Contains(NormalBuildingInfo.EClipSideSlots.right))
                     {
                         posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(totalPlaceAdj.x, 0, 0));
-                        mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.right;
-                        mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.left;
+                        //mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.right;
+                        //mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.left;
                     }
                     //else
                     //{
@@ -385,15 +403,15 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
                         if (mRelativeHitDot < 0 && !mHitObjInfo.OccupiedSideSlots.Contains(NormalBuildingInfo.EClipSideSlots.left))
                         {
                             posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(totalPlaceAdj.x / 2, 0, totalPlaceAdj.z));
-                            mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.left;
-                            mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.right;
+                            //mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.left;
+                            //mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.right;
                             //Debug.Log("+ links hinter");
                         }
                         if (mRelativeHitDot > 0 && !mHitObjInfo.OccupiedSideSlots.Contains(NormalBuildingInfo.EClipSideSlots.right))
                         {
                             posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(totalPlaceAdj.x / 2, 0, -totalPlaceAdj.z));
-                            mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.right;
-                            mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.left;
+                            //mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.right;
+                            //mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.left;
                             //Debug.Log("+ rechts vorne");
                         }
                     }
@@ -402,15 +420,15 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
                         if (mRelativeHitDot < 0 && !mHitObjInfo.OccupiedSideSlots.Contains(NormalBuildingInfo.EClipSideSlots.right))
                         {
                             posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(totalPlaceAdj.x / 2, 0, -totalPlaceAdj.z));
-                            mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.right;
-                            mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.left;
+                            //mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.right;
+                            //mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.left;
                             //Debug.Log("- rechts vorne");
                         }
                         if (mRelativeHitDot > 0 && !mHitObjInfo.OccupiedSideSlots.Contains(NormalBuildingInfo.EClipSideSlots.left))
                         {
                             posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(totalPlaceAdj.x / 2, 0, totalPlaceAdj.z));
-                            mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.left;
-                            mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.right;
+                            //mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.left;
+                            //mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.right;
                             //Debug.Log("- links hinter");
                         }
                     }
@@ -424,30 +442,29 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
                 //}
             }
 
-
             if (mDotProductSide < mClipThreshold_Side && mDotProductSide > -mClipThreshold_Side)
             {
                 if (mDotProductUp >= mClipThreshold_Up && mHitObj.transform.position.y - hitObjSize.y / 2 > 0 && !mHitObjInfo.OccupiedSideSlots.Contains(NormalBuildingInfo.EClipSideSlots.down) && mHitObjInfo.IsFirstFloor)
                 {
                     posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(0, -totalPlaceAdj.y, 0));
 
-                    mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.up;
-                    mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.down;
+                    //mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.down;
+                    //mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.up;
                 }
 
                 if (mDotProductUp <= -mClipThreshold_Up && !mHitObjInfo.OccupiedSideSlots.Contains(NormalBuildingInfo.EClipSideSlots.up))
                 {
                     posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(0, totalPlaceAdj.y, 0));
 
-                    mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.down;
-                    mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.up;
+                    //mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.up;
+                    //mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.down;
                 }
             }
         }
         else
         {
-            mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.none;
-            mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.none;
+            //mHitSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.none;
+            //mCurrentSlotToAdd_Side = NormalBuildingInfo.EClipSideSlots.none;
             Debug.Log("No valid Clip Pos");
         }
  
@@ -461,27 +478,36 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && mPlaceholderScript.ValidPosition)
         {
-            if(mHitSlotToAdd_Side != NormalBuildingInfo.EClipSideSlots.none)
-                mHitObjInfo.AddClipSlotSide(mHitSlotToAdd_Side);
-            if(mHitSlotToAdd_Face != NormalBuildingInfo.EClipFaceSlots.none)
-                mHitObjInfo.AddClipSlotFace(mHitSlotToAdd_Face);
+            //if(mHitSlotToAdd_Side != NormalBuildingInfo.EClipSideSlots.none)
+                //mHitObjInfo.AddClipSlotSide(mHitSlotToAdd_Side);
+            //if(mHitSlotToAdd_Face != NormalBuildingInfo.EClipFaceSlots.none)
+                //mHitObjInfo.AddClipSlotFace(mHitSlotToAdd_Face);
 
             string objToBuild = mPlaceholderScript.ObjName;
 
-            GameObject currentBuilding = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", objToBuild), mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
+            GameObject currentBuilding = Instantiate(mCurrentBuilding, mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
+
+            //GameObject currentBuilding = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", objToBuild), mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
             NormalBuildingInfo currenBuildingInfo = currentBuilding.GetComponent<NormalBuildingInfo>();
 
-            if (mCurrentSlotToAdd_Side != NormalBuildingInfo.EClipSideSlots.none)
-                currenBuildingInfo.AddClipSlotSide(mCurrentSlotToAdd_Side);
+            mMiner.SubtractResource(mPlaceholderScript.BuildingValue);
+
+            if (currentBuilding.transform.position.y /*+ mAvailableDimensions.mBuildingDimensions[(int)mCurrentDimension].y / 2*/ > mCurrentPlaceholder.transform.position.y)
+            {
+                currenBuildingInfo.SetFirstFloor();
+            }
+
+            //if (mCurrentSlotToAdd_Side != NormalBuildingInfo.EClipSideSlots.none)
+                //currenBuildingInfo.AddClipSlotSide(mCurrentSlotToAdd_Side);
 
             if (mCurrentSlotToAdd_Face != NormalBuildingInfo.EClipFaceSlots.none)
                 currenBuildingInfo.AddClipSlotFace(mCurrentSlotToAdd_Face);
 
-            if (mHitSlotToAdd_Side == NormalBuildingInfo.EClipSideSlots.up && mCurrentSlotToAdd_Side == NormalBuildingInfo.EClipSideSlots.down || mHitObjInfo.IsFirstFloor)
-            {
-                if (mHitSlotToAdd_Side != NormalBuildingInfo.EClipSideSlots.down)
-                    currenBuildingInfo.SetFirstFloor();
-            }
+            //if (mHitSlotToAdd_Side == NormalBuildingInfo.EClipSideSlots.up && mCurrentSlotToAdd_Side == NormalBuildingInfo.EClipSideSlots.down || mHitObjInfo.IsFirstFloor)
+            //{
+            //    if (mHitSlotToAdd_Side != NormalBuildingInfo.EClipSideSlots.down)
+            //        currenBuildingInfo.SetFirstFloor();
+            //}
         }
     }
 
@@ -502,30 +528,49 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     private void SetBuildingNormal(Vector3 _posToSet)
     {
         float posHeightY = 0;
-        posHeightY = mCurrentPlaceholder.transform.localScale.y / 2;
+        posHeightY = mBuildPoint.transform.position.y;
 
         float posX = Mathf.Round(_posToSet.x);
         float posY = Mathf.Round(_posToSet.y);
         float posZ = Mathf.Round(_posToSet.z);
         Vector3 actualPos = new Vector3(posX, posY, posZ);
 
-        mCurrentPlaceholder.transform.position = new Vector3(actualPos.x, 0 , actualPos.z);
+        mCurrentPlaceholder.transform.position = new Vector3(actualPos.x, actualPos.y, actualPos.z);
         mCurrentPlaceholder.transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + mRotFloat, transform.eulerAngles.z);
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && mPlaceholderScript.ValidPosition)
         {
+            GameObject currentBuilding = Instantiate(mCurrentBuilding, mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
+
             string objToBuild = mPlaceholderScript.ObjName;
 
-            GameObject currentBuilding = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", objToBuild), mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
+            //GameObject currentBuilding = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", objToBuild), mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
             currentBuilding.GetComponent<NormalBuildingInfo>().AddClipSlotSide(NormalBuildingInfo.EClipSideSlots.down);
+            //Debug.Log(mPlaceholderScript.BuildingValue);
+            mMiner.SubtractResource(mPlaceholderScript.BuildingValue);
         }
+    }
+
+    private void ChangeModeType()
+    {
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            if (!mIsInBuildMode && mIsInMineMode)
+            {
+                mIsInMineMode = false;
+                mIsInBuildMode = true;
+            }
+            else
+            {
+                mIsInMineMode = true;
+                mIsInBuildMode = false;
+            }
+        }
+          
     }
 
     private void ChangeBuildType()
     {
-        if (Input.GetKeyDown(KeyCode.B))
-            mIsInBuildMode = true;
-
         if (Input.GetKeyDown(KeyCode.E))
         {
             TogglePlaceholder(mAllPlaceholder[mBuidlIdx]);

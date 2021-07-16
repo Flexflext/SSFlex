@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Forcefield Weapon
+  m_Shader: {fileID: -6465566751694194690, guid: 26618a62cd35c644390eeae58ed8083b,
+    type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Texture2D_629AAEDA:
+        m_Texture: {fileID: 2800000, guid: 4033663344c6c2a499b874bc83e5aa1e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_EFC01C9E:
+        m_Texture: {fileID: 2800000, guid: 4033663344c6c2a499b874bc83e5aa1e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_17405470: -0.7
+    - Vector1_1E5B9457: 0.5
+    - Vector1_44DA1763: 2.6
+    - Vector1_6C78398D: 1.14
+    - Vector1_8007D3D: 1
+    - Vector1_8CC702C3: -0.88
+    - Vector1_B7AF2A94: 1.29
+    - Vector1_C2C369D: 0.06
+    - Vector1_EC4A279: 0.51
+    - Vector1_EE0A1D8B: 1.18
+    m_Colors:
+    - Color_485E996B: {r: 0, g: 0, b: 0, a: 0}
+    - Color_D5192DFC: {r: 3.0980859, g: 1.4922718, b: 0, a: 1}
+    - Vector2_8EB64D9A: {r: -15.4, g: 15.75, b: 0, a: 0}

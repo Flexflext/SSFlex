@@ -39,8 +39,9 @@ public class Gun : MonoBehaviourPunCallbacks
 
     protected float currentReloadTime;
 
-    [SerializeField]
-    protected int currentAmmo;
+    [SerializeField] protected int currentAmmo;
+    public int CurrentAmmo { get { return currentAmmo; } set { currentAmmo = Mathf.Clamp(value, 0, maxAmmo); } }
+
     [SerializeField] protected int maxAmmo;
 
     //BulletSpread
@@ -69,8 +70,8 @@ public class Gun : MonoBehaviourPunCallbacks
     protected float yRecoil;
     protected int index;
 
-    [SerializeField] protected string name;
-    public string GunName => name;
+    [SerializeField] protected string gunName;
+    public string GunName => gunName;
 
     //private PhotonView pV;
 
@@ -178,7 +179,11 @@ public class Gun : MonoBehaviourPunCallbacks
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         Bullet bulletScript = bullet.GetComponent<Bullet>();
 
-        bulletScript.OnHit += HitAnything;
+        if (!photonView.IsMine)
+        {
+            bulletScript.OnHit += HitAnything;
+        }
+
         rb.AddForce(_direction * _speed);
     }
 
@@ -191,7 +196,7 @@ public class Gun : MonoBehaviourPunCallbacks
     {
         Debug.Log("Hit Smth");
 
-        if (_gameobject.layer == 9)
+        if (_gameobject.layer == 14)
         {
             _gameobject.GetComponent<PlayerHealth>().TakeDamage(dmg);
         }
@@ -305,8 +310,10 @@ public class Gun : MonoBehaviourPunCallbacks
             {
                 if (currentAmmo >= magSize)
                 {
+                    int difference = magSize - currentBulletsInMag;
+
                     currentBulletsInMag = magSize;
-                    currentAmmo -= magSize;
+                    currentAmmo -= difference;
                 }
                 else
                 {

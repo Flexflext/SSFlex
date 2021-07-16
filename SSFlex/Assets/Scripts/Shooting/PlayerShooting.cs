@@ -18,6 +18,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     [SerializeField] private Camera cam;
     [SerializeField] private PrimaryWeapon weapon;
     [SerializeField] private Animator thirdPersonAnimator;
+    [SerializeField] private GameObject farmTool;
 
     [Header("CurrentGun")]
     [SerializeField] private Gun currentGun;
@@ -59,7 +60,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     private bool isSwitching;
 
-    [SerializeField] private bool farmMode = true;
+    [SerializeField] private bool farmMode;
 
 
     private void Start()
@@ -68,7 +69,9 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         playerLook = GetComponent<PlayerLook>();
         controller = GetComponent<PlayerController>();
 
-        ChooseGun();
+        //ChooseGun();
+
+        farmMode = true;
     }
 
     // Update is called once per frame
@@ -232,8 +235,11 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     }
 
-    private void ChooseGun()
+    public void ChooseGun()
     {
+        farmMode = false;
+        farmTool.SetActive(false);
+        animator.SetBool("Farm", false);
         secondaryGun = Pistol;
 
         switch (weapon)
@@ -366,6 +372,26 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         thirdPersonAnimator.SetBool("isStabbing", true);
         yield return new WaitForSeconds(1);
         thirdPersonAnimator.SetBool("isStabbing", false);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("AmmoPistol"))
+        {
+            Pistol.CurrentAmmo += 100;
+        }
+        else if (other.CompareTag("AmmoShotgun"))
+        {
+            Shotgun.CurrentAmmo += 50;
+        }
+        else if (other.CompareTag("AmmoAR"))
+        {
+            AR.CurrentAmmo += 200;
+        }
+        else if (other.CompareTag("AmmoSniper"))
+        {
+            Sniper.CurrentAmmo += 20;
+        }
     }
 
     private void OnDrawGizmos()

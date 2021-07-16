@@ -1,9 +1,9 @@
 ﻿using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using Photon.Realtime;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
@@ -21,18 +21,56 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     [SerializeField] private GameObject startGameButton;
 
-    [SerializeField] private Dictionary<int, Team> playerIdTeam = new Dictionary<int, Team>();
+    [SerializeField] private Dictionary<int, bool> playerIdTeam = new Dictionary<int, bool>();
 
 
     private Team team;
+    private bool canStartGame;
+
+    private void Awake()
+    {
+        photonView.RPC("AddToDictionary", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.ActorNumber);
+    }
 
     private void Start()
     {
-        if (PhotonNetwork.IsMasterClient)
+        startGameButton.SetActive(false);
+    }
+
+    private void Update()
+    { 
+        if (canStartGame)
         {
-            startGameButton.SetActive(true);
+            if (PhotonNetwork.IsMasterClient)
+            {
+                if (!startGameButton.activeSelf)
+                {
+                    startGameButton.SetActive(true);
+                }        
+            }
+        }
+        else
+        {
+            if (startGameButton.activeSelf)
+            {
+                startGameButton.SetActive(false);
+            }  
         }
     }
+
+    private void CheckIfCanChange()
+    {
+        foreach (var player in playerIdTeam)
+        {
+            if (!playerIdTeam[player.Key])
+            {
+                canStartGame = false;
+                return;
+            }
+        }
+        canStartGame = true;
+    }
+
 
     public void ChangeTeam(int _teamnum)
     {
@@ -45,7 +83,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
                 selectGreenButton.SetActive(false);
                 break;
             case 2:
-                team = Team.Blue;                
+                team = Team.Blue;
                 selectRedButton.SetActive(false);
                 selectYellowButton.SetActive(false);
                 selectGreenButton.SetActive(false);
@@ -76,11 +114,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.LeaveRoom();
         MenuManager.Instance.AdminLoadingMenu();
+
     }
 
     public void StartGame()
     {
-        
         PhotonNetwork.LoadLevel(2);
     }
 
@@ -92,7 +130,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
-        MenuManager.Instance.AdminMainMenu();
+        MenuManager.Instance.LoadMainMenu();
     }
 
 
@@ -107,26 +145,34 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             case 1:
                 playerRed.text = _name;
                 selectRedButton.SetActive(false);
-                playerIdTeam.Add(_id, Team.Red);
+
                 break;
             case 2:
                 playerBlue.text = _name;
                 selectBlueButton.SetActive(false);
-                playerIdTeam.Add(_id, Team.Blue);
                 break;
             case 3:
                 playerYellow.text = _name;
                 selectYellowButton.SetActive(false);
-                playerIdTeam.Add(_id, Team.Yellow);
                 break;
             case 4:
                 playerGreen.text = _name;
                 selectGreenButton.SetActive(false);
-                playerIdTeam.Add(_id, Team.Green);
                 break;
             default:
                 break;
         }
+
+        playerIdTeam[_id] = true;
+        CheckIfCanChange();
+    }
+
+    [PunRPC]
+    private void AddToDictionary(int _id)
+    {
+        playerIdTeam.Add(_id, false);
+        canStartGame = false;
+        startGameButton.SetActive(false);
     }
 
     #endregion

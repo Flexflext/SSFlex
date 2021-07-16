@@ -6,42 +6,67 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    public bool PreparationPhase => mPreparationPhase;
+
+    [Header("The lenght of the Preparation Phase")]
+    [SerializeField]
+    private float mMaxPreparationTime;
+    private float mPreparationTimer;
+
+    private OptionsManager mOptions;
+    [SerializeField]
+    private GameObject mEscapeMenu;
+
 
     private float mFov;
     private float mMouseSensitivity;
-
-    private OptionsManager mOptions;
-    private GameObject mEscapeMenu;
+    private bool mPreparationPhase = true;
 
     private Scene mCurrentScene;
 
     private void Awake()
     {
-        if (Instance)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        DontDestroyOnLoad(gameObject);
-        Instance = this;
+        if (Instance == null)     
+            Instance = this;
+        else
+            Destroy(this.gameObject);
 
-        mCurrentScene = SceneManager.GetActiveScene();
+        DontDestroyOnLoad(this.gameObject);
+
+
+        mPreparationTimer = mMaxPreparationTime;
     }
+
 
 
     private void Update()
     {
-        GetOptions();
+        if(mPreparationPhase)
+            CountPrepPhase();
 
-        if (mEscapeMenu == null && mCurrentScene != SceneManager.GetSceneByName("MainMenu") && mCurrentScene != SceneManager.GetSceneByName("Lobby"))
+        if(mEscapeMenu == null)
         {
-            mEscapeMenu = GameObject.FindGameObjectWithTag("EscapeMenu");
-            mEscapeMenu.SetActive(false);
-            mOptions.gameObject.SetActive(false);
+            mCurrentScene = SceneManager.GetActiveScene();
+            if (mCurrentScene.buildIndex > 1)
+            {
+                mEscapeMenu = GameObject.FindGameObjectWithTag("EscapeMenu");
+                mEscapeMenu.SetActive(false);
+            }
         }
+
+
+        GetOptions();
 
         if (Input.GetKeyDown(KeyCode.Escape) && mEscapeMenu != null)
             ToggleEscapeMenu();
+    }
+
+    private void CountPrepPhase()
+    {
+        mPreparationTimer -= Time.deltaTime;
+
+        if (mPreparationTimer <= 0)
+            mPreparationPhase = false;
     }
 
     private void ToggleEscapeMenu()
