@@ -165,6 +165,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
                 // Start the Fireing of the CurrentGun
                 currentGun.StartFiring();
                 InterruptReload();
+                PlayerHud.Instance.ChangeAmmoAmount(currentGun.BulletsInMag, currentGun.CurrentAmmo);
 
                 // Check if is Fireing + has enough Ammo
                 if (currentGun.IsFiring && currentGun.BulletsInMag > 0)
@@ -184,6 +185,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             if (currentGun.IsFiring && !currentGun.IsReloading)
             {
                 currentGun.UpdateFiring(Time.deltaTime);
+                PlayerHud.Instance.ChangeAmmoAmount(currentGun.BulletsInMag, currentGun.CurrentAmmo);
             }
             else // Sets Bool if aint fireing
             {
@@ -271,6 +273,9 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     private IEnumerator C_WeaponSwitch(Gun _switchtogun, Gun _switchfromgun)
     {
+        PlayerHud.Instance.ChangeWeaponImg(_switchtogun.GunImg, _switchfromgun.GunImg);
+
+
         isSwitching = true;
         animator.SetBool(_switchtogun.GunName, true);
         yield return new WaitForSeconds(0.25f);
@@ -291,6 +296,8 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
         //Changes the waepon and Changes the UI Images and Text
         currentGun.gameObject.SetActive(true);
+
+        PlayerHud.Instance.ChangeAmmoAmount(currentGun.BulletsInMag, currentGun.CurrentAmmo);
 
         yield return new WaitForSeconds(0.25f);
         isSwitching = false;
@@ -358,7 +365,18 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     private IEnumerator C_GrenadeRegenTimer(float _time)
     {
-        yield return new WaitForSeconds(_time);
+        float curTime = 0f;
+
+        while (curTime < _time)
+        {
+            curTime += Time.deltaTime;
+
+            PlayerHud.Instance.ChangeGrenadeFillAmount(_time, curTime);
+
+            yield return null;
+        }
+
+        
         canThrowGrenade = true;
     }
 
@@ -381,6 +399,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         if (other.CompareTag("AmmoPistol"))
         {
             Pistol.CurrentAmmo += 100;
+
         }
         else if (other.CompareTag("AmmoShotgun"))
         {
@@ -394,6 +413,8 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         {
             Sniper.CurrentAmmo += 20;
         }
+
+        PlayerHud.Instance.ChangeAmmoAmount(currentGun.BulletsInMag, currentGun.CurrentAmmo);
     }
 
     private void OnDrawGizmos()
