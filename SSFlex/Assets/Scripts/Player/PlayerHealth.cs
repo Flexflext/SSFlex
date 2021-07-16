@@ -43,6 +43,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
             }
             else
             {
+                PlayerHud.Instance.ChangeShieldAmount(maxShield, shield, false);
                 shield += Time.deltaTime * regenPerSecond;
             }
         }
@@ -83,5 +84,9 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
             Debug.Log("I am Dead");
             dead = true;
         }
+
+
+        PlayerHud.Instance.ChangeHealthAmount(maxHealth, health);
+        PlayerHud.Instance.ChangeShieldAmount(maxShield, shield, true);
     }
 }

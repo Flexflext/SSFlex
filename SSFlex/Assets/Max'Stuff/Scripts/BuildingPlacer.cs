@@ -485,9 +485,9 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
 
             string objToBuild = mPlaceholderScript.ObjName;
 
-            GameObject currentBuilding = Instantiate(mCurrentBuilding, mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
+            //GameObject currentBuilding = Instantiate(mCurrentBuilding, mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
 
-            //GameObject currentBuilding = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", objToBuild), mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
+            GameObject currentBuilding = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", objToBuild), mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
             NormalBuildingInfo currenBuildingInfo = currentBuilding.GetComponent<NormalBuildingInfo>();
 
             mMiner.SubtractResource(mPlaceholderScript.BuildingValue);
@@ -540,11 +540,11 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && mPlaceholderScript.ValidPosition)
         {
-            GameObject currentBuilding = Instantiate(mCurrentBuilding, mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
+            //GameObject currentBuilding = Instantiate(mCurrentBuilding, mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
 
             string objToBuild = mPlaceholderScript.ObjName;
 
-            //GameObject currentBuilding = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", objToBuild), mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
+            GameObject currentBuilding = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", objToBuild), mCurrentPlaceholder.transform.position, mCurrentPlaceholder.transform.rotation);
             currentBuilding.GetComponent<NormalBuildingInfo>().AddClipSlotSide(NormalBuildingInfo.EClipSideSlots.down);
             //Debug.Log(mPlaceholderScript.BuildingValue);
             mMiner.SubtractResource(mPlaceholderScript.BuildingValue);

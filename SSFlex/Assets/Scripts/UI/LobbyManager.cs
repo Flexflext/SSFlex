@@ -2,11 +2,14 @@
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
 using UnityEngine;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
+    public Team CurrentTeam => team;
+
     [Header("Select Name Text")]
     [SerializeField] private TMP_Text playerRed;
     [SerializeField] private TMP_Text playerBlue;
@@ -23,13 +26,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     [SerializeField] private Dictionary<int, bool> playerIdTeam = new Dictionary<int, bool>();
 
-
     private Team team;
     private bool canStartGame;
 
     private void Awake()
     {
         photonView.RPC("AddToDictionary", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.ActorNumber);
+
     }
 
     private void Start()

@@ -52,6 +52,7 @@ MonoBehaviour:
   - DisplayTeamYellow
   - ChangeTeamApperanceforOther
   - AddToDictionary
+  - DisplayCurrentKit
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

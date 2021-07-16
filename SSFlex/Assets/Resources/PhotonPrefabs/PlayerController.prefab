@@ -1031,7 +1031,7 @@ GameObject:
   - component: {fileID: 175030458020562713}
   - component: {fileID: 279627001}
   - component: {fileID: 1918742738}
-  m_Layer: 17
+  m_Layer: 9
   m_Name: PlayerController
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1115,7 +1115,8 @@ MonoBehaviour:
   grenadeThrowPosition: {fileID: 2070718484313483526}
   crossHairTarget: {fileID: 1370586006440095953}
   regenTime: 5
-  grenadeSpeed: 1.5
+  grenadeSpeed: 50
+  maxGrenadeDmg: 0
   grenadePrefab: {fileID: 2788992215005824281, guid: 8e1b3f557862f5546b645b43342f3bd0,
     type: 3}
   range: 0.5
@@ -1211,7 +1212,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &-1493995520272024769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1719,13 +1720,38 @@ PrefabInstance:
     m_TransformParent: {fileID: 1370586008103240521}
     m_Modifications:
     - target: {fileID: 152028411, guid: fc80979f393058542a06d78eef397530, type: 3}
+      propertyPath: gunImg
+      value: 
+      objectReference: {fileID: 21300000, guid: eba328a51a7989f409615aaad049630d,
+        type: 3}
+    - target: {fileID: 152028411, guid: fc80979f393058542a06d78eef397530, type: 3}
       propertyPath: gunName
       value: AR
+      objectReference: {fileID: 0}
+    - target: {fileID: 152028411, guid: fc80979f393058542a06d78eef397530, type: 3}
+      propertyPath: magSize
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 152028411, guid: fc80979f393058542a06d78eef397530, type: 3}
+      propertyPath: maxAmmo
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 152028411, guid: fc80979f393058542a06d78eef397530, type: 3}
+      propertyPath: bulletSpeed
+      value: 1500
+      objectReference: {fileID: 0}
+    - target: {fileID: 152028411, guid: fc80979f393058542a06d78eef397530, type: 3}
+      propertyPath: currentAmmo
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 152028411, guid: fc80979f393058542a06d78eef397530, type: 3}
       propertyPath: crossHairTarget
       value: 
       objectReference: {fileID: 1370586006440095953}
+    - target: {fileID: 152028411, guid: fc80979f393058542a06d78eef397530, type: 3}
+      propertyPath: playerLayer.m_Bits
+      value: 16384
+      objectReference: {fileID: 0}
     - target: {fileID: 509079931345286055, guid: fc80979f393058542a06d78eef397530,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -1743,8 +1769,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1370586006739449291, guid: fc80979f393058542a06d78eef397530,
         type: 3}
+      propertyPath: gunImg
+      value: 
+      objectReference: {fileID: 21300000, guid: 4468e2e085c12f04c9727f3c9d7b5b22,
+        type: 3}
+    - target: {fileID: 1370586006739449291, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
       propertyPath: gunName
       value: Sniper
+      objectReference: {fileID: 0}
+    - target: {fileID: 1370586006739449291, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
+      propertyPath: maxAmmo
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1370586006739449291, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
+      propertyPath: currentAmmo
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 1370586006739449291, guid: fc80979f393058542a06d78eef397530,
         type: 3}
@@ -1758,8 +1800,29 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1370586006943107614, guid: fc80979f393058542a06d78eef397530,
         type: 3}
+      propertyPath: gunImg
+      value: 
+      objectReference: {fileID: 21300000, guid: 2a74051f17bb9db4ca47a14c95645d03,
+        type: 3}
+    - target: {fileID: 1370586006943107614, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
       propertyPath: gunName
       value: Shotgun
+      objectReference: {fileID: 0}
+    - target: {fileID: 1370586006943107614, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
+      propertyPath: magSize
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1370586006943107614, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
+      propertyPath: maxAmmo
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1370586006943107614, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
+      propertyPath: currentAmmo
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 1370586006943107614, guid: fc80979f393058542a06d78eef397530,
         type: 3}
@@ -1788,8 +1851,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1370586008147488376, guid: fc80979f393058542a06d78eef397530,
         type: 3}
+      propertyPath: gunImg
+      value: 
+      objectReference: {fileID: 21300000, guid: 0995e9f83ee8b7d40ba8a009095d3783,
+        type: 3}
+    - target: {fileID: 1370586008147488376, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
       propertyPath: gunName
       value: Pistol
+      objectReference: {fileID: 0}
+    - target: {fileID: 1370586008147488376, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
+      propertyPath: maxAmmo
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1370586008147488376, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
+      propertyPath: currentAmmo
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 1370586008147488376, guid: fc80979f393058542a06d78eef397530,
         type: 3}
@@ -1814,6 +1893,11 @@ PrefabInstance:
     - target: {fileID: 2405612573986075364, guid: fc80979f393058542a06d78eef397530,
         type: 3}
       propertyPath: m_InitialEventNameOverriden
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2703382973902064976, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3188031656853597218, guid: fc80979f393058542a06d78eef397530,

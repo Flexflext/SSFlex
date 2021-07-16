@@ -1,10 +1,10 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using Photon.Realtime;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.VFX;
-using Photon.Pun;
-using System.IO;
-using Photon.Realtime;
 
 public class Gun : MonoBehaviourPunCallbacks
 {
@@ -73,6 +73,9 @@ public class Gun : MonoBehaviourPunCallbacks
     [SerializeField] protected string gunName;
     public string GunName => gunName;
 
+    [SerializeField] protected Sprite gunImg;
+    public Sprite GunImg => gunImg;
+
     //private PhotonView pV;
 
 
@@ -101,7 +104,7 @@ public class Gun : MonoBehaviourPunCallbacks
     /// Fire a Bullet (Check if Can fire and Where to Fire)
     /// </summary>
     protected virtual void FireBullet()
-    {  
+    {
         // No more Reloading
         isReloading = false;
 
@@ -179,10 +182,11 @@ public class Gun : MonoBehaviourPunCallbacks
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         Bullet bulletScript = bullet.GetComponent<Bullet>();
 
-        if (!photonView.IsMine)
+        if (photonView.IsMine)
         {
             bulletScript.OnHit += HitAnything;
         }
+        
 
         rb.AddForce(_direction * _speed);
     }
@@ -196,9 +200,15 @@ public class Gun : MonoBehaviourPunCallbacks
     {
         Debug.Log("Hit Smth");
 
-        if (_gameobject.layer == 14)
+        if (_gameobject.layer == 9)
         {
             _gameobject.GetComponent<PlayerHealth>().TakeDamage(dmg);
+            PlayerHud.Instance.DisplayDmgToPlayer();
+        }
+        else if (_gameobject.layer == 8)
+        {
+            _gameobject.GetComponent<NormalBuildingInfo>().TakeDamage(dmg);
+            PlayerHud.Instance.DisplayDmgToObj();
         }
     }
 
@@ -321,7 +331,7 @@ public class Gun : MonoBehaviourPunCallbacks
                     currentAmmo -= currentAmmo;
                 }
 
-                //PlayerHud.Instance.ChangeAmmoAmount(currentBulletsInMag, currentAmmo);
+                PlayerHud.Instance.ChangeAmmoAmount(BulletsInMag, CurrentAmmo);
                 //AudioManager.Instance.PlayRandom(weaponName, weaponName + "Reload");
                 isReloading = false;
                 canReload = false;
@@ -431,5 +441,10 @@ public class Gun : MonoBehaviourPunCallbacks
             // Reduce Recoil Time
             currentRecoilTime -= Time.deltaTime;
         }
+    }
+
+    private new void OnEnable()
+    {
+        PlayerHud.Instance.ChangeAmmoAmount(BulletsInMag, CurrentAmmo);
     }
 }
