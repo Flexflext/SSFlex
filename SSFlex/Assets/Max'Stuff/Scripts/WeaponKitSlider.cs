@@ -26,7 +26,7 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
     private AudioClip mButtonClickSound;
 
     [SerializeField]
-    private LobbyManager mLobbyMangager;
+    private Player mLobbyManager;
 
     private PhotonView mPhotonView;
 
@@ -42,11 +42,13 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
 
     private PrimaryWeapon mCurrentKitPos;
 
+    [SerializeField]
+    private GameObject mOwner;
+
+
     private void Start()
     {
-
-        
-
+        mPhotonView = GetComponent<PhotonView>();
 
 
         mAllPlaceholder = new List<GameObject>()
@@ -59,20 +61,16 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
         DisplayCurrentKit((int)mCurrentKitPos);
     }
 
-    public override void OnEnable()
-    {
-        base.OnEnable();
-
-        GameObject pv = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "LobbyPlayer"), transform.position, transform.rotation);
-        mPhotonView = pv.GetComponent<PhotonView>();
-    }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.L))
             OnClickLeft();
+
+        Debug.Log(mPhotonView.IsMine);
     }
 
+    [PunRPC]
     private void DisplayCurrentKit(int _currentKitIdx)
     {
       
@@ -102,9 +100,7 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
-        Debug.Log(mPhotonView.IsMine);
-
-        if (!mPhotonView.IsMine && targetPlayer == mPhotonView.Owner)
+        if (!mPhotonView.IsMine && targetPlayer == mPhotonView.Owner && mOwner != null)
         {
             DisplayCurrentKit((int)changedProps["weaponKey"]);
             Debug.Log("OnPlayerPropertiesUpdate");
@@ -113,7 +109,8 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
 
     public void OnClickRight()
     {
-
+        if (!mPhotonView.IsMine || mOwner == null)
+            return;
 
         Debug.Log("Click Righ");
 
@@ -121,13 +118,18 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
         if ((int)mCurrentKitPos >= (int)PrimaryWeapon.Sniper + 1)
             mCurrentKitPos = 0;
 
-        DisplayCurrentKit((int)mCurrentKitPos);
+        //DisplayCurrentKit((int)mCurrentKitPos);
+
+        mPhotonView.RPC("DisplayCurrentKit", RpcTarget.AllBufferedViaServer, mCurrentKitPos);
 
         GameManager.Instance.SetStartWeapon(mCurrentKitPos);
     }
 
     public void OnClickLeft()
     {
+        if (!mPhotonView.IsMine || mOwner == null)
+            return;
+
         Debug.Log("Click Left");
 
         mCurrentKitPos--;
@@ -135,8 +137,19 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
         if (mCurrentKitPos < 0)
             mCurrentKitPos = PrimaryWeapon.Sniper;
 
-        DisplayCurrentKit((int)mCurrentKitPos);
+
+        //DisplayCurrentKit((int)mCurrentKitPos);
+
+        mPhotonView.RPC("DisplayCurrentKit", RpcTarget.AllBufferedViaServer, mCurrentKitPos);
 
         GameManager.Instance.SetStartWeapon(mCurrentKitPos);
+    }
+
+    public void OnSelect()
+    {
+        mPhotonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+        Debug.Log("DDD");
+
+        mOwner = this.gameObject;
     }
 }
