@@ -69,9 +69,9 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         playerLook = GetComponent<PlayerLook>();
         controller = GetComponent<PlayerController>();
 
-        //ChooseGun();
+        ChooseGun();
 
-        farmMode = true;
+        farmMode = false;
     }
 
     // Update is called once per frame
@@ -238,7 +238,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     public void ChooseGun()
     {
         farmMode = false;
-        farmTool.SetActive(false);
+        //farmTool.SetActive(false);
         animator.SetBool("Farm", false);
         secondaryGun = Pistol;
 
