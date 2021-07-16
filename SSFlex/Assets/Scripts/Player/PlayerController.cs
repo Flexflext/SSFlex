@@ -254,8 +254,21 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Audio
+    //public void DisplayAudioMixing()
+    //{
+    //    photonView.RPC("DisplayTeam", RpcTarget.AllBufferedViaServer);
+    //}
+
+
+    
     private void AudioMixing()
     {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            AudioManager.Instance.Play("ShootShotgun");
+        }
+
+
         if (isStoneGrounded && !isGravelGrounded)
         {
             Debug.Log("isonstone");
