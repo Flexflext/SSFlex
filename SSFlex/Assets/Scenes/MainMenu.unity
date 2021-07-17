@@ -6781,8 +6781,11 @@ MonoBehaviour:
   - {fileID: 1278912205}
   - {fileID: 1543946531}
   - {fileID: 1078268463}
-  mMovementSpeed: 5
-  mDamping: 1.5
+  mMaxMovementSpeed: 5
+  mMovementccelaration: 1
+  mMaxDamping: 0.5
+  mDampingModifier: 0.25
+  mStartDelay: 2
 --- !u!1 &1078268463
 GameObject:
   m_ObjectHideFlags: 0
