@@ -17,7 +17,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public static Launcher Instance;
 
-    [SerializeField] private TMP_InputField roomNameInputField;
+    [SerializeField] private TextMeshProUGUI roomName;
     [SerializeField] private TMP_Text errorText;
     [SerializeField] private TMP_Text roomNameText;
     [SerializeField] private Transform roomListContent;
@@ -34,7 +34,12 @@ public class Launcher : MonoBehaviourPunCallbacks
     void Start()
     {
         // Connects to the Photon's Master server using our own "PhotonServerSettings" File.
-        PhotonNetwork.ConnectUsingSettings(); 
+        PhotonNetwork.ConnectUsingSettings();
+    }
+
+    public void SetRoomName(string _roomName)
+    {
+        roomName.text = _roomName;
     }
 
     // When client is successfully connected to the master server this will be called.
@@ -48,18 +53,17 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         //MenuManager.Instance.AdminMainMenu();
-        PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
     }
 
     public void CreateRoom()
     {
         // Prevents client from creating a room without typing anything in InputField.
-        if (string.IsNullOrEmpty(roomNameInputField.text))
+        if (string.IsNullOrEmpty(roomName.text))
         {
             return;
         }
 
-        PhotonNetwork.CreateRoom(roomNameInputField.text);
+        PhotonNetwork.CreateRoom(roomName.text);
 
         // Prevents client to click on other buttons while room is being created.
         MenuManager.Instance.AdminLoadingMenu();
@@ -105,6 +109,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void JoinRoom(RoomInfo _info)
     {
+        Debug.Log("Join Room");
         PhotonNetwork.JoinRoom(_info.Name);
         MenuManager.Instance.AdminLoadingMenu();
     }

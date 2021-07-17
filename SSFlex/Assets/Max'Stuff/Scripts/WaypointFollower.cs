@@ -50,7 +50,11 @@ public class WaypointFollower : MonoBehaviour
             Quaternion rotation = Quaternion.LookRotation(mWaypoints[mWaypointIdx].transform.position - transform.position);
             transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * mCurrentDamping);
         }
-        else mWaypointIdx++;
+        else 
+        {
+            mWaypointIdx++;
+            mCurrentMovementSpeed /= 2;
+        }
 
         if (mWaypointIdx >= mWaypoints.Count)
             mWaypointIdx = 0;
