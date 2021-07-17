@@ -380,8 +380,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     }
 
     private IEnumerator C_GrenadeTimer(float _time)
-    {
-        
+    {        
         yield return new WaitForSeconds(_time - _time * 1/3f);
         
         ThrowGrenade();
