@@ -22,10 +22,15 @@ public class Grenade : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(_time);
         Instantiate(explosion, transform.position, Quaternion.identity);
 
-        Explode();
         // Do Dmg
-        PhotonNetwork.RemoveRPCs(photonView);
-        PhotonNetwork.Destroy(this.gameObject);
+        Explode();
+
+        if (photonView.IsMine)
+        {
+            PhotonNetwork.Destroy(this.gameObject);
+            PhotonNetwork.RemoveRPCs(photonView);
+        }
+        
     }
 
 

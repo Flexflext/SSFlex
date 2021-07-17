@@ -182,7 +182,7 @@ public class Gun : MonoBehaviourPunCallbacks
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         Bullet bulletScript = bullet.GetComponent<Bullet>();
 
-        if (!photonView.IsMine)
+        if (photonView.IsMine)
         {
             bulletScript.OnHit += HitAnything;
         }
@@ -199,6 +199,11 @@ public class Gun : MonoBehaviourPunCallbacks
     public void HitAnything(GameObject _gameobject)
     {
         Debug.Log("Hit Smth");
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
 
         if (_gameobject.layer == 9)
         {
@@ -331,7 +336,11 @@ public class Gun : MonoBehaviourPunCallbacks
                     currentAmmo -= currentAmmo;
                 }
 
-                PlayerHud.Instance.ChangeAmmoAmount(BulletsInMag, CurrentAmmo);
+                if (photonView.IsMine)
+                {
+                    PlayerHud.Instance.ChangeAmmoAmount(BulletsInMag, CurrentAmmo);
+                }
+                
                 //AudioManager.Instance.PlayRandom(weaponName, weaponName + "Reload");
                 isReloading = false;
                 canReload = false;
@@ -445,6 +454,9 @@ public class Gun : MonoBehaviourPunCallbacks
 
     private new void OnEnable()
     {
-        PlayerHud.Instance.ChangeAmmoAmount(BulletsInMag, CurrentAmmo);
+        if (photonView.IsMine)
+        {
+            PlayerHud.Instance.ChangeAmmoAmount(BulletsInMag, CurrentAmmo);
+        }
     }
 }

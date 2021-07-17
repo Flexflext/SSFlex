@@ -1,11 +1,11 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using Photon.Pun;
 using System.IO;
+using UnityEngine;
 
-public enum PrimaryWeapon 
-{ 
+public enum PrimaryWeapon
+{
     AR,
     Shotgun,
     Sniper,
@@ -35,7 +35,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     private bool canThrowGrenade = true;
     //Animation
     private bool isGrenadeThrowing;
-    private float grenadeTime = 2/3f;
+    private float grenadeTime = 2 / 3f;
 
     [Header("Meele")]
     [SerializeField] private float range;
@@ -297,7 +297,10 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     private IEnumerator C_WeaponSwitch(Gun _switchtogun, Gun _switchfromgun)
     {
-        PlayerHud.Instance.ChangeWeaponImg(_switchtogun.GunImg, _switchfromgun.GunImg);
+        if (photonView.IsMine)
+        {
+            PlayerHud.Instance.ChangeWeaponImg(_switchtogun.GunImg, _switchfromgun.GunImg);
+        }
 
 
         isSwitching = true;
@@ -322,7 +325,10 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         //Changes the waepon and Changes the UI Images and Text
         currentGun.gameObject.SetActive(true);
 
-        PlayerHud.Instance.ChangeAmmoAmount(currentGun.BulletsInMag, currentGun.CurrentAmmo);
+        if (photonView.IsMine)
+        {
+            PlayerHud.Instance.ChangeAmmoAmount(currentGun.BulletsInMag, currentGun.CurrentAmmo);
+        }
 
         yield return new WaitForSeconds(0.25f);
         isSwitching = false;
@@ -333,6 +339,11 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     /// </summary>
     public void InterruptReload()
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
         currentGun.StopReload();
         animator.SetTrigger("StopReload");
     }
@@ -349,13 +360,13 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
         Vector3 direction = (crossHairTarget.position - grenadeThrowPosition.position).normalized + Vector3.up / 4;
 
-        GameObject grenade = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs","Grenade"), grenadeThrowPosition.position, Quaternion.identity);
+        GameObject grenade = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Grenade"), grenadeThrowPosition.position, Quaternion.identity);
 
         Rigidbody grendadeRb = grenade.GetComponent<Rigidbody>();
 
         grendadeRb.AddForce(direction * grenadeSpeed, ForceMode.Impulse);
 
-        grenade.GetComponent<Grenade>().HitAnything += HitAnything;
+        grenade.GetComponent<Grenade>().HitAnything += HitAnythingWithGrenade;
 
         canThrowGrenade = false;
         StartCoroutine(C_GrenadeRegenTimer(regenTime));
@@ -363,11 +374,17 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     private void DoMeeleDmg()
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
         Collider[] allDmgColliders = Physics.OverlapSphere(swordPosition.position, range, allDmgLayers);
 
         foreach (Collider dmgObj in allDmgColliders)
         {
-            Debug.Log("Do "+ dmg + " Dmg to: " + dmgObj.gameObject.name);
+            Debug.Log("Do " + dmg + " Dmg to: " + dmgObj.gameObject.name);
+            HitAnything(dmg, dmgObj.gameObject);
         }
     }
 
@@ -380,12 +397,12 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     }
 
     private IEnumerator C_GrenadeTimer(float _time)
-    {        
-        yield return new WaitForSeconds(_time - _time * 1/3f);
-        
+    {
+        yield return new WaitForSeconds(_time - _time * 1 / 3f);
+
         ThrowGrenade();
         yield return new WaitForSeconds(_time * 1 / 3f);
-        
+
         isGrenadeThrowing = false;
     }
 
@@ -414,40 +431,60 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     /// Check what Dmg to Do and to what
     /// </summary>
     /// <param name="_gameobject"></param>
-    public void HitAnything(GameObject _gameobject, float _percent)
+    public void HitAnythingWithGrenade(GameObject _gameobject, float _percent)
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
         Debug.Log("Hit Smth with grenade");
 
         float grenadeDmg = maxGrenadeDmg * _percent;
 
 
+        HitAnything(grenadeDmg, _gameobject);
 
+    }
+
+    private void HitAnything(float _dmg, GameObject _gameobject)
+    {
         if (_gameobject.layer == 9)
         {
-            _gameobject.GetComponent<PlayerHealth>()?.TakeDamage(grenadeDmg);
-            PlayerHud.Instance.DisplayDmgToPlayer();
+            _gameobject.GetComponent<PlayerHealth>()?.TakeDamage(_dmg);
+
+            if (photonView.IsMine)
+            {
+                PlayerHud.Instance.DisplayDmgToPlayer();
+            }
         }
         else if (_gameobject.layer == 8)
         {
-            _gameobject.GetComponent<NormalBuildingInfo>()?.TakeDamage(grenadeDmg);
-            PlayerHud.Instance.DisplayDmgToObj();
+            _gameobject.GetComponent<NormalBuildingInfo>()?.TakeDamage(_dmg);
+            if (photonView.IsMine)
+            {
+                PlayerHud.Instance.DisplayDmgToObj();
+            }
+
         }
     }
 
     private IEnumerator C_GrenadeRegenTimer(float _time)
     {
+
         float curTime = 0f;
 
         while (curTime < _time)
         {
             curTime += Time.deltaTime;
 
+
             PlayerHud.Instance.ChangeGrenadeFillAmount(_time, curTime);
 
             yield return null;
         }
 
-        
+
         canThrowGrenade = true;
     }
 
@@ -467,6 +504,11 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
         if (other.CompareTag("AmmoPistol"))
         {
             Pistol.CurrentAmmo += 100;

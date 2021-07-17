@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class PlayerLook : MonoBehaviour
+public class PlayerLook : MonoBehaviourPunCallbacks
 {
     // Script for the Player to Look Around (Cam Control)
 
@@ -28,6 +29,10 @@ public class PlayerLook : MonoBehaviour
 
     private void Start()
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
 
         yRotation = cam.transform.rotation.y;
         xRotation = cam.transform.rotation.x;
@@ -45,6 +50,11 @@ public class PlayerLook : MonoBehaviour
 
     private void Update()
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
         //Check that timeScale is above 0
         if (Time.timeScale == 0)
         {
@@ -76,6 +86,11 @@ public class PlayerLook : MonoBehaviour
     /// <param name="_yrecoil"></param>
     public void AddRecoil(float _xrecoil, float _yrecoil)
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
         xRotation -= _xrecoil;
         yRotation += _yrecoil;
     }
