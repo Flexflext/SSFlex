@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private Animator fpsAnimator;
     private PhotonView photonView;
+    private PlayerShooting playerShooting;
 
     // Non-visible Stats
     // Movement
@@ -159,6 +160,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             isMoving = false;
+            moveDir = Vector3.zero;
 
             fpsAnimator.SetFloat("Velocity", 0);
         }
@@ -263,10 +265,7 @@ public class PlayerController : MonoBehaviour
     
     private void AudioMixing()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            AudioManager.Instance.Play("ShootShotgun");
-        }
+        
 
 
         if (isStoneGrounded && !isGravelGrounded)

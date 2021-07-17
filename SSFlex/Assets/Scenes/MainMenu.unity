@@ -3394,28 +3394,28 @@ MonoBehaviour:
   sounds:
   - Name: GravelWalk
     Clip: {fileID: 8300000, guid: 12e073ab2c7054940aee493081984ec5, type: 3}
-    Volume: 0.1
+    Volume: 0.2
     Pitch: 1
     SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: GravelRun
-    Clip: {fileID: 0}
-    Volume: 0.1
+    Clip: {fileID: 8300000, guid: 12e073ab2c7054940aee493081984ec5, type: 3}
+    Volume: 0.2
     Pitch: 1.2
     SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: StoneWalk
-    Clip: {fileID: 0}
-    Volume: 0.1
+    Clip: {fileID: 8300000, guid: 13fca762f56e9ed458d1ea4080c34f33, type: 3}
+    Volume: 0.2
     Pitch: 1
     SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: StoneRun
-    Clip: {fileID: 0}
-    Volume: 0.1
+    Clip: {fileID: 8300000, guid: 13fca762f56e9ed458d1ea4080c34f33, type: 3}
+    Volume: 0.2
     Pitch: 1.2
     SpatialBlend: 0
     Loop: 0
@@ -3429,35 +3429,35 @@ MonoBehaviour:
     Source: {fileID: 0}
   - Name: GrenadeExplosion
     Clip: {fileID: 8300000, guid: 3054a4ecc721d4b4887efb3bcfd0816c, type: 3}
-    Volume: 0.1
+    Volume: 0.5
     Pitch: 0.8
     SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: ShootAR
     Clip: {fileID: 8300000, guid: 7eefe4f3f37d1274cbfffbd92e4c327b, type: 3}
-    Volume: 0.1
+    Volume: 0.5
     Pitch: 1
     SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: ShootPistol
     Clip: {fileID: 8300000, guid: 3e7f9e3c6e2d2fe4dba8d649f258cd9a, type: 3}
-    Volume: 0.1
+    Volume: 0.5
     Pitch: 1
     SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: ShootShotgun
     Clip: {fileID: 8300000, guid: c0eda1bc636fc244fb391e8c27ee1ae5, type: 3}
-    Volume: 0.1
+    Volume: 0.5
     Pitch: 1
     SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
   - Name: ShootSniper
     Clip: {fileID: 8300000, guid: e81be30ab78ff46478e6f928a0434213, type: 3}
-    Volume: 0.1
+    Volume: 0.5
     Pitch: 1
     SpatialBlend: 0
     Loop: 0
@@ -3483,38 +3483,38 @@ MonoBehaviour:
     SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
-  - Name: 
-    Clip: {fileID: 0}
-    Volume: 0
-    Pitch: 0
+  - Name: ReloadStart
+    Clip: {fileID: 8300000, guid: 11f8231b582deda4899208fc79545bf7, type: 3}
+    Volume: 0.5
+    Pitch: 1
     SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
-  - Name: 
-    Clip: {fileID: 0}
-    Volume: 0
-    Pitch: 0
+  - Name: ReloadEnd
+    Clip: {fileID: 8300000, guid: 6c61d468f3ec1e7418bf1132c1c06ed6, type: 3}
+    Volume: 0.5
+    Pitch: 1
     SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
-  - Name: 
-    Clip: {fileID: 0}
-    Volume: 0
-    Pitch: 0
+  - Name: Melee
+    Clip: {fileID: 8300000, guid: 36dbfd6a4bec0954f8a2a9a0e4c3c50b, type: 3}
+    Volume: 0.5
+    Pitch: 1
     SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
-  - Name: 
-    Clip: {fileID: 0}
-    Volume: 0
-    Pitch: 0
+  - Name: HitMarker
+    Clip: {fileID: 8300000, guid: 80eaf2757341eae4998cf079d1b5900b, type: 3}
+    Volume: 0.5
+    Pitch: 1
     SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
-  - Name: 
-    Clip: {fileID: 0}
-    Volume: 0
-    Pitch: 0
+  - Name: GrenadeStart
+    Clip: {fileID: 8300000, guid: c6422eb762e5e5e42a938c4c8a567531, type: 3}
+    Volume: 0.5
+    Pitch: 1
     SpatialBlend: 0
     Loop: 0
     Source: {fileID: 0}
