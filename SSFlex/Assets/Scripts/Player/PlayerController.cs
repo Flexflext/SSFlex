@@ -160,6 +160,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             isMoving = false;
+            moveDir = Vector3.zero;
 
             fpsAnimator.SetFloat("Velocity", 0);
         }
