@@ -1528,7 +1528,22 @@ MonoBehaviour:
     Name: isThrowing
   - Type: 4
     SynchronizeType: 2
-    Name: isShotGunShooting
+    Name: isShooting
+  - Type: 4
+    SynchronizeType: 2
+    Name: AR
+  - Type: 4
+    SynchronizeType: 2
+    Name: Shotgun
+  - Type: 4
+    SynchronizeType: 2
+    Name: Sniper
+  - Type: 4
+    SynchronizeType: 2
+    Name: Pistol
+  - Type: 4
+    SynchronizeType: 2
+    Name: isReloading
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0

@@ -102,6 +102,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
                 StartCoroutine(C_MeeleTimer(meeleTime));
                 //Set Animator
                 animator.SetTrigger("isMeeleing");
+                AudioManager.Instance.Play("Melee");
                 StartCoroutine(MeleeAnimation());
             }
 
@@ -113,6 +114,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
                 //Set Animator
                 animator.SetTrigger("GrenadeThrow");
                 StartCoroutine(PlayerGrenadeAnimator());
+                StartCoroutine(GrenadeAudioTimer());
             }
 
 
@@ -173,6 +175,23 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
                 {
                     // Sets Animator
                     animator.SetBool("isShooting", true);
+                    thirdPersonAnimator.SetBool("isShooting", true);
+                    if (currentGun == AR)
+                    {
+                        AudioManager.Instance.Play("ShootAR");
+                    }
+                    if (currentGun == Shotgun)
+                    {
+                        AudioManager.Instance.Play("ShootShotgun");
+                    }
+                    if (currentGun == Sniper)
+                    {
+                        AudioManager.Instance.Play("ShootSniper");
+                    }
+                    if (currentGun == Pistol)
+                    {
+                        AudioManager.Instance.Play("ShootPistol");
+                    }
                 }
                 else
                 {
@@ -191,6 +210,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             else // Sets Bool if aint fireing
             {
                 animator.SetBool("isShooting", false);
+                thirdPersonAnimator.SetBool("isShooting", false);
             }
 
             // Check for Player input
@@ -200,6 +220,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
                 currentGun.StopFiring();
                 // Resets Animator bool
                 animator.SetBool("isShooting", false);
+                thirdPersonAnimator.SetBool("isShooting", false);
             }
 
             // Update CurrentBullets
@@ -213,9 +234,10 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             {
                 //Start Reloading
                 currentGun.StartReload();
+                StartCoroutine(ReloadAudioTimer());
                 animator.SetTrigger("isReloading");
                 animator.ResetTrigger("StopReload");
-
+                StartCoroutine(ReloadAnimatorTimer());
             }
 
             currentGun.ReloadGun(Time.deltaTime);
@@ -268,6 +290,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     private void SwitchWeapon(Gun _switchtogun, Gun _switchfromgun)
     {
         animator.SetBool(_switchfromgun.GunName, false);
+        thirdPersonAnimator.SetBool(_switchfromgun.GunName, false);
 
         StartCoroutine(C_WeaponSwitch(_switchtogun, _switchfromgun));
     }
@@ -279,6 +302,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
         isSwitching = true;
         animator.SetBool(_switchtogun.GunName, true);
+        thirdPersonAnimator.SetBool(_switchtogun.GunName, true);
         yield return new WaitForSeconds(0.25f);
 
         // Sets new Gun as Currentgun
@@ -364,6 +388,27 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(_time * 1 / 3f);
         
         isGrenadeThrowing = false;
+    }
+
+    private IEnumerator GrenadeAudioTimer()
+    {
+        AudioManager.Instance.Play("GrenadeStart");
+        yield return new WaitForSeconds(6);
+        AudioManager.Instance.Play("GrenadeExplosion");
+    }
+
+    private IEnumerator ReloadAudioTimer()
+    {
+        AudioManager.Instance.Play("ReloadStart");
+        yield return new WaitForSeconds(1f);
+        AudioManager.Instance.Play("ReloadEnd");
+    }
+
+    private IEnumerator ReloadAnimatorTimer()
+    {
+        thirdPersonAnimator.SetBool("isReloading", true);
+        yield return new WaitForSeconds(2);
+        thirdPersonAnimator.SetBool("isReloading", false);
     }
 
     /// <summary>
