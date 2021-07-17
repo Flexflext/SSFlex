@@ -182,7 +182,7 @@ public class Gun : MonoBehaviourPunCallbacks
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         Bullet bulletScript = bullet.GetComponent<Bullet>();
 
-        if (photonView.IsMine)
+        if (!photonView.IsMine)
         {
             bulletScript.OnHit += HitAnything;
         }
