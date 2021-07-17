@@ -14265,6 +14265,8 @@ MonoBehaviour:
   - It seams you really cant read
   - A name, thats something your parents gave you instead of an deserved abortion
   - Please stop being illiterate
+  mMasterStartButton: {fileID: 952710391}
+  mClientStartButton: {fileID: 123325706}
 --- !u!114 &2075237638
 MonoBehaviour:
   m_ObjectHideFlags: 0

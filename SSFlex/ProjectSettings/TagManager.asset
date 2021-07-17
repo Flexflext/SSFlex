@@ -16,6 +16,7 @@ TagManager:
   - AmmoAR
   - AmmoShotgun
   - TEST
+  - PlayerHud
   layers:
   - Default
   - TransparentFX

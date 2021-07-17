@@ -67,7 +67,17 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
         if (Input.GetKeyDown(KeyCode.L))
             OnClickLeft();
 
+        InputArrowKeyValidation();
+
         Debug.Log(mPhotonView.IsMine);
+    }
+
+    private void InputArrowKeyValidation()
+    {
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+            OnClickRight();
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+            OnClickLeft();
     }
 
     [PunRPC]

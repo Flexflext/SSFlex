@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     private OptionsManager mOptions;
     [SerializeField]
     private GameObject mEscapeMenu;
+    private GameObject mPlayerHUD;
 
 
     private float mFov;
@@ -41,28 +42,13 @@ public class GameManager : MonoBehaviour
     }
 
 
-
     private void Update()
     {
         if(mPreparationPhase)
             CountPrepPhase();
 
-        if(mEscapeMenu == null)
-        {
-            mCurrentScene = SceneManager.GetActiveScene();
-            if (mCurrentScene.buildIndex > 1)
-            {
-                mEscapeMenu = GameObject.FindGameObjectWithTag("EscapeMenu");
-                mEscapeMenu.SetActive(false);
-            }
-        }
-
-
 
         GetOptions();
-
-        if (Input.GetKeyDown(KeyCode.Escape) && mEscapeMenu != null)
-            ToggleEscapeMenu();
     }
 
     public void SetStartWeapon(PrimaryWeapon _startWeapon)
@@ -76,21 +62,6 @@ public class GameManager : MonoBehaviour
 
         if (mPreparationTimer <= 0)
             mPreparationPhase = false;
-    }
-
-    private void ToggleEscapeMenu()
-    {
-        if (!mEscapeMenu.activeSelf)
-        {
-            Cursor.lockState = CursorLockMode.None;
-            mEscapeMenu.SetActive(true);
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            mEscapeMenu.SetActive(false);
-        }
-
     }
 
     private void GetOptions()

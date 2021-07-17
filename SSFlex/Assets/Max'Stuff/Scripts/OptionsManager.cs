@@ -149,6 +149,7 @@ public class OptionsManager : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+        Debug.Log("Quit Game");
     }
 
     public void SetFov(float _value)
@@ -165,5 +166,4 @@ public class OptionsManager : MonoBehaviour
     {
         QualitySettings.SetQualityLevel(_graphicQualityIdx);
     }
-
 }

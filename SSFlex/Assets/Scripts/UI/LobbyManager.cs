@@ -26,13 +26,32 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     [SerializeField] private Dictionary<int, bool> playerIdTeam = new Dictionary<int, bool>();
 
+    [Space]
+    [SerializeField]
+    private GameObject mWeaponSlider_Red;
+    [SerializeField]
+    private GameObject mWeaponSlider_Blue;
+    [SerializeField]
+    private GameObject mWeaponSlider_Yellow;
+    [SerializeField]
+    private GameObject mWeaponSlider_Green;
+    [Space]
+    [SerializeField]
+    private WeaponKitSlider mKitSliderPlayer_Red;
+    [SerializeField]
+    private WeaponKitSlider mKitSliderPlayer_Blue;
+    [SerializeField]
+    private WeaponKitSlider mKitSliderPlayer_Yellow;
+    [SerializeField]
+    private WeaponKitSlider mKitSliderPlayer_Green;
+
     private Team team;
     private bool canStartGame;
+    private bool mTeamSet;
 
     private void Awake()
     {
         photonView.RPC("AddToDictionary", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.ActorNumber);
-
     }
 
     private void Start()
@@ -58,6 +77,43 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             {
                 startGameButton.SetActive(false);
             }  
+        }
+
+        if(!mTeamSet)
+            InputNumberKeyValidation();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+            ReturnMenu();
+
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+            StartGame();
+    }
+
+    private void InputNumberKeyValidation()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            mWeaponSlider_Red.SetActive(true);
+            mKitSliderPlayer_Red.OnSelect();
+            ChangeTeam(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            mWeaponSlider_Blue.SetActive(true);
+            mKitSliderPlayer_Blue.OnSelect();
+            ChangeTeam(2);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            mWeaponSlider_Yellow.SetActive(true);
+            mKitSliderPlayer_Yellow.OnSelect();
+            ChangeTeam(3);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            mWeaponSlider_Green.SetActive(true);
+            mKitSliderPlayer_Green.OnSelect();
+            ChangeTeam(4);
         }
     }
 
@@ -108,6 +164,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
                 break;
         }
 
+        mTeamSet = true;
         RoomManager.Instance.ChangeTeam(team);
         photonView.RPC("DisplayTeam", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.NickName, _teamnum, PhotonNetwork.LocalPlayer.ActorNumber);
     }

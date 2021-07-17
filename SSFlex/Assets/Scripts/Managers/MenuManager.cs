@@ -41,6 +41,11 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     private string[] mEnterPlayerNameMessages;
 
+    [SerializeField]
+    private GameObject mMasterStartButton;
+    [SerializeField]
+    private GameObject mClientStartButton;
+
     private List<GameObject> mAllMenus;
 
     private void Awake()
@@ -67,6 +72,44 @@ public class MenuManager : MonoBehaviour
         };
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+            InputEnterValidation();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+            InputEscapeValidation();
+    }
+
+    private void InputEnterValidation()
+    {
+        if (mPlayerNameInput.isActiveAndEnabled)
+        {
+            AdminFindRoomMenu();
+            Debug.Log("DDDD");
+            if (mMasterStartButton.activeSelf)
+                CreateRoomFromLauncher();
+        }
+        else if (mServerNameInput.isActiveAndEnabled)
+        {
+            AdminNameMenu();
+            Debug.Log("DDDD");
+            mMasterStartButton.SetActive(true);
+            mClientStartButton.SetActive(false);
+        }
+        else if (mRoomMenu.activeSelf)
+            Launcher.Instance.StartLobby();
+    }
+
+    private void InputEscapeValidation()
+    {
+        if (mRoomMenu.activeSelf)
+            Launcher.Instance.LeaveRoom();
+        else if (mNameMenu.activeSelf || mCreateRoomMenu.activeSelf || mFindRoomMenu.activeSelf)
+            AdminMainMenu();
+        else if (mOptionsMenu.activeSelf)
+            AdmitOptionsMenu();
+    }
 
     public void AdminMainMenu()
     {
@@ -129,11 +172,6 @@ public class MenuManager : MonoBehaviour
             mEnterRoomNameText.text = mEnterRoomNameMessages[rndIdx];
         }
     }
-
-    //public void SetRoomNameInLauncher()
-    //{
-    //    if(mServerNameInput)
-    //}
 
     public void AdminCreateRoomMenu()
     {
@@ -222,7 +260,7 @@ public class MenuManager : MonoBehaviour
     {
         foreach (GameObject menu in mAllMenus)
         {
-            if (menu != _menuToCheck)
+            if (menu != _menuToCheck && menu != null)
                 menu.SetActive(false);
         }
     }
