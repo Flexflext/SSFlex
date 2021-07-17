@@ -34,5 +34,6 @@ public class UIPositioning : MonoBehaviour
 
         mArrowLeft.transform.position = new Vector3(ankerPos.x - mArrowAlignment, ankerPos.y - mArrowHeight, ankerPos.z);
         mArrowRight.transform.position = new Vector3(ankerPos.x + mArrowAlignment, ankerPos.y - mArrowHeight, ankerPos.z);
+
     }
 }

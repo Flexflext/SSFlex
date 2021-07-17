@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
 
@@ -22,6 +24,22 @@ public class MenuManager : MonoBehaviour
     private GameObject mErrorMenu;
     [SerializeField]
     private GameObject mFindRoomMenu;
+    [SerializeField]
+    private GameObject mNameMenu;
+
+    [SerializeField]
+    private TMP_InputField mPlayerNameInput;
+    [SerializeField]
+    private TMP_InputField mServerNameInput;
+    [SerializeField]
+    private TextMeshProUGUI mEnterRoomNameText;
+    [SerializeField]
+    private TextMeshProUGUI mEnterPlayerNameText;
+
+    [SerializeField]
+    private string[] mEnterRoomNameMessages;
+    [SerializeField]
+    private string[] mEnterPlayerNameMessages;
 
     private List<GameObject> mAllMenus;
 
@@ -44,7 +62,8 @@ public class MenuManager : MonoBehaviour
             mCreateRoomMenu,
             mRoomMenu,
             mErrorMenu,
-            mFindRoomMenu
+            mFindRoomMenu,
+            mNameMenu
         };
     }
 
@@ -59,7 +78,7 @@ public class MenuManager : MonoBehaviour
                 mMainMenu.SetActive(true);
         }
 
-        CloseMenu(mMainMenu);
+        CloseMenus(mMainMenu);
     }
 
     public void AdminLoadingMenu()
@@ -72,7 +91,7 @@ public class MenuManager : MonoBehaviour
                 mLoadingScreen.SetActive(true);
         }
 
-        CloseMenu(mLoadingScreen);
+        CloseMenus(mLoadingScreen);
     }
 
     public void AdmitOptionsMenu()
@@ -86,6 +105,36 @@ public class MenuManager : MonoBehaviour
         }
     }
 
+    public void AdminNameMenu()
+    {
+        if (!mServerNameInput.isActiveAndEnabled || mServerNameInput.text.Length > 0)
+        {
+            if (mNameMenu != null)
+            {
+                if (mNameMenu.activeSelf)
+                    mNameMenu.SetActive(false);
+                else
+                    mNameMenu.SetActive(true);
+
+                Launcher.Instance.SetRoomName(mServerNameInput.text);
+
+                mEnterRoomNameText.gameObject.SetActive(false);
+            }
+            CloseMenus(mNameMenu);
+        }
+        else
+        {
+            mEnterRoomNameText.gameObject.SetActive(true) ;
+            int rndIdx = Random.Range(0, mEnterRoomNameMessages.Length);
+            mEnterRoomNameText.text = mEnterRoomNameMessages[rndIdx];
+        }
+    }
+
+    //public void SetRoomNameInLauncher()
+    //{
+    //    if(mServerNameInput)
+    //}
+
     public void AdminCreateRoomMenu()
     {
         if (mCreateRoomMenu != null)
@@ -96,22 +145,33 @@ public class MenuManager : MonoBehaviour
                 mCreateRoomMenu.SetActive(true);
         }
 
-        CloseMenu(mCreateRoomMenu);
+        CloseMenus(mCreateRoomMenu);
     }
 
     public void AdminRoomMenu()
     {
-        if (mRoomMenu != null)
+        if(mPlayerNameInput.text.Length > 0)
         {
-            if (mRoomMenu.activeSelf)
-                mRoomMenu.SetActive(false);
-            else
-                mRoomMenu.SetActive(true);
-        }
+            if (mRoomMenu != null)
+            {
+                if (mRoomMenu.activeSelf)
+                    mRoomMenu.SetActive(false);
+                else
+                    mRoomMenu.SetActive(true);
 
-        CloseMenu(mRoomMenu);
+                mEnterPlayerNameText.gameObject.SetActive(false);
+            }
+            CloseMenus(mRoomMenu);
+        }
+        else
+        {
+            mEnterPlayerNameText.gameObject.SetActive(true);
+            int rndIdx = Random.Range(0, mEnterPlayerNameMessages.Length);
+            mEnterPlayerNameText.text = mEnterPlayerNameMessages[rndIdx];
+        }
     }
 
+   
     public void AdminErrorMenu()
     {
         if (mErrorMenu != null)
@@ -122,23 +182,43 @@ public class MenuManager : MonoBehaviour
                 mErrorMenu.SetActive(true);
         }
 
-        CloseMenu(mErrorMenu);
+        CloseMenus(mErrorMenu);
     }
 
     public void AdminFindRoomMenu()
     {
-        if (mFindRoomMenu != null)
+        if (mPlayerNameInput.text.Length > 0)
         {
-            if (mFindRoomMenu.activeSelf)
-                mFindRoomMenu.SetActive(false);
-            else
-                mFindRoomMenu.SetActive(true);
-        }
+            Debug.Log(mPlayerNameInput.text.Length);
 
-        CloseMenu(mFindRoomMenu);
+            if (mFindRoomMenu != null)
+            {
+                if (mFindRoomMenu.activeSelf)
+                    mFindRoomMenu.SetActive(false);
+                else
+                    mFindRoomMenu.SetActive(true);
+
+                
+
+                mEnterPlayerNameText.gameObject.SetActive(false);
+            }
+            CloseMenus(mFindRoomMenu);
+        }
+        else
+        {
+            mEnterPlayerNameText.gameObject.SetActive(true);
+            int rndIdx = Random.Range(0, mEnterPlayerNameMessages.Length);
+            mEnterPlayerNameText.text = mEnterPlayerNameMessages[rndIdx];
+        }
     }
 
-    private void CloseMenu(GameObject _menuToCheck)
+    public void CreateRoomFromLauncher()
+    {
+        if(mPlayerNameInput.text.Length > 0)
+            Launcher.Instance.CreateRoom();
+    }
+
+    private void CloseMenus(GameObject _menuToCheck)
     {
         foreach (GameObject menu in mAllMenus)
         {
