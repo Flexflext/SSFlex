@@ -25,9 +25,16 @@ public class PlayerController : MonoBehaviour
     // Photon
     [SerializeField] private GameObject cameraHolder;
     [SerializeField] private GameObject firstPersonShotgun;
+    [SerializeField] private GameObject firstPersonAR;
+    [SerializeField] private GameObject firstPersonSniper;
+    [SerializeField] private GameObject firstPersonPistol;
     [SerializeField] private GameObject firstPersonMesh;
     [SerializeField] private GameObject thirdPersonShotgun;
+    [SerializeField] private GameObject thirdPersonAR;
+    [SerializeField] private GameObject thirdPersonSniper;
+    [SerializeField] private GameObject thirdPersonPistol;
     [SerializeField] private GameObject thirdPersonMesh;
+
     [SerializeField] private Animator thirdPersonAnimator;
 
     [Header("Testing Stats")]
@@ -35,6 +42,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float currentPlayerSpeed, playerWalkingSpeed, playerRunSpeed, playerSneakingSpeed;
     [SerializeField] private float jumpForce;
+    [SerializeField] private float groundDrag;
+    [SerializeField] private float airDrag;
     [SerializeField] private bool isOnStone, isOnGravel;
 
     // Non-visible References
@@ -48,6 +57,8 @@ public class PlayerController : MonoBehaviour
     // Movement
     private float movementMultiplier = 1;
     public float MovementMultiplier { get { return movementMultiplier; } set { movementMultiplier = Mathf.Clamp01(value); } }
+
+   
 
     private bool isMoving, isRunning, isSneaking;
 
@@ -77,6 +88,9 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(thirdPersonMesh.gameObject);
             Destroy(thirdPersonShotgun);
+            Destroy(thirdPersonAR);
+            Destroy(thirdPersonSniper);
+            Destroy(thirdPersonPistol);
         }
 
         // To seperate the camera control and the rigidbody of multiple players.
@@ -87,6 +101,9 @@ public class PlayerController : MonoBehaviour
             Destroy(cameraHolder.gameObject);
             Destroy(firstPersonMesh.gameObject);
             Destroy(firstPersonShotgun);
+            Destroy(firstPersonAR);
+            Destroy(firstPersonSniper);
+            Destroy(firstPersonPistol);
         }
 
         currentPlayerSpeed = playerWalkingSpeed;
@@ -123,11 +140,12 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        rb.velocity = new Vector3(moveDir.x * currentPlayerSpeed * Time.fixedDeltaTime, rb.velocity.y, moveDir.z * currentPlayerSpeed * Time.fixedDeltaTime);
+        rb.velocity = new Vector3(moveDir.normalized.x * currentPlayerSpeed * Time.fixedDeltaTime, rb.velocity.y, moveDir.normalized.z * currentPlayerSpeed * Time.fixedDeltaTime);
 
         rb.useGravity = false;
         if (useGravity)
         {
+            Debug.Log("using grav");
             rb.AddForce(Physics.gravity * (rb.mass * rb.mass));
         }
 
@@ -136,11 +154,11 @@ public class PlayerController : MonoBehaviour
     #region Movement
     private void PlayerMoving()
     {
-        float hor = Input.GetAxisRaw("Horizontal");
-        float ver = Input.GetAxisRaw("Vertical");
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
 
-        moveDir = transform.forward * ver + transform.right * hor;
-        moveDir.Normalize();
+        moveDir = transform.forward * vertical + transform.right * horizontal;
+        
 
 
         if (moveDir.magnitude >= 0.1f)
@@ -160,7 +178,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             isMoving = false;
-            moveDir = Vector3.zero;
+            moveDir = new Vector3(0, rb.velocity.y, 0);
 
             fpsAnimator.SetFloat("Velocity", 0);
         }
@@ -231,6 +249,15 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerJump()
     {
+        if (isGrounded)
+        {
+            rb.drag = groundDrag;
+        }
+        else
+        {
+            rb.drag = airDrag;
+        }
+
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             StartCoroutine(JumpAnimatorTimer());

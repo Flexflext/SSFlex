@@ -53,6 +53,7 @@ MonoBehaviour:
   - ChangeTeamApperanceforOther
   - AddToDictionary
   - DisplayCurrentKit
+  - RPCLook
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
