@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class PlayerHud : MonoBehaviour
 {
@@ -29,6 +29,7 @@ public class PlayerHud : MonoBehaviour
     [SerializeField] private TMP_Text killAmount;
     [SerializeField] private GameObject hitSmthObjPlayer;
     [SerializeField] private GameObject hitSmthObjObject;
+    [SerializeField] private GameObject hud;
 
 
     private void Awake()
@@ -53,15 +54,9 @@ public class PlayerHud : MonoBehaviour
 
         shieldDisplay.color = shieldColorOverLife.Evaluate(shieldPercent);
         shieldBar.fillAmount = shieldPercent;
-        if (_current > 0.5f)
-        {
-            shieldText.text = ((int)_current).ToString();
-        }
-        else
-        {
-            shieldText.text = "1";
-        }
-        
+
+        shieldText.text = ((int)_current).ToString();
+
     }
 
     /// <summary>
@@ -83,7 +78,15 @@ public class PlayerHud : MonoBehaviour
         }
         else
         {
-            healthText.text = "1";
+            if (_current <= 0)
+            {
+                healthText.text = "0";
+            }
+            else
+            {
+                healthText.text = "1";
+            }
+            
         }
     }
 

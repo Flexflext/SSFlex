@@ -82,6 +82,10 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
         if (health <= 0)
         {
             Debug.Log("I am Dead");
+            GameObject deadRobot = PhotonNetwork.Instantiate(System.IO.Path.Combine("PhotonPrefabs", "DeadRobot"), this.transform.position, this.transform.rotation);
+            deadRobot.GetComponent<DeadRobot>().ChangeApperance(this.GetComponent<PlayerGFXChange>().CurrentTeam);
+            Debug.Log("Hier");
+            PhotonNetwork.Destroy(this.gameObject);
             dead = true;
         }
 

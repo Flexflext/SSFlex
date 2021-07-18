@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class DestroyAfterTime : MonoBehaviour
 {
     [SerializeField] private float destroyTime;
+    [SerializeField] private bool destroyNetwork;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +22,14 @@ public class DestroyAfterTime : MonoBehaviour
     private IEnumerator C_TimeTillDestoy(float _time)
     {
         yield return new WaitForSeconds(_time);
-        Destroy(this.gameObject);
+
+        if (destroyNetwork)
+        {
+            PhotonNetwork.Destroy(this.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
     }
 }
