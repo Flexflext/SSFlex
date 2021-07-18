@@ -137,14 +137,14 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         if (!photonView.IsMine)
             return;
 
-        if (GameManager.Instance.PreparationPhase)
+        if (PreparationCounter.Instance.PreparationPhase)
         {
             ManageBuildMode();
             ManageBuildingClip();
             ChangeModeType();
             ChangeBuildType();
         }
-        else if (mIsInBuildMode && !GameManager.Instance.PreparationPhase)
+        else if (mIsInBuildMode && !PreparationCounter.Instance.PreparationPhase)
             mIsInBuildMode = false;
     }
 

@@ -15,8 +15,8 @@ TagManager:
   - AmmoSniper
   - AmmoAR
   - AmmoShotgun
-  - TEST
   - PlayerHud
+  - Walls
   layers:
   - Default
   - TransparentFX

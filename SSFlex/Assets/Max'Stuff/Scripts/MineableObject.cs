@@ -18,8 +18,6 @@ public class MineableObject : MonoBehaviourPunCallbacks
     [SerializeField]
     private Collider mCollider;
     [SerializeField]
-    private Animator mAnimator;
-    [SerializeField]
     private AnimationClip mWasMindedClip;
 
 
@@ -61,18 +59,14 @@ public class MineableObject : MonoBehaviourPunCallbacks
         {
             mCurrentMineDuration -= mMineSpeed * Time.deltaTime;
 
-            if (!mBeingMined.isPlaying)
-                mBeingMined.Play();
-
-            mAnimator.SetBool("BeingMined", true);
+            //if (!mBeingMined.isPlaying)
+            //    mBeingMined.Play();
         }
-        else if (!mIsBeingMined)
-        {
-            if (mBeingMined.isPlaying)
-                mBeingMined.Stop();
-
-            mAnimator.SetBool("BeingMined", false);
-        }
+        //else if (!mIsBeingMined)
+        //{
+        //    if (mBeingMined.isPlaying)
+        //        mBeingMined.Stop();
+        //}
     }
 
     public int MineResource(float _mineSpeed, ResourceMiner _miner)
@@ -86,7 +80,6 @@ public class MineableObject : MonoBehaviourPunCallbacks
 
         if (mCurrentMineDuration <= 0)
         {
-            mAnimator.SetBool("WasMined", true);            
             mWasMined = true;
 
             StartCoroutine("ResourceHasBeenMined");

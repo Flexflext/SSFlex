@@ -227,7 +227,6 @@ public class MenuManager : MonoBehaviour
     {
         if (mPlayerNameInput.text.Length > 0)
         {
-            Debug.Log(mPlayerNameInput.text.Length);
 
             if (mFindRoomMenu != null)
             {

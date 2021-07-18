@@ -54,6 +54,13 @@ MonoBehaviour:
   - AddToDictionary
   - DisplayCurrentKit
   - RPCLook
+  - ChooseGun
+  - SwitchWeapon
+  - DisplayGun
+  - DeactivateWalls
+  - DeactivateTool
+  - DisplayObject
+  - C_WeaponSwitch
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

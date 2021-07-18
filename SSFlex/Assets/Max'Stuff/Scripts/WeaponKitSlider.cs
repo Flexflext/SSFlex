@@ -16,7 +16,7 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
 
     [Header("The default kit the Player has at the start")]
     [SerializeField]
-    private PrimaryWeapon mDefaultKit;
+    private EWeaponsAndUtensils mDefaultKit;
 
     [Header("The Kit name text")]
     [SerializeField]
@@ -40,7 +40,7 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
     private GameObject mCurrentPlaceholder;
     private List<GameObject> mAllPlaceholder;
 
-    private PrimaryWeapon mCurrentKitPos;
+    private EWeaponsAndUtensils mCurrentKitPos;
 
     [SerializeField]
     private GameObject mOwner;
@@ -100,7 +100,6 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
 
         if (mPhotonView.IsMine)
         {
-
             Hashtable hash = new Hashtable();
             hash.Add("weaponKey", (int)mCurrentKitPos);
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
@@ -125,7 +124,7 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
         Debug.Log("Click Righ");
 
         mCurrentKitPos++;
-        if ((int)mCurrentKitPos >= (int)PrimaryWeapon.Sniper + 1)
+        if ((int)mCurrentKitPos >= (int)EWeaponsAndUtensils.Sniper + 1)
             mCurrentKitPos = 0;
 
         //DisplayCurrentKit((int)mCurrentKitPos);
@@ -145,7 +144,7 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
         mCurrentKitPos--;
 
         if (mCurrentKitPos < 0)
-            mCurrentKitPos = PrimaryWeapon.Sniper;
+            mCurrentKitPos = EWeaponsAndUtensils.Sniper;
 
 
         //DisplayCurrentKit((int)mCurrentKitPos);
