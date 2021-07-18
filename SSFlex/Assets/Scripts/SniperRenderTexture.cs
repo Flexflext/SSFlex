@@ -16,6 +16,10 @@ public class SniperRenderTexture : MonoBehaviourPunCallbacks
         {
             cam.targetTexture = sniperRenderTexture;
         }
+        else
+        {
+            Destroy(cam.gameObject);
+        }
     }
 
     // Update is called once per frame
