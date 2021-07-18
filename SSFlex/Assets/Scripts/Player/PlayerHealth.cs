@@ -82,6 +82,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
         if (health <= 0)
         {
             Debug.Log("I am Dead");
+            PhotonNetwork.Destroy(this.gameObject);
             dead = true;
         }
 

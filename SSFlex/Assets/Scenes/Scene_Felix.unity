@@ -6506,7 +6506,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.19364573, y: 0.27127334, z: -0.004737474}
+  m_ConnectedAnchor: {x: 0.19364579, y: 0.27127337, z: -0.0047365464}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -6896,7 +6896,7 @@ Transform:
   m_GameObject: {fileID: 703887934}
   m_LocalRotation: {x: 0.00000081956375, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 2.0466511, y: -1.009, z: -16.747}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 703850092}
   - {fileID: 703850014}
@@ -7990,6 +7990,7 @@ GameObject:
   m_Component:
   - component: {fileID: 703850012}
   - component: {fileID: 694487474}
+  - component: {fileID: 703887935}
   m_Layer: 0
   m_Name: DeadRobot
   m_TagString: Untagged
@@ -7997,6 +7998,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &703887935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 703887934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca3f1473322a4914f8b9ced84d7a1892, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  redRobot: {fileID: 0}
+  blueRobot: {fileID: 0}
+  yellowRobot: {fileID: 0}
+  greenRobot: {fileID: 0}
 --- !u!1 &703887968
 GameObject:
   m_ObjectHideFlags: 0
@@ -8728,6 +8745,7 @@ MonoBehaviour:
   recoilPatternArray:
   - {x: 0, y: 40}
   gunName: 
+  gunImg: {fileID: 0}
   muzzleFlash: {fileID: 207622959}
   normalCanvas: {fileID: 1042773622}
   bulletPrefab: {fileID: 7805154379572082998, guid: 8510e3cd1ccd9d4458676d24b7e06eac,
@@ -8852,7 +8870,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.00000021047893, y: 0.36363497, z: -0.00000028312226}
+  m_ConnectedAnchor: {x: -0.00000015832485, y: 0.36363474, z: 0.0000005811457}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:
@@ -8977,6 +8995,7 @@ MonoBehaviour:
   crossHairTarget: {fileID: 1280569499}
   regenTime: 5
   grenadeSpeed: 1.5
+  maxGrenadeDmg: 0
   grenadePrefab: {fileID: 2788992215005824281, guid: 8e1b3f557862f5546b645b43342f3bd0,
     type: 3}
   range: 0.5
@@ -9030,8 +9049,14 @@ MonoBehaviour:
     m_Bits: 0
   cameraHolder: {fileID: 0}
   firstPersonShotgun: {fileID: 0}
+  firstPersonAR: {fileID: 0}
+  firstPersonSniper: {fileID: 0}
+  firstPersonPistol: {fileID: 0}
   firstPersonMesh: {fileID: 0}
   thirdPersonShotgun: {fileID: 0}
+  thirdPersonAR: {fileID: 0}
+  thirdPersonSniper: {fileID: 0}
+  thirdPersonPistol: {fileID: 0}
   thirdPersonMesh: {fileID: 0}
   thirdPersonAnimator: {fileID: 0}
   moveDir: {x: 0, y: 0, z: 0}
@@ -9040,6 +9065,8 @@ MonoBehaviour:
   playerRunSpeed: 500
   playerSneakingSpeed: 100
   jumpForce: 1500
+  groundDrag: 0
+  airDrag: 0
   isOnStone: 0
   isOnGravel: 0
 --- !u!54 &1015002866
@@ -9366,7 +9393,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.00000011175871, y: 0.36363506, z: -0.0000001043083}
+  m_ConnectedAnchor: {x: 0.00000014156103, y: 0.36363482, z: 0.00000078976285}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:
@@ -9779,7 +9806,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.15995015, y: 0.06604643, z: -0.018472932}
+  m_ConnectedAnchor: {x: -0.15995003, y: 0.06604643, z: -0.018472932}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:
@@ -10398,6 +10425,7 @@ MonoBehaviour:
   recoilPatternArray:
   - {x: 0, y: 50}
   gunName: 
+  gunImg: {fileID: 0}
   muzzleFlash: {fileID: 468409166}
   normalCanvas: {fileID: 1629486279}
   bulletPrefab: {fileID: 7805154379572082998, guid: 8510e3cd1ccd9d4458676d24b7e06eac,
@@ -11334,6 +11362,7 @@ MonoBehaviour:
   recoilPatternArray:
   - {x: 0, y: 200}
   gunName: 
+  gunImg: {fileID: 0}
   muzzleFlash: {fileID: 1002241867}
   normalCanvas: {fileID: 1576046162}
   bulletPrefab: {fileID: 7805154379572082998, guid: 8510e3cd1ccd9d4458676d24b7e06eac,
@@ -11377,7 +11406,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 3.6655823e-10, y: 0.19552007, z: 0.00000008940697}
+  m_ConnectedAnchor: {x: 3.6738423e-10, y: 0.19552019, z: -0.00000086426735}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:
@@ -11451,7 +11480,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.19364564, y: 0.27127323, z: -0.0047382154}
+  m_ConnectedAnchor: {x: -0.19364576, y: 0.27127326, z: -0.004737284}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -13236,6 +13265,7 @@ MonoBehaviour:
   recoilPatternArray:
   - {x: 0, y: 20}
   gunName: 
+  gunImg: {fileID: 0}
   muzzleFlash: {fileID: 4383216763313673355}
   normalCanvas: {fileID: 4383216762884480177}
   bulletPrefab: {fileID: 7805154379572082998, guid: 8510e3cd1ccd9d4458676d24b7e06eac,
