@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using Photon.Realtime;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
 
-public class DeadRobot : MonoBehaviour
+public class DeadRobot : MonoBehaviourPunCallbacks
 {
 
     [SerializeField] private Material redRobot;
@@ -11,27 +12,55 @@ public class DeadRobot : MonoBehaviour
     [SerializeField] private Material yellowRobot;
     [SerializeField] private Material greenRobot;
 
-    private SkinnedMeshRenderer meshRend;
+    [SerializeField] private SkinnedMeshRenderer meshRend;
 
-    private void Start()
-    {
-        meshRend = GetComponentInChildren<SkinnedMeshRenderer>();
-    }
 
     public void ChangeApperance(Team _team)
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
+        int teamNum = 0;
+
         switch (_team)
         {
             case Team.Red:
-                meshRend.material = redRobot;
+                teamNum = 1;
                 break;
             case Team.Blue:
-                meshRend.material = blueRobot;
+                teamNum = 2;
                 break;
             case Team.Yellow:
-                meshRend.material = yellowRobot;
+                teamNum = 3;
                 break;
             case Team.Green:
+                teamNum = 4;
+                break;
+            default:
+                break;
+        }
+
+        photonView.RPC("RPC_ChnageApperance", RpcTarget.All, teamNum);
+
+    }
+
+    [PunRPC]
+    private void RPC_ChnageApperance(int _teamnum)
+    {
+        switch (_teamnum)
+        {
+            case 1:
+                meshRend.material = redRobot;
+                break;
+            case 2:
+                meshRend.material = blueRobot;
+                break;
+            case 3:
+                meshRend.material = yellowRobot;
+                break;
+            case 4:
                 meshRend.material = greenRobot;
                 break;
             default:

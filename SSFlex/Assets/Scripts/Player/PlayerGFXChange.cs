@@ -16,6 +16,7 @@ public enum Team
 public class PlayerGFXChange : MonoBehaviourPunCallbacks
 {
     [SerializeField] private Team team;
+    public Team CurrentTeam => team;
 
     [Header("Materials")]
     [SerializeField] private Material robotRed;

@@ -54,6 +54,7 @@ MonoBehaviour:
   - AddToDictionary
   - DisplayCurrentKit
   - RPCLook
+  - RPC_ChnageApperance
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
