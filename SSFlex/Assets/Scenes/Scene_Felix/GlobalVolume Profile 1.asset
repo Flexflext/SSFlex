@@ -19,7 +19,7 @@ MonoBehaviour:
     m_Value: 1
   gaussianStart:
     m_OverrideState: 1
-    m_Value: 5.29
+    m_Value: 5.93
     min: 0
   gaussianEnd:
     m_OverrideState: 1
@@ -78,12 +78,12 @@ MonoBehaviour:
   m_AdvancedMode: 0
   temperature:
     m_OverrideState: 1
-    m_Value: -10
+    m_Value: 10
     min: -100
     max: 100
   tint:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 22.9
     min: -100
     max: 100
 --- !u!114 &11400000
