@@ -223,10 +223,10 @@ public class Gun : MonoBehaviourPunCallbacks
 
     private void OnKillSmth(string _name)
     {
-        Debug.Log("Killed " + _name);
+        //Debug.Log("Killed " + _name);
 
 
-        PlayerHud.Instance.DisplayKillOnPlayer();
+        PlayerHud.Instance.DisplayKillOnPlayer(gunImg, photonView.Owner.NickName, _name);
         PlayerHud.Instance.ChangeKillAmount(1);
     }
 
@@ -492,7 +492,7 @@ public class Gun : MonoBehaviourPunCallbacks
                 return;
             }
 
-            Debug.Log("HIEr !!!");
+            //Debug.Log("HIEr !!!");
 
             object[] data = (object[])photonEvent.CustomData;
 
