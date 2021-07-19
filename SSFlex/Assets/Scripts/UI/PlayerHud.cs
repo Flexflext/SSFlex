@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
-public class PlayerHud : MonoBehaviour
+public class PlayerHud : MonoBehaviourPunCallbacks
 {
     public static PlayerHud Instance;
 
@@ -31,6 +32,9 @@ public class PlayerHud : MonoBehaviour
     [SerializeField] private GameObject hitSmthObjObject;
     [SerializeField] private GameObject killSmthObj;
     [SerializeField] private GameObject hud;
+    [SerializeField] private GameObject deathMenu;
+    [SerializeField] private TMP_Text killerText;
+    [SerializeField] private GameObject killFeedPos;
 
 
     private void Awake()
@@ -155,8 +159,24 @@ public class PlayerHud : MonoBehaviour
     /// <summary>
     /// Display a kill Indicator on the player hud
     /// </summary>
-    public void DisplayKillOnPlayer()
+    public void DisplayKillOnPlayer(Sprite _weapon, string _killername, string _victimname)
     {
         Instantiate(killSmthObj, this.transform);
+
+        GameObject killFeedObj = PhotonNetwork.Instantiate(System.IO.Path.Combine("PhotonPrefabs", "KillFeedKill"), killFeedPos.transform.position, Quaternion.identity);
+        killFeedObj.transform.parent = killFeedPos.transform;
+        killFeedObj.GetComponent<KillFeedKill>().ChangeFeedContent(_weapon, _killername, _victimname);
     }
+
+    /// <summary>
+    /// Displays a Death Display
+    /// </summary>
+    /// <param name="_killername"></param>
+    public void DisplayDeathDisplay(string _killername)
+    {
+        deathMenu.SetActive(true);
+        hud.SetActive(false);
+        killerText.text = _killername;
+    }
+
 }
