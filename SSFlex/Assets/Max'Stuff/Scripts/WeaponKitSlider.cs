@@ -74,16 +74,16 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
 
     private void InputArrowKeyValidation()
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKeyDown(KeyCode.RightArrow)|| Input.GetKeyDown(KeyCode.A))
             OnClickRight();
-        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.D))
             OnClickLeft();
     }
 
     [PunRPC]
     private void DisplayCurrentKit(int _currentKitIdx)
     {
-      
+
 
         for (int i = 0; i < mAllPlaceholder.Count; i++)
         {
@@ -94,27 +94,26 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
             }
             else
                 mAllPlaceholder[i].SetActive(false);
-
         }
 
 
-        if (mPhotonView.IsMine)
-        {
-            Hashtable hash = new Hashtable();
-            hash.Add("weaponKey", (int)mCurrentKitPos);
-            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-        }    
+        //if (mPhotonView.IsMine)
+        //{
+        //    Hashtable hash = new Hashtable();
+        //    hash.Add("kitKey", (int)mCurrentKitPos);
+        //    PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        //}    
     }
 
 
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
-    {
-        if (!mPhotonView.IsMine && targetPlayer == mPhotonView.Owner && mOwner != null)
-        {
-            DisplayCurrentKit((int)changedProps["weaponKey"]);
-            Debug.Log("OnPlayerPropertiesUpdate");
-        }
-    }
+    //public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    //{
+    //    if (!mPhotonView.IsMine && targetPlayer == mPhotonView.Owner && mOwner != null)
+    //    {
+    //        DisplayCurrentKit((int)changedProps["weaponKey"]);
+    //        Debug.Log("OnPlayerPropertiesUpdate");
+    //    }
+    //}
 
     public void OnClickRight()
     {
@@ -132,6 +131,10 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
         mPhotonView.RPC("DisplayCurrentKit", RpcTarget.AllBufferedViaServer, mCurrentKitPos);
 
         GameManager.Instance.SetStartWeapon(mCurrentKitPos);
+
+        GameManager.Instance.GetComponent<PhotonView>().RPC("SetStartWeapon", RpcTarget.OthersBuffered, mCurrentKitPos);
+
+        //GameManager.Instance.SetStartWeapon(mCurrentKitPos);
     }
 
     public void OnClickLeft()
@@ -152,6 +155,10 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
         mPhotonView.RPC("DisplayCurrentKit", RpcTarget.AllBufferedViaServer, mCurrentKitPos);
 
         GameManager.Instance.SetStartWeapon(mCurrentKitPos);
+
+        GameManager.Instance.GetComponent<PhotonView>().RPC("SetStartWeapon", RpcTarget.OthersBuffered, mCurrentKitPos);
+
+        //GameManager.Instance.SetStartWeapon(mCurrentKitPos);
     }
 
     public void OnSelect()

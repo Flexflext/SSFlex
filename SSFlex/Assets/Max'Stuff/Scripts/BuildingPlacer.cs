@@ -145,7 +145,10 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
             ChangeBuildType();
         }
         else if (mIsInBuildMode && !PreparationCounter.Instance.PreparationPhase)
+        {
             mIsInBuildMode = false;
+            mCurrentPlaceholder.SetActive(false);
+        }
     }
 
     private void ManageBuildMode()
@@ -192,6 +195,8 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
 
             if (Vector3.Distance(transform.position, hitPos) <= mMaxBuildRange)
                 mBuildPoint.transform.position = new Vector3(hitPos.x, hitPos.y, hitPos.z);
+           
+
 
             if (hit.collider.gameObject.CompareTag("ClipTag"))
             {
