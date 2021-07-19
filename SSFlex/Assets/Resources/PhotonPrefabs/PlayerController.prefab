@@ -1115,7 +1115,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 1370586007883492911}
-  weapon: 1
+  primaryWeaponIdx: 0
   thirdPersonAnimator: {fileID: 3253832158568025572}
   farmTool: {fileID: 3029886475710840224}
   currentGun: {fileID: 2703382973323045817}
@@ -1138,7 +1138,10 @@ MonoBehaviour:
   AR: {fileID: 3927443214775788892}
   Shotgun: {fileID: 2703382973323045817}
   Pistol: {fileID: 2703382973997453279}
-  farmMode: 0
+  mThirdPersonAR: {fileID: 0}
+  mThirdPersonShotgun: {fileID: 0}
+  mThirdPersonSniper: {fileID: 0}
+  mThirdPersonPistol: {fileID: 0}
 --- !u!114 &1370586008316802746
 MonoBehaviour:
   m_ObjectHideFlags: 0

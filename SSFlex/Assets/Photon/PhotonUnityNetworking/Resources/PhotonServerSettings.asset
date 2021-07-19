@@ -55,6 +55,9 @@ MonoBehaviour:
   - DisplayCurrentKit
   - RPCLook
   - RPC_ChnageApperance
+  - DeactivateWalls
+  - DisplayObject
+  - RPC_OnKillDisplay
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

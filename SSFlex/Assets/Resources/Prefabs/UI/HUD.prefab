@@ -2373,6 +2373,9 @@ MonoBehaviour:
     type: 3}
   hitSmthObjObject: {fileID: 1442898827110148260, guid: 09ec39d7818d645478fe2b0358532e1e,
     type: 3}
+  killSmthObj: {fileID: 681306490015680995, guid: cd0af37db4062a54d9c526141988dac5,
+    type: 3}
+  hud: {fileID: 0}
 --- !u!1 &575248074075651503
 GameObject:
   m_ObjectHideFlags: 0
