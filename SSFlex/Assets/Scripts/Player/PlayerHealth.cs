@@ -1,10 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.VFX;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
-using ExitGames.Client.Photon;
 
 public class PlayerHealth : MonoBehaviourPunCallbacks
 {
@@ -15,6 +16,10 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
     [SerializeField] private float shield;
     [SerializeField] private float timeUntilShieldRegen;
     [SerializeField] private float regenPerSecond;
+
+    [SerializeField] private VisualEffect impactEffect;
+    [SerializeField] private ParticleSystem regenEffect;
+
     private float maxHealth;
     private float maxShield;
     private float currentTime;
@@ -25,10 +30,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-        if (!photonView.IsMine)
-        {
-            return;
-        }
+        regenEffect.Stop();
 
         maxHealth = health;
         maxShield = shield;
@@ -37,10 +39,10 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-        if (!photonView.IsMine)
-        {
-            return;
-        }
+        //if (!photonView.IsMine)
+        //{
+        //    return;
+        //}
 
         if (shield <= maxShield && !dead)
         {
@@ -50,14 +52,30 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
             }
             else
             {
-                PlayerHud.Instance.ChangeShieldAmount(maxShield, shield, false);
+                regenEffect.Play();
+
                 shield += Time.deltaTime * regenPerSecond;
+
+                if (shield >= maxShield)
+                {
+                    regenEffect.Stop();
+                }
+
+                if (photonView.IsMine)
+                {
+                    PlayerHud.Instance.ChangeShieldAmount(maxShield, shield, false);
+                }
             }
         }
     }
 
     public void TakeDamage(float _dmg, int _actornum)
     {
+        if (!photonView.IsMine)
+        {
+            impactEffect.Play();
+        }
+
         photonView.RPC("RPC_TakeDamage", RpcTarget.All, _dmg, _actornum);
     }
 
@@ -116,6 +134,6 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
 
         PlayerHud.Instance.ChangeHealthAmount(maxHealth, health);
         PlayerHud.Instance.ChangeShieldAmount(maxShield, shield, true);
-    } 
+    }
 }
 
