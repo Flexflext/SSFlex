@@ -30,8 +30,6 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-        regenEffect.Stop();
-
         maxHealth = health;
         maxShield = shield;
     }
@@ -74,6 +72,19 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
         if (!photonView.IsMine)
         {
             impactEffect.Play();
+        }
+
+        float difference = shield - _dmg;
+        currentTime = timeUntilShieldRegen;
+
+        if (difference >= 0)
+        {
+            shield -= _dmg;
+        }
+        else
+        {
+            shield = 0f;
+            health += difference;
         }
 
         photonView.RPC("RPC_TakeDamage", RpcTarget.All, _dmg, _actornum);

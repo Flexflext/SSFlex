@@ -3598,6 +3598,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3004047150750502702, guid: b87719851e0e4b74b98d45ad94bf4ee7,
         type: 3}
+      propertyPath: prewarm
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3004047150750502702, guid: b87719851e0e4b74b98d45ad94bf4ee7,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3004047150750502702, guid: b87719851e0e4b74b98d45ad94bf4ee7,
+        type: 3}
       propertyPath: ShapeModule.m_SkinnedMeshRenderer
       value: 
       objectReference: {fileID: 7552176119729213148}
