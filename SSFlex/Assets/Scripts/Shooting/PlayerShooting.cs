@@ -16,6 +16,13 @@ public enum EWeaponsAndUtensils
     sword,
 }
 
+public enum ELoadout
+{
+    farmTool,
+    primaryWeapon,
+    secondaryWeapon,
+    knife
+}
 
 public class PlayerShooting : MonoBehaviourPunCallbacks
 {
@@ -30,7 +37,6 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     [SerializeField] private Gun currentGun;
     [SerializeField] private Gun primaryGun;
     [SerializeField] private Gun secondaryGun;
-
 
     [Header("GrenadeStuff")]
     [SerializeField] private Transform grenadeThrowPosition;
@@ -64,11 +70,14 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     private GameObject mThirdPersonSniper;
     [SerializeField]
     private GameObject mThirdPersonPistol;
+    [SerializeField]
+    private GameObject mThirdPersonKnife;
 
     private GameObject mPrimaryThridPersonGun;
     private GameObject mSecondaryThridPersonGun;
 
     private List<GameObject> mLoadout;
+    private ELoadout mCurrentLoadoutIdx;
 
     private Animator animator;
     private PlayerLook playerLook;
@@ -98,12 +107,8 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         primaryWeaponIdx = GameManager.Instance.StartWeapon;
 
         mLoadout = new List<GameObject>();
+        ChooseGun();
 
-        mLoadout.Add(farmTool);
-        weaponIdx = 0;
-
-        if (photonView.IsMine)
-            photonView.RPC("DisplayObject", RpcTarget.OthersBuffered, weaponIdx);
     }
 
     private void OnPreRender()
@@ -135,9 +140,8 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         if (!PreparationCounter.Instance.PreparationPhase && !mChooseWeapon)
         {
             mChooseWeapon = true;
-            ChooseGun();
+            SwitchWeapon(primaryGun, secondaryGun);
         }
-
 
         if (!farmMode)
         {
@@ -334,10 +338,16 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
                 break;
         }
 
+
+        mLoadout.Add(farmTool);
         mLoadout.Add(mPrimaryThridPersonGun);
         mLoadout.Add(mSecondaryThridPersonGun);
-        
-        SwitchWeapon(primaryGun, secondaryGun);
+        mLoadout.Add(mThirdPersonKnife);
+
+        mCurrentLoadoutIdx = ELoadout.farmTool;
+
+        if (photonView.IsMine)
+            photonView.RPC("DisplayObject", RpcTarget.OthersBuffered, (int)mCurrentLoadoutIdx);         
     }
 
     private void SwitchWeapon(Gun _switchtogun, Gun _switchfromgun)
@@ -367,13 +377,15 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
         currentGun = _switchtogun;
 
-        if (currentGun == secondaryGun)
-            weaponIdx = 2;
-        else
-            weaponIdx = 1;
+
+        if (currentGun == secondaryGun && !isMeeleing)
+            mCurrentLoadoutIdx = ELoadout.secondaryWeapon;
+        else if(!isMeeleing)
+            mCurrentLoadoutIdx = ELoadout.primaryWeapon;
+        else if (isMeeleing)
+            mCurrentLoadoutIdx = ELoadout.knife;
 
 
-        
         //Changes the Ads Multiplier
         if (imAiming)
         {
@@ -387,7 +399,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
         //Changes the waepon and Changes the UI Images and Text
         if(photonView.IsMine)
-            photonView.RPC("DisplayObject", RpcTarget.OthersBuffered, weaponIdx);
+            photonView.RPC("DisplayObject", RpcTarget.OthersBuffered, (int)mCurrentLoadoutIdx);
 
         currentGun.gameObject.SetActive(true);
 
@@ -402,15 +414,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     [PunRPC]
     public void DisplayObject(int _currentWeapon)
-    {
-        //if (_toolKey == 0)
-        //{
-        //    for (int i = 0; i < mTools.Count; i++)
-        //    {
-        //        mTools[i].SetActive(false);
-        //    }
-        //}
-            
+    {       
         for (int i = 0; i < mLoadout.Count; i++)
         {
             if (i == _currentWeapon)
@@ -425,13 +429,12 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             }
         }
 
-        if (!photonView.IsMine)
+        if (photonView.IsMine)
         {
             Hashtable hash = new Hashtable();
-            hash.Add("weaponKey", weaponIdx);
+            hash.Add("weaponKey", (int)mCurrentLoadoutIdx);
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         }
-
     }
 
     /// <summary>
@@ -492,8 +495,25 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     {
         yield return new WaitForSeconds(_time / 6);
         DoMeeleDmg();
+
+        if (currentGun == primaryGun)
+            SwitchWeapon(primaryGun, secondaryGun);
+        else
+            SwitchWeapon(secondaryGun, primaryGun);
+
+        if (photonView.IsMine)
+            photonView.RPC("DisplayObject", RpcTarget.OthersBuffered, mCurrentLoadoutIdx);
+
         yield return new WaitForSeconds(_time - _time / 6);
         isMeeleing = false;
+
+        if (currentGun == primaryGun)
+            SwitchWeapon(primaryGun, secondaryGun);
+        else
+            SwitchWeapon(secondaryGun, primaryGun);
+
+        if (photonView.IsMine)
+            photonView.RPC("DisplayObject", RpcTarget.OthersBuffered, mCurrentLoadoutIdx);
     }
 
     private IEnumerator C_GrenadeTimer(float _time)
@@ -598,7 +618,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     private IEnumerator MeleeAnimation()
     {
         thirdPersonAnimator.SetBool("isStabbing", true);
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1f);
         thirdPersonAnimator.SetBool("isStabbing", false);
     }
 

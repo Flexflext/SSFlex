@@ -68,7 +68,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
                 if (!startGameButton.activeSelf)
                 {
                     startGameButton.SetActive(true);
-                }        
+                }
+
+                if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Space))
+                    StartGame();
             }
         }
         else
@@ -83,33 +86,30 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             InputNumberKeyValidation();
 
         if (Input.GetKeyDown(KeyCode.Escape))
-            ReturnMenu();
-
-        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
-            StartGame();
+            ReturnMenu();   
     }
 
     private void InputNumberKeyValidation()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1) && selectRedButton.activeSelf)
         {
             mWeaponSlider_Red.SetActive(true);
             mKitSliderPlayer_Red.OnSelect();
             ChangeTeam(1);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        else if (Input.GetKeyDown(KeyCode.Alpha2) && selectBlueButton.activeSelf)
         {
             mWeaponSlider_Blue.SetActive(true);
             mKitSliderPlayer_Blue.OnSelect();
             ChangeTeam(2);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        else if (Input.GetKeyDown(KeyCode.Alpha3) && selectYellowButton.activeSelf)
         {
             mWeaponSlider_Yellow.SetActive(true);
             mKitSliderPlayer_Yellow.OnSelect();
             ChangeTeam(3);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        else if (Input.GetKeyDown(KeyCode.Alpha4) && selectGreenButton.activeSelf)
         {
             mWeaponSlider_Green.SetActive(true);
             mKitSliderPlayer_Green.OnSelect();

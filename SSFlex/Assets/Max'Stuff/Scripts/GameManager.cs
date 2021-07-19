@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager Instance;
     public EWeaponsAndUtensils StartWeapon => mStartWeapon;
@@ -37,11 +38,11 @@ public class GameManager : MonoBehaviour
         GetOptions();
     }
 
+    [PunRPC]
     public void SetStartWeapon(EWeaponsAndUtensils _startWeapon)
     {
         mStartWeapon = _startWeapon;
     }
-
 
     private void GetOptions()
     {

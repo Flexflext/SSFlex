@@ -58,6 +58,8 @@ MonoBehaviour:
   - DeactivateWalls
   - DisplayObject
   - ChangeGfx
+  - SetStartWeapon
+  - CallStartWeaponForAll
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

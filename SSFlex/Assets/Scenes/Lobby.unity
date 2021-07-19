@@ -99,7 +99,7 @@ LightmapSettings:
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: b7dad9b6b476fed409355bfdee29ff64,
     type: 2}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -16559,8 +16559,8 @@ MonoBehaviour:
   selectYellowButton: {fileID: 1092419739}
   selectGreenButton: {fileID: 1098030666}
   startGameButton: {fileID: 784330615}
-  mWeaponSlider_Red: {fileID: 793191734}
-  mWeaponSlider_Blue: {fileID: 243416236}
+  mWeaponSlider_Red: {fileID: 1549735146}
+  mWeaponSlider_Blue: {fileID: 2597753631756127266}
   mWeaponSlider_Yellow: {fileID: 2597753632051880678}
   mWeaponSlider_Green: {fileID: 2597753632715649495}
   mKitSliderPlayer_Red: {fileID: 1323967002}

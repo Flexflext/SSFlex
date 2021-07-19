@@ -73,7 +73,7 @@ public class PlayerGFXChange : MonoBehaviourPunCallbacks
         if (photonView.IsMine)
         {
             Hashtable hash = new Hashtable();
-            hash.Add("TeamIndex", team);
+            hash.Add("TeamIndex", _team);
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         }
     }
@@ -82,10 +82,13 @@ public class PlayerGFXChange : MonoBehaviourPunCallbacks
     {
         if (!photonView.IsMine && targetPlayer == photonView.Owner)
         {
-            ChangePlayerGfx((Team)changedProps["TeamIndex"]);
+            if (changedProps.ContainsValue("weaponKey"))
+                mPlayerShooting.DisplayObject((int)changedProps["weaponKey"]);
+            else
+                ChangePlayerGfx((Team)changedProps["TeamIndex"]);
 
-            mPlayerShooting.DisplayObject((int)changedProps["weaponKey"]);
-            Debug.Log("OnPlayerPropertiesUpdate");
+            //mPlayerShooting.DisplayObject((int)changedProps["weaponKey"]);
+            //ChangePlayerGfx((Team)changedProps["TeamIndex"]);
         }
     }
 
@@ -94,8 +97,6 @@ public class PlayerGFXChange : MonoBehaviourPunCallbacks
         foreach (SkinnedMeshRenderer renderer in robots)
         {
             renderer.material = _currentMat;
-        }
-
-        
+        }        
     }
 }

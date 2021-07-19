@@ -47,7 +47,7 @@ public class PreparationCounter : MonoBehaviour
 
         mTimer.text = (int)mPreparationTimer + " sec"; 
 
-        if (mPreparationTimer <= 0)
+        if (mPreparationTimer < 1)
         {
             mPhotonView.RPC("DeactivateWalls", RpcTarget.AllBufferedViaServer);
         }
