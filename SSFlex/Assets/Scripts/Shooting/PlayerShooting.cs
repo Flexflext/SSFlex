@@ -640,11 +640,11 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
-        if (!photonView.IsMine && targetPlayer == photonView.Owner)
-        {
-            DisplayObject((int)changedProps["weaponKey"]);
-            Debug.Log("OnPlayerPropertiesUpdate");
-        }
+        //if (!photonView.IsMine && targetPlayer == photonView.Owner)
+        //{
+        //    DisplayObject((int)changedProps["weaponKey"]);
+        //    Debug.Log("OnPlayerPropertiesUpdate");
+        //}
     }
 
     private void OnDrawGizmos()
