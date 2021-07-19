@@ -24,11 +24,26 @@ public class PlayerGFXChange : MonoBehaviourPunCallbacks
     [SerializeField] private Material robotYellow;
     [SerializeField] private Material robotGreen;
 
+    private List<Material> mAllMats;
+
+    private Material mCurrentMat;
+
     [Header("Refrences")]
     [SerializeField] private SkinnedMeshRenderer[] robots;
 
+    [SerializeField]
+    private PlayerShooting mPlayerShooting;
+
     private void Awake()
     {
+        mAllMats = new List<Material>()
+        {
+            robotRed,
+            robotBlue,
+            robotYellow,
+            robotGreen
+        };
+
         ChangePlayerGfx(team);
     }
 
@@ -38,25 +53,27 @@ public class PlayerGFXChange : MonoBehaviourPunCallbacks
         switch (_team)
         {
             case Team.Red:
-                ChangeGfx(robotRed);
+                mCurrentMat = robotRed;
                 break;
             case Team.Blue:
-                ChangeGfx(robotBlue);
+                mCurrentMat = robotBlue;
                 break;
             case Team.Yellow:
-                ChangeGfx(robotYellow);
+                mCurrentMat = robotYellow;
                 break;
             case Team.Green:
-                ChangeGfx(robotGreen);
+                mCurrentMat = robotGreen;
                 break;
             default:
                 break;
         }
 
+        ChangeGfx(mCurrentMat);
+
         if (photonView.IsMine)
         {
             Hashtable hash = new Hashtable();
-            hash.Add("TeamIndex", _team);
+            hash.Add("TeamIndex", team);
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         }
     }
@@ -66,15 +83,19 @@ public class PlayerGFXChange : MonoBehaviourPunCallbacks
         if (!photonView.IsMine && targetPlayer == photonView.Owner)
         {
             ChangePlayerGfx((Team)changedProps["TeamIndex"]);
+
+            mPlayerShooting.DisplayObject((int)changedProps["weaponKey"]);
+            Debug.Log("OnPlayerPropertiesUpdate");
         }
     }
 
-
-    private void ChangeGfx(Material _mat)
+    private void ChangeGfx(Material _currentMat)
     {
         foreach (SkinnedMeshRenderer renderer in robots)
         {
-            renderer.material = _mat;
+            renderer.material = _currentMat;
         }
+
+        
     }
 }

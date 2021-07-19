@@ -2373,6 +2373,7 @@ MonoBehaviour:
     type: 3}
   hitSmthObjObject: {fileID: 1442898827110148260, guid: 09ec39d7818d645478fe2b0358532e1e,
     type: 3}
+  hud: {fileID: 0}
 --- !u!1 &575248074075651503
 GameObject:
   m_ObjectHideFlags: 0
@@ -4216,7 +4217,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &349869823676355207
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4337,8 +4338,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0

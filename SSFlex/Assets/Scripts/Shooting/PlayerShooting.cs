@@ -69,7 +69,6 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     private GameObject mSecondaryThridPersonGun;
 
     private List<GameObject> mLoadout;
-    private List<GameObject> mTools;
 
     private Animator animator;
     private PlayerLook playerLook;
@@ -86,11 +85,11 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     int weaponIdx;
     int toolIdx;
 
-    private bool farmMode = false;
+    private bool farmMode = true;
 
     private bool mChooseWeapon;
 
-    private void Start()
+    private void Awake()
     {
         animator = GetComponentInChildren<Animator>();
         playerLook = GetComponent<PlayerLook>();
@@ -99,9 +98,12 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         primaryWeaponIdx = GameManager.Instance.StartWeapon;
 
         mLoadout = new List<GameObject>();
-        mTools = new List<GameObject>();
 
-        ChooseGun();
+        mLoadout.Add(farmTool);
+        weaponIdx = 0;
+
+        if (photonView.IsMine)
+            photonView.RPC("DisplayObject", RpcTarget.OthersBuffered, weaponIdx);
     }
 
     private void OnPreRender()
@@ -130,11 +132,11 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             return;
         }
 
-        //if (!PreparationCounter.Instance.PreparationPhase && !mChooseWeapon)
-        //{
-        //    mChooseWeapon = true;
-        //    ChooseGun();
-        //}
+        if (!PreparationCounter.Instance.PreparationPhase && !mChooseWeapon)
+        {
+            mChooseWeapon = true;
+            ChooseGun();
+        }
 
 
         if (!farmMode)
@@ -310,8 +312,6 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     public void ChooseGun()
     {
         farmMode = false;
-        mTools.Add(farmTool);
-        farmTool.SetActive(false);
         animator.SetBool("Farm", false);
         secondaryGun = Pistol;
         mSecondaryThridPersonGun = mThirdPersonPistol;
@@ -336,15 +336,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
         mLoadout.Add(mPrimaryThridPersonGun);
         mLoadout.Add(mSecondaryThridPersonGun);
-
         
-
-        //mLoadout[0] = mPrimaryThridPersonGun;
-        //mLoadout[1] = mSecondaryThridPersonGun;
-        //mLoadout[2] = farmTool;
-
-        //mLoadout.Add(mPrimaryThridPersonGun);
-        //mLoadout.Add(mSecondaryThridPersonGun);
         SwitchWeapon(primaryGun, secondaryGun);
     }
 
@@ -371,15 +363,15 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
         // Sets new Gun as Currentgun
         currentGun.gameObject.SetActive(false);
+        farmTool.SetActive(false);
 
         currentGun = _switchtogun;
 
         if (currentGun == secondaryGun)
-            weaponIdx = 1;
+            weaponIdx = 2;
         else
-            weaponIdx = 0;
+            weaponIdx = 1;
 
-        toolIdx = 0;
 
         
         //Changes the Ads Multiplier
@@ -409,7 +401,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    private void DisplayObject(int _currentWeapon)
+    public void DisplayObject(int _currentWeapon)
     {
         //if (_toolKey == 0)
         //{
@@ -638,14 +630,10 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         PlayerHud.Instance.ChangeAmmoAmount(currentGun.BulletsInMag, currentGun.CurrentAmmo);
     }
 
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
-    {
-        //if (!photonView.IsMine && targetPlayer == photonView.Owner)
-        //{
-        //    DisplayObject((int)changedProps["weaponKey"]);
-        //    Debug.Log("OnPlayerPropertiesUpdate");
-        //}
-    }
+    //public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    //{
+
+    //}
 
     private void OnDrawGizmos()
     {

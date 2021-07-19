@@ -82867,35 +82867,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 575248072874051476, guid: c31731b9849bd1b4b8a41550b23f4fe3,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -166.00049
-      objectReference: {fileID: 0}
-    - target: {fileID: 575248072874051476, guid: c31731b9849bd1b4b8a41550b23f4fe3,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -11
-      objectReference: {fileID: 0}
-    - target: {fileID: 575248073898738324, guid: c31731b9849bd1b4b8a41550b23f4fe3,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 575248073898738325, guid: c31731b9849bd1b4b8a41550b23f4fe3,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -27
-      objectReference: {fileID: 0}
     - target: {fileID: 575248074072578114, guid: c31731b9849bd1b4b8a41550b23f4fe3,
         type: 3}
       propertyPath: m_Name
       value: HUD
-      objectReference: {fileID: 0}
-    - target: {fileID: 575248074072578114, guid: c31731b9849bd1b4b8a41550b23f4fe3,
-        type: 3}
-      propertyPath: m_TagString
-      value: PlayerHud
       objectReference: {fileID: 0}
     - target: {fileID: 575248074072578118, guid: c31731b9849bd1b4b8a41550b23f4fe3,
         type: 3}
@@ -83001,16 +82976,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 575248074662794480, guid: c31731b9849bd1b4b8a41550b23f4fe3,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2584464575004412546, guid: c31731b9849bd1b4b8a41550b23f4fe3,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c31731b9849bd1b4b8a41550b23f4fe3, type: 3}

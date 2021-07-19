@@ -15,6 +15,9 @@ public class CrossHairTarget : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (cam == null)
+            return;
+
         // Ray straight from Cam
         ray.origin = cam.transform.position;
         ray.direction = cam.transform.forward;

@@ -1179,6 +1179,7 @@ MonoBehaviour:
   robots:
   - {fileID: 7552176119729213148}
   - {fileID: 3919714516974720712}
+  mPlayerShooting: {fileID: 1370586008316802725}
 --- !u!114 &-4470319555703973738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1994,6 +1995,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2057376994054921223, guid: fc80979f393058542a06d78eef397530,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2405612573986075364, guid: fc80979f393058542a06d78eef397530,
         type: 3}

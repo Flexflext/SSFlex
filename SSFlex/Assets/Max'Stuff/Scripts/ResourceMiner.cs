@@ -37,6 +37,9 @@ public class ResourceMiner : MonoBehaviour
 
     private void LookForResource()
     {
+        if (mMainCam == null)
+            return;
+
         RaycastHit hit;
 
         if (Physics.Raycast(mMainCam.transform.position, mMainCam.transform.forward, out hit, 1000, mResourceLayer))
