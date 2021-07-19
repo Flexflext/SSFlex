@@ -2,9 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+using ExitGames.Client.Photon;
 
 public class PlayerHealth : MonoBehaviourPunCallbacks
 {
+    public const byte ON_DEATH = 66;
+
+
     [SerializeField] private float health;
     [SerializeField] private float shield;
     [SerializeField] private float timeUntilShieldRegen;
@@ -14,6 +20,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
     private float currentTime;
 
     private bool dead;
+    public System.Action<string> OnKill;
 
     // Start is called before the first frame update
     void Start()
@@ -49,13 +56,13 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
         }
     }
 
-    public void TakeDamage(float _dmg)
+    public void TakeDamage(float _dmg, int _actornum)
     {
-        photonView.RPC("RPC_TakeDamage", RpcTarget.All, _dmg);   
+        photonView.RPC("RPC_TakeDamage", RpcTarget.All, _dmg, _actornum);
     }
 
     [PunRPC]
-    private void RPC_TakeDamage(float _dmg)
+    private void RPC_TakeDamage(float _dmg, int _actornum)
     {
         if (!photonView.IsMine)
         {
@@ -84,7 +91,12 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
             Debug.Log("I am Dead");
             GameObject deadRobot = PhotonNetwork.Instantiate(System.IO.Path.Combine("PhotonPrefabs", "DeadRobot"), this.transform.position, this.transform.rotation);
             deadRobot.GetComponent<DeadRobot>().ChangeApperance(this.GetComponent<PlayerGFXChange>().CurrentTeam);
-            Debug.Log("Hier");
+
+
+            object[] content = new object[] { photonView.Owner.NickName };
+            RaiseEventOptions eventOptions = new RaiseEventOptions { TargetActors = new int[] { _actornum } };
+            PhotonNetwork.RaiseEvent(ON_DEATH, content, eventOptions, SendOptions.SendReliable);
+
             PhotonNetwork.Destroy(this.gameObject);
             dead = true;
         }
@@ -92,5 +104,6 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
 
         PlayerHud.Instance.ChangeHealthAmount(maxHealth, health);
         PlayerHud.Instance.ChangeShieldAmount(maxShield, shield, true);
-    }
+    } 
 }
+

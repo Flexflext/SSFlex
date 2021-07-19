@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using ExitGames.Client.Photon;
+using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
@@ -186,7 +187,7 @@ public class Gun : MonoBehaviourPunCallbacks
         {
             bulletScript.OnHit += HitAnything;
         }
-        
+
 
         rb.AddForce(_direction * _speed);
     }
@@ -207,7 +208,10 @@ public class Gun : MonoBehaviourPunCallbacks
 
         if (_gameobject.layer == 9)
         {
-            _gameobject.GetComponent<PlayerHealth>().TakeDamage(dmg);
+            PlayerHealth health = _gameobject.GetComponent<PlayerHealth>();
+            health.TakeDamage(dmg, photonView.OwnerActorNr);
+            //health.OnKill += OnKillSmth;
+
             PlayerHud.Instance.DisplayDmgToPlayer();
         }
         else if (_gameobject.layer == 8)
@@ -216,6 +220,16 @@ public class Gun : MonoBehaviourPunCallbacks
             PlayerHud.Instance.DisplayDmgToObj();
         }
     }
+
+    private void OnKillSmth(string _name)
+    {
+        Debug.Log("Killed " + _name);
+
+
+        PlayerHud.Instance.DisplayKillOnPlayer();
+        PlayerHud.Instance.ChangeKillAmount(1);
+    }
+
 
     /// <summary>
     /// Start the Fireing of the Gun if can Fire
@@ -340,7 +354,7 @@ public class Gun : MonoBehaviourPunCallbacks
                 {
                     PlayerHud.Instance.ChangeAmmoAmount(BulletsInMag, CurrentAmmo);
                 }
-                
+
                 //AudioManager.Instance.PlayRandom(weaponName, weaponName + "Reload");
                 isReloading = false;
                 canReload = false;
@@ -454,9 +468,35 @@ public class Gun : MonoBehaviourPunCallbacks
 
     private new void OnEnable()
     {
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+
         if (photonView.IsMine)
         {
             PlayerHud.Instance.ChangeAmmoAmount(BulletsInMag, CurrentAmmo);
+        }
+    }
+
+    private new void OnDisable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+    }
+
+    public void OnEvent(EventData photonEvent)
+    {
+
+        byte num = 66;
+        if (photonEvent.Code == num)
+        {
+            if (!photonView.IsMine)
+            {
+                return;
+            }
+
+            Debug.Log("HIEr !!!");
+
+            object[] data = (object[])photonEvent.CustomData;
+
+            OnKillSmth((string)data[0]);
         }
     }
 }

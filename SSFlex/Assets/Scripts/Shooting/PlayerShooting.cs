@@ -540,7 +540,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
         Debug.Log("Hit Smth with grenade");
 
-        float grenadeDmg = maxGrenadeDmg * _percent;
+        float grenadeDmg = 1-( maxGrenadeDmg * _percent);
 
 
         HitAnything(grenadeDmg, _gameobject);
@@ -551,7 +551,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     {
         if (_gameobject.layer == 9)
         {
-            _gameobject.GetComponent<PlayerHealth>()?.TakeDamage(_dmg);
+            //_gameobject.GetComponent<PlayerHealth>()?.TakeDamage(_dmg);
 
             if (photonView.IsMine)
             {

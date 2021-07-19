@@ -99,7 +99,7 @@ LightmapSettings:
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: f9b0220ae1c29ed4da5da6578f6bd2f2,
     type: 2}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -7037,7 +7037,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 632057445}
-  weapon: 1
+  primaryWeaponIdx: 0
   thirdPersonAnimator: {fileID: 0}
   farmTool: {fileID: 0}
   currentGun: {fileID: 1851738708}
@@ -7060,7 +7060,10 @@ MonoBehaviour:
   AR: {fileID: 2703382973974242582}
   Shotgun: {fileID: 1851738708}
   Pistol: {fileID: 912797234}
-  farmMode: 0
+  mThirdPersonAR: {fileID: 0}
+  mThirdPersonShotgun: {fileID: 0}
+  mThirdPersonSniper: {fileID: 0}
+  mThirdPersonPistol: {fileID: 0}
 --- !u!114 &1015002864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9459,11 +9462,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: HUD
-      objectReference: {fileID: 0}
-    - target: {fileID: 575248074072578114, guid: c31731b9849bd1b4b8a41550b23f4fe3,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 575248074072578118, guid: c31731b9849bd1b4b8a41550b23f4fe3,
         type: 3}

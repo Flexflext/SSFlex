@@ -29,6 +29,7 @@ public class PlayerHud : MonoBehaviour
     [SerializeField] private TMP_Text killAmount;
     [SerializeField] private GameObject hitSmthObjPlayer;
     [SerializeField] private GameObject hitSmthObjObject;
+    [SerializeField] private GameObject killSmthObj;
     [SerializeField] private GameObject hud;
 
 
@@ -149,5 +150,13 @@ public class PlayerHud : MonoBehaviour
     public void DisplayDmgToObj()
     {
         Instantiate(hitSmthObjObject, this.transform);
+    }
+
+    /// <summary>
+    /// Display a kill Indicator on the player hud
+    /// </summary>
+    public void DisplayKillOnPlayer()
+    {
+        Instantiate(killSmthObj, this.transform);
     }
 }
