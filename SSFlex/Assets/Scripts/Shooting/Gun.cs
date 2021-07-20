@@ -223,7 +223,9 @@ public class Gun : MonoBehaviourPunCallbacks
         }
         else if (_gameobject.layer == 8)
         {
-            _gameobject.GetComponent<NormalBuildingInfo>().TakeDamage(dmg);
+            _gameobject.GetComponent<PhotonView>().RPC("TakeDamage", RpcTarget.AllBufferedViaServer, dmg);
+
+            //_gameobject.GetComponent<NormalBuildingInfo>().TakeDamage(dmg);
             PlayerHud.Instance.DisplayDmgToObj();
         }
     }
