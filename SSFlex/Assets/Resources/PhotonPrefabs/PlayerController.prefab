@@ -1197,6 +1197,8 @@ MonoBehaviour:
   shield: 100
   timeUntilShieldRegen: 5
   regenPerSecond: 10
+  impactEffect: {fileID: 0}
+  regenEffect: {fileID: 0}
 --- !u!136 &1370586008316802745
 CapsuleCollider:
   m_ObjectHideFlags: 0

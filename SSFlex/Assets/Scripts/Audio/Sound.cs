@@ -13,6 +13,8 @@ public class Sound
     public float Pitch;
     [Range(0f, 1f)]
     public float SpatialBlend;
+    [Range(0f, 360f)]
+    public float Spread;
 
 
     public bool Loop;

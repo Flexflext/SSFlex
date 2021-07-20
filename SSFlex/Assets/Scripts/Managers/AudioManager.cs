@@ -56,6 +56,7 @@ public class AudioManager : MonoBehaviour
             s.Source.pitch = s.Pitch;
             s.Source.loop = s.Loop;
             s.Source.spatialBlend = s.SpatialBlend;
+            s.Source.spread = s.Spread;
         }
     }
 

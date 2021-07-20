@@ -129,6 +129,7 @@ public class PlayerController : MonoBehaviour
 
         // Audio
         AudioMixing();
+        
     }
 
     void FixedUpdate()
@@ -363,6 +364,12 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
+    //[PunRPC]
+    //public void SyncAudio(string _audioName)
+    //{
+    //    AudioManager.Instance.Play(_audioName);
+    //}
     #endregion 
 
     IEnumerator JumpAnimatorTimer()

@@ -83,6 +83,8 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     private PlayerLook playerLook;
     private PlayerController controller;
 
+    private Vector3 audioPosition;
+
     private bool imAiming;
     public bool ImAiming => imAiming;
 
@@ -155,6 +157,11 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
                 animator.SetTrigger("isMeeleing");
                 AudioManager.Instance.Play("Melee");
                 StartCoroutine(MeleeAnimation());
+
+                if (photonView.IsMine)
+                {
+                    photonView.RPC("SyncAudio", RpcTarget.All, "Melee");
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.Q) && !isGrenadeThrowing && !isMeeleing && canThrowGrenade && !isSwitching)
@@ -230,18 +237,38 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
                     if (currentGun == AR)
                     {
                         AudioManager.Instance.Play("ShootAR");
+
+                        if (photonView.IsMine)
+                        {
+                            photonView.RPC("SyncAudio", RpcTarget.All, "ShootAR");
+                        }
                     }
                     if (currentGun == Shotgun)
                     {
                         AudioManager.Instance.Play("ShootShotgun");
+
+                        if (photonView.IsMine)
+                        {
+                            photonView.RPC("SyncAudio", RpcTarget.All, "ShootShotgun");
+                        }
                     }
                     if (currentGun == Sniper)
                     {
                         AudioManager.Instance.Play("ShootSniper");
+
+                        if (photonView.IsMine)
+                        {
+                            photonView.RPC("SyncAudio", RpcTarget.All, "ShootSniper");
+                        }
                     }
                     if (currentGun == Pistol)
                     {
                         AudioManager.Instance.Play("ShootPistol");
+
+                        if (photonView.IsMine)
+                        {
+                            photonView.RPC("SyncAudio", RpcTarget.All, "ShootPistol");
+                        }
                     }
                 }
                 else
@@ -529,15 +556,36 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     private IEnumerator GrenadeAudioTimer()
     {
         AudioManager.Instance.Play("GrenadeStart");
-        yield return new WaitForSeconds(6);
+
+        if (photonView.IsMine)
+        {
+            photonView.RPC("SyncAudio", RpcTarget.All, "GrenadeStart");
+        }
+
+        yield return new WaitForSeconds(5);
         AudioManager.Instance.Play("GrenadeExplosion");
+
+        if (photonView.IsMine)
+        {
+            photonView.RPC("SyncAudio", RpcTarget.All, "TPGrenadeExplosion");
+        }
     }
 
     private IEnumerator ReloadAudioTimer()
     {
         AudioManager.Instance.Play("ReloadStart");
+
+        if (photonView.IsMine)
+        {
+            photonView.RPC("SyncAudio", RpcTarget.All, "ReloadStart");
+        }
         yield return new WaitForSeconds(1f);
         AudioManager.Instance.Play("ReloadEnd");
+
+        if (photonView.IsMine)
+        {
+            photonView.RPC("SyncAudio", RpcTarget.All, "ReloadEnd");
+        }
     }
 
     private IEnumerator ReloadAnimatorTimer()
@@ -588,6 +636,13 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
         }
     }
+
+    [PunRPC]
+    public void SyncAudio(string _audioName)
+    {
+        AudioManager.Instance.Play(_audioName);
+    }
+
 
     private IEnumerator C_GrenadeRegenTimer(float _time)
     {
