@@ -205,12 +205,14 @@ public class Gun : MonoBehaviourPunCallbacks
             return;
         }
 
+        Debug.Log(_gameobject.layer);
 
-        if (_gameobject.layer == 9)
+
+        if (_gameobject.CompareTag("DmgPlayer"))
         {
-            PlayerHealth health = _gameobject.GetComponent<PlayerHealth>();
+            Debug.Log("Hit Player");
+            PlayerHealth health = _gameobject.GetComponentInParent<PlayerHealth>();
             health.TakeDamage(dmg, photonView.OwnerActorNr);
-            //health.OnKill += OnKillSmth;
 
             PlayerHud.Instance.DisplayDmgToPlayer();
         }

@@ -43,6 +43,8 @@ public class Bullet : MonoBehaviourPunCallbacks
             OnHit.Invoke(collision.gameObject);
         }
 
-        Destroy(this.gameObject);
+
+        GetComponent<Rigidbody>().isKinematic = true;
+        //Destroy(this.gameObject);
     }
 }
