@@ -149,6 +149,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         if (!PreparationCounter.Instance.PreparationPhase && !mChooseWeapon)
         {
             mChooseWeapon = true;
+            farmMode = false;
             SwitchWeapon(primaryGun, secondaryGun);
         }
 
@@ -324,7 +325,6 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     public void ChooseGun()
     {
-        farmMode = false;
         animator.SetBool("Farm", false);
         secondaryGun = Pistol;
         mSecondaryThridPersonGun = mThirdPersonPistol;

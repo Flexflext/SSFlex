@@ -37,9 +37,21 @@ public class PlayerHud : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject killFeedPos;
 
 
+    [SerializeField]
+    private Slider mMiningProgress;
+    [SerializeField]
+    private TextMeshProUGUI mCurrentResources;
+
     private void Awake()
     {
         Instance = this;
+    }
+
+    public void SetResourceElements(float _maxMineDuration, float _miningProgress, float _currentResources)
+    {
+        mCurrentResources.text = "" + _currentResources;
+        mMiningProgress.maxValue = _maxMineDuration;
+        mMiningProgress.value = _miningProgress;
     }
 
     /// <summary>
