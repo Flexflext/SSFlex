@@ -41,10 +41,10 @@ public class Grenade : MonoBehaviourPunCallbacks
 
         foreach (Collider col in collider)
         {
-            float distance = (transform.position - col.transform.position).sqrMagnitude;
-            float percent = distance / explosionRadius;
+            float distance = (col.transform.position - transform.position).magnitude;
+            float percent = 1-(distance / explosionRadius);
 
-            if (HitAnything != null)
+            if (HitAnything != null && distance <= explosionRadius)
             {
                 HitAnything.Invoke(col.gameObject, percent);
             }

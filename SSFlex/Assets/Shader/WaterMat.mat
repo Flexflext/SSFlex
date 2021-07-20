@@ -33,16 +33,16 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_181DA036: 1
+    - Vector1_181DA036: 0.77
     - Vector1_3BF41946: 0.14
     - Vector1_3F20D79E: 5.36
     - Vector1_5B75F5DA: 7.29
     - Vector1_71744E99: 0.63
     - Vector1_8137273F: 1.5
     - Vector1_87145E95: 0.38
-    - Vector1_91B1301E: 2.96
+    - Vector1_91B1301E: 3.52
     - Vector1_9C1D7B90: 0.11
-    - Vector1_9DCA46D6: 0.01
+    - Vector1_9DCA46D6: -0.09
     - Vector1_9E77DC10: -0.33
     - Vector1_AA20C873: 0.18
     - Vector1_CC6B3139: 42.2

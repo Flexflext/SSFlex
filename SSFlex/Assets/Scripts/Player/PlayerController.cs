@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject thirdPersonSniper;
     [SerializeField] private GameObject thirdPersonPistol;
     [SerializeField] private GameObject thirdPersonMesh;
+    [SerializeField] private GameObject thirdPersonPlayer;
 
     [SerializeField] private Animator thirdPersonAnimator;
 
@@ -91,6 +92,7 @@ public class PlayerController : MonoBehaviour
             Destroy(thirdPersonAR);
             Destroy(thirdPersonSniper);
             Destroy(thirdPersonPistol);
+            thirdPersonPlayer.SetActive(false);
         }
 
         // To seperate the camera control and the rigidbody of multiple players.
@@ -98,6 +100,7 @@ public class PlayerController : MonoBehaviour
         // + FPS Body and shotgun on other players are not visible for own player.
         if (!photonView.IsMine)
         {
+            GetComponent<Collider>().enabled = false;
             Destroy(cameraHolder.gameObject);
             Destroy(firstPersonMesh.gameObject);
             Destroy(firstPersonShotgun);

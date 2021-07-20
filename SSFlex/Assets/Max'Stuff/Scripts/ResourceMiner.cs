@@ -40,11 +40,13 @@ public class ResourceMiner : MonoBehaviour
         if (mMainCam == null)
             return;
 
+        
+
         RaycastHit hit;
 
         if (Physics.Raycast(mMainCam.transform.position, mMainCam.transform.forward, out hit, 1000, mResourceLayer))
         {
-
+            Debug.Log("Looking for Resources");
             if (mHitObj == null)
                 mHitObj = hit.collider.gameObject.GetComponent<MineableObject>();
 

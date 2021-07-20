@@ -26,9 +26,13 @@ public class PlayerLook : MonoBehaviourPunCallbacks
     private float xRotation = 0f;
     private float yRotation = 0f;
 
+    private bool canLook = true;
+
 
     private void Start()
     {
+        EscapeMenu.Instance.OnToggle += ChangeCanLook;
+
         if (!photonView.IsMine)
         {
             return;
@@ -56,7 +60,7 @@ public class PlayerLook : MonoBehaviourPunCallbacks
         }
 
         //Check that timeScale is above 0
-        if (Time.timeScale == 0)
+        if (!canLook)
         {
             return;
         }
@@ -102,5 +106,12 @@ public class PlayerLook : MonoBehaviourPunCallbacks
     {
         //sensX = GameManager.Instance.MouseSens;
         //sensY = GameManager.Instance.MouseSens;
+    }
+
+
+    private void ChangeCanLook()
+    {
+        Debug.Log("Hier");
+        canLook = !canLook;
     }
 }

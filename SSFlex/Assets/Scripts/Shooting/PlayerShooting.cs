@@ -79,9 +79,13 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     private List<GameObject> mLoadout;
     private ELoadout mCurrentLoadoutIdx;
 
+    PlayerShooting mThisObj;
+
     private Animator animator;
     private PlayerLook playerLook;
     private PlayerController controller;
+    [SerializeField]
+    private PlayerGFXChange mTeamGfx;
 
     private Vector3 audioPosition;
 
@@ -95,6 +99,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     int weaponIdx;
     int toolIdx;
+    Team team;
 
     private bool farmMode = true;
 
@@ -109,10 +114,14 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         primaryWeaponIdx = GameManager.Instance.StartWeapon;
 
         mLoadout = new List<GameObject>();
-        ChooseGun();
 
+        ChooseGun();
     }
 
+    private void Start()
+    {
+        
+    }
     private void OnPreRender()
     {
         if (photonView.IsMine)
@@ -142,6 +151,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         if (!PreparationCounter.Instance.PreparationPhase && !mChooseWeapon)
         {
             mChooseWeapon = true;
+            farmMode = false;
             SwitchWeapon(primaryGun, secondaryGun);
         }
 
@@ -342,7 +352,6 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     public void ChooseGun()
     {
-        farmMode = false;
         animator.SetBool("Farm", false);
         secondaryGun = Pistol;
         mSecondaryThridPersonGun = mThirdPersonPistol;
@@ -435,6 +444,14 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             PlayerHud.Instance.ChangeAmmoAmount(currentGun.BulletsInMag, currentGun.CurrentAmmo);
         }
 
+
+        if (photonView.IsMine)
+        {
+            Hashtable hash = new Hashtable();
+            hash.Add("weaponKey", (int)mCurrentLoadoutIdx);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        }
+
         yield return new WaitForSeconds(0.25f);
         isSwitching = false;
     }
@@ -456,12 +473,6 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             }
         }
 
-        if (photonView.IsMine)
-        {
-            Hashtable hash = new Hashtable();
-            hash.Add("weaponKey", (int)mCurrentLoadoutIdx);
-            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-        }
     }
 
     /// <summary>
@@ -606,9 +617,9 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             return;
         }
 
-        Debug.Log("Hit Smth with grenade");
 
-        float grenadeDmg = 1-( maxGrenadeDmg * _percent);
+        float grenadeDmg =( maxGrenadeDmg * ( _percent));
+        
 
 
         HitAnything(grenadeDmg, _gameobject);
@@ -617,23 +628,33 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     private void HitAnything(float _dmg, GameObject _gameobject)
     {
-        if (_gameobject.layer == 9)
+        Debug.Log("Hit Smth");
+        if (!photonView.IsMine)
         {
-            //_gameobject.GetComponent<PlayerHealth>()?.TakeDamage(_dmg);
+            return;
+        }
 
-            if (photonView.IsMine)
-            {
-                PlayerHud.Instance.DisplayDmgToPlayer();
-            }
+        Debug.Log(_gameobject.layer);
+
+        //if (_gameobject.CompareTag("Player"))
+        //{
+        //    Debug.Log("Fuck U");
+        //}
+
+
+        if (_gameobject.CompareTag("Player"))
+        {
+            Debug.Log("Hit Player");
+            PlayerHealth health = _gameobject.GetComponentInParent<PlayerHealth>();
+            health.TakeDamage(_dmg, photonView.OwnerActorNr);
+            Debug.Log(_dmg);
+
+            PlayerHud.Instance.DisplayDmgToPlayer();
         }
         else if (_gameobject.layer == 8)
         {
-            _gameobject.GetComponent<NormalBuildingInfo>()?.TakeDamage(_dmg);
-            if (photonView.IsMine)
-            {
-                PlayerHud.Instance.DisplayDmgToObj();
-            }
-
+            _gameobject.GetComponent<NormalBuildingInfo>().TakeDamage(_dmg);
+            PlayerHud.Instance.DisplayDmgToObj();
         }
     }
 

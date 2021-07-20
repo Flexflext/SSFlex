@@ -86,9 +86,6 @@ public class PlayerGFXChange : MonoBehaviourPunCallbacks
                 mPlayerShooting.DisplayObject((int)changedProps["weaponKey"]);
             else
                 ChangePlayerGfx((Team)changedProps["TeamIndex"]);
-
-            //mPlayerShooting.DisplayObject((int)changedProps["weaponKey"]);
-            //ChangePlayerGfx((Team)changedProps["TeamIndex"]);
         }
     }
 
