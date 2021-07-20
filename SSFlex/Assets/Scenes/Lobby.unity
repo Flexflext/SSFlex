@@ -1361,6 +1361,7 @@ MonoBehaviour:
   mShotgunPlaceholder: {fileID: 1133486678}
   mSniperPlaceholder: {fileID: 1035771517}
   mOwner: {fileID: 0}
+  mCurrentTeam: 3
 --- !u!114 &116728332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7555,6 +7556,7 @@ MonoBehaviour:
   mShotgunPlaceholder: {fileID: 181822247}
   mSniperPlaceholder: {fileID: 1456447966}
   mOwner: {fileID: 0}
+  mCurrentTeam: 2
 --- !u!114 &650482945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15350,6 +15352,7 @@ MonoBehaviour:
   mShotgunPlaceholder: {fileID: 1364696693}
   mSniperPlaceholder: {fileID: 1220139469}
   mOwner: {fileID: 0}
+  mCurrentTeam: 0
 --- !u!114 &1323967003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22292,6 +22295,7 @@ MonoBehaviour:
   mShotgunPlaceholder: {fileID: 935257356}
   mSniperPlaceholder: {fileID: 2086788157}
   mOwner: {fileID: 0}
+  mCurrentTeam: 1
 --- !u!114 &2033189134
 MonoBehaviour:
   m_ObjectHideFlags: 0

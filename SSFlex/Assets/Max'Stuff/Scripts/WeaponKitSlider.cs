@@ -45,11 +45,12 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
     [SerializeField]
     private GameObject mOwner;
 
+    [SerializeField]
+    private Team mCurrentTeam;
 
     private void Start()
     {
         mPhotonView = GetComponent<PhotonView>();
-
 
         mAllPlaceholder = new List<GameObject>()
         {
@@ -97,23 +98,22 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
         }
 
 
-        //if (mPhotonView.IsMine)
-        //{
-        //    Hashtable hash = new Hashtable();
-        //    hash.Add("kitKey", (int)mCurrentKitPos);
-        //    PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-        //}    
+        if (mPhotonView.IsMine)
+        {
+            Hashtable hash = new Hashtable();
+            hash.Add("startWeaponKey", (int)mCurrentKitPos);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        }
     }
 
 
-    //public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
-    //{
-    //    if (!mPhotonView.IsMine && targetPlayer == mPhotonView.Owner && mOwner != null)
-    //    {
-    //        DisplayCurrentKit((int)changedProps["weaponKey"]);
-    //        Debug.Log("OnPlayerPropertiesUpdate");
-    //    }
-    //}
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        if (!mPhotonView.IsMine && targetPlayer == mPhotonView.Owner && mOwner != null)
+        {
+            DisplayCurrentKit((int)changedProps["startWeaponKey"]);
+        }
+    }
 
     public void OnClickRight()
     {
@@ -126,15 +126,13 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
         if ((int)mCurrentKitPos >= (int)EWeaponsAndUtensils.Sniper + 1)
             mCurrentKitPos = 0;
 
-        //DisplayCurrentKit((int)mCurrentKitPos);
 
         mPhotonView.RPC("DisplayCurrentKit", RpcTarget.AllBufferedViaServer, mCurrentKitPos);
 
+
+        //GameManager.Instance.GetComponent<PhotonView>().RPC("SetStartWeapon", RpcTarget.AllBufferedViaServer, mCurrentKitPos, mCurrentTeam);
+
         GameManager.Instance.SetStartWeapon(mCurrentKitPos);
-
-        GameManager.Instance.GetComponent<PhotonView>().RPC("SetStartWeapon", RpcTarget.OthersBuffered, mCurrentKitPos);
-
-        //GameManager.Instance.SetStartWeapon(mCurrentKitPos);
     }
 
     public void OnClickLeft()
@@ -150,15 +148,13 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
             mCurrentKitPos = EWeaponsAndUtensils.Sniper;
 
 
-        //DisplayCurrentKit((int)mCurrentKitPos);
 
         mPhotonView.RPC("DisplayCurrentKit", RpcTarget.AllBufferedViaServer, mCurrentKitPos);
 
+
+        //GameManager.Instance.GetComponent<PhotonView>().RPC("SetStartWeapon", RpcTarget.AllBufferedViaServer, mCurrentKitPos, mCurrentTeam);
+
         GameManager.Instance.SetStartWeapon(mCurrentKitPos);
-
-        GameManager.Instance.GetComponent<PhotonView>().RPC("SetStartWeapon", RpcTarget.OthersBuffered, mCurrentKitPos);
-
-        //GameManager.Instance.SetStartWeapon(mCurrentKitPos);
     }
 
     public void OnSelect()

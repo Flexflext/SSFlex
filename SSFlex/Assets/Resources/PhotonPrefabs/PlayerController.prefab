@@ -1145,6 +1145,7 @@ MonoBehaviour:
   mThirdPersonSniper: {fileID: 7246251687090254558}
   mThirdPersonPistol: {fileID: 8779164528215812202}
   mThirdPersonKnife: {fileID: 7131896437958493781}
+  mTeamGfx: {fileID: 5609322861684964203}
 --- !u!114 &1370586008316802746
 MonoBehaviour:
   m_ObjectHideFlags: 0

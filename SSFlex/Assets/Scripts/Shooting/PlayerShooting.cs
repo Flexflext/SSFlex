@@ -79,9 +79,13 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     private List<GameObject> mLoadout;
     private ELoadout mCurrentLoadoutIdx;
 
+    PlayerShooting mThisObj;
+
     private Animator animator;
     private PlayerLook playerLook;
     private PlayerController controller;
+    [SerializeField]
+    private PlayerGFXChange mTeamGfx;
 
     private bool imAiming;
     public bool ImAiming => imAiming;
@@ -93,6 +97,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     int weaponIdx;
     int toolIdx;
+    Team team;
 
     private bool farmMode = true;
 
@@ -107,10 +112,14 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         primaryWeaponIdx = GameManager.Instance.StartWeapon;
 
         mLoadout = new List<GameObject>();
-        ChooseGun();
 
+        ChooseGun();
     }
 
+    private void Start()
+    {
+        
+    }
     private void OnPreRender()
     {
         if (photonView.IsMine)
@@ -408,6 +417,14 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             PlayerHud.Instance.ChangeAmmoAmount(currentGun.BulletsInMag, currentGun.CurrentAmmo);
         }
 
+
+        if (photonView.IsMine)
+        {
+            Hashtable hash = new Hashtable();
+            hash.Add("weaponKey", (int)mCurrentLoadoutIdx);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        }
+
         yield return new WaitForSeconds(0.25f);
         isSwitching = false;
     }
@@ -429,12 +446,6 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             }
         }
 
-        if (photonView.IsMine)
-        {
-            Hashtable hash = new Hashtable();
-            hash.Add("weaponKey", (int)mCurrentLoadoutIdx);
-            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-        }
     }
 
     /// <summary>

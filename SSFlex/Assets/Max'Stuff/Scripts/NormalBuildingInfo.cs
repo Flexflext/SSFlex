@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class NormalBuildingInfo : MonoBehaviour
+public class NormalBuildingInfo : MonoBehaviourPunCallbacks
 {
     public enum EClipSideSlots
     {
@@ -125,6 +126,15 @@ public class NormalBuildingInfo : MonoBehaviour
         mDamagedParticle.Play();
 
         mMeshRenderer.material.color = mDamagedColour;
+
+        if (mHealth <= 0)
+        {
+            if (photonView.IsMine)
+            {
+                PhotonNetwork.Destroy(this.gameObject);
+                PhotonNetwork.RemoveRPCs(photonView);
+            }
+        }
     }
 
     private void GetNeighboursSide()
