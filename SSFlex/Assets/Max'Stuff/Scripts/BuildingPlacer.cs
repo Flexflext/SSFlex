@@ -524,7 +524,7 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
 
     private void SetClippedBuildingPos(Vector3 _posToAdj)
     {
-        if (_posToAdj != Vector3.zero)
+        if (_posToAdj != Vector3.zero || _posToAdj != Vector3.negativeInfinity || _posToAdj != Vector3.positiveInfinity)
             mCurrentPlaceholder.transform.position = _posToAdj;
         else
             SetBuildingNormal(mBuildPoint.transform.position);

@@ -10,6 +10,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
 {
     public static RoomManager Instance;
 
+    public Team MyTeam => myTeam;
+
     private Team myTeam;
 
     Scene mCurrentScene;

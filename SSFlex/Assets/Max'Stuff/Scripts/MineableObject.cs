@@ -96,7 +96,13 @@ public class MineableObject : MonoBehaviourPunCallbacks
             mCollider.enabled = false;
 
         if (mMinedAnimClipLenght <= 0)
-            Destroy(gameObject);
+        {
+            if (photonView.IsMine)
+            {
+                PhotonNetwork.Destroy(this.gameObject);
+                PhotonNetwork.RemoveRPCs(photonView);
+            }
+        }
         else
             mMinedAnimClipLenght -= Time.deltaTime;
     }

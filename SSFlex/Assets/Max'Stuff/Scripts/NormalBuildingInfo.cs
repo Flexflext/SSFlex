@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
 
-public class NormalBuildingInfo : MonoBehaviour
+public class NormalBuildingInfo : MonoBehaviourPunCallbacks
 {
     public enum EClipSideSlots
     {
@@ -115,6 +118,7 @@ public class NormalBuildingInfo : MonoBehaviour
         mOccupiedFaceSlots.Remove(_slotToRemove);
     }
 
+    [PunRPC]
     public void TakeDamage(float _damage)
     {
         mHealth -= _damage;
@@ -124,7 +128,42 @@ public class NormalBuildingInfo : MonoBehaviour
         mDamagedColour = Color.HSVToRGB(0, mColourStartValue + mRFloat, 1);
         mDamagedParticle.Play();
 
-        mMeshRenderer.material.color = mDamagedColour;
+        //mMeshRenderer.material.color = mDamagedColour;
+
+        if (photonView.IsMine)
+        {
+            Hashtable hash = new Hashtable();
+            hash.Add("colourR", mDamagedColour.r);
+            hash.Add("colourG", mDamagedColour.g);
+            hash.Add("colourB", mDamagedColour.b);
+            hash.Add("colourA", mDamagedColour.a);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        }
+
+        photonView.RPC("MateChange", RpcTarget.AllBufferedViaServer, mDamagedColour.r, mDamagedColour.g, mDamagedColour.b, mDamagedColour.a);
+
+        if (mHealth <= 0)
+        {
+            if (photonView.IsMine)
+            {
+                PhotonNetwork.Destroy(this.gameObject);
+                PhotonNetwork.RemoveRPCs(photonView);
+            }
+        }
+    }
+
+    [PunRPC]
+    private void MateChange(float _r, float _g, float _b,float _a)
+    {
+        mMeshRenderer.material.color = new Color(_r,_g,_b,_a);
+    }
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        if (!photonView.IsMine && targetPlayer == photonView.Owner)
+        {
+            MateChange((float)changedProps["colourR"], (float)changedProps["colourG"], (float)changedProps["colourB"], (float)changedProps["colourA"]);
+        }
     }
 
     private void GetNeighboursSide()
