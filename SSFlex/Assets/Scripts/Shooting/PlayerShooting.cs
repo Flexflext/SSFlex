@@ -569,9 +569,9 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             return;
         }
 
-        Debug.Log("Hit Smth with grenade");
 
-        float grenadeDmg = 1-( maxGrenadeDmg * _percent);
+        float grenadeDmg =( maxGrenadeDmg * ( _percent));
+        
 
 
         HitAnything(grenadeDmg, _gameobject);
@@ -580,23 +580,33 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     private void HitAnything(float _dmg, GameObject _gameobject)
     {
-        if (_gameobject.layer == 9)
+        Debug.Log("Hit Smth");
+        if (!photonView.IsMine)
         {
-            //_gameobject.GetComponent<PlayerHealth>()?.TakeDamage(_dmg);
+            return;
+        }
 
-            if (photonView.IsMine)
-            {
-                PlayerHud.Instance.DisplayDmgToPlayer();
-            }
+        Debug.Log(_gameobject.layer);
+
+        //if (_gameobject.CompareTag("Player"))
+        //{
+        //    Debug.Log("Fuck U");
+        //}
+
+
+        if (_gameobject.CompareTag("Player"))
+        {
+            Debug.Log("Hit Player");
+            PlayerHealth health = _gameobject.GetComponentInParent<PlayerHealth>();
+            health.TakeDamage(_dmg, photonView.OwnerActorNr);
+            Debug.Log(_dmg);
+
+            PlayerHud.Instance.DisplayDmgToPlayer();
         }
         else if (_gameobject.layer == 8)
         {
-            _gameobject.GetComponent<NormalBuildingInfo>()?.TakeDamage(_dmg);
-            if (photonView.IsMine)
-            {
-                PlayerHud.Instance.DisplayDmgToObj();
-            }
-
+            _gameobject.GetComponent<NormalBuildingInfo>().TakeDamage(_dmg);
+            PlayerHud.Instance.DisplayDmgToObj();
         }
     }
 
