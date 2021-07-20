@@ -1128,7 +1128,7 @@ MonoBehaviour:
   crossHairTarget: {fileID: 1370586006440095953}
   regenTime: 5
   grenadeSpeed: 50
-  maxGrenadeDmg: 250
+  maxGrenadeDmg: 200
   grenadePrefab: {fileID: 2788992215005824281, guid: 8e1b3f557862f5546b645b43342f3bd0,
     type: 3}
   range: 0.5

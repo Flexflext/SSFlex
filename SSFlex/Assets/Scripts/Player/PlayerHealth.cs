@@ -119,7 +119,6 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
         {
             Debug.Log("I am Dead");
             GameObject deadRobot = PhotonNetwork.Instantiate(System.IO.Path.Combine("PhotonPrefabs", "DeadRobot"), this.transform.position, this.transform.rotation);
-            deadRobot.GetComponent<DeadRobot>().ChangeApperance(this.GetComponent<PlayerGFXChange>().CurrentTeam);
 
             string killerName = "";
 
