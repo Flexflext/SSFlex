@@ -111,7 +111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mResourceValue: 10
   mMaxMineDuration: 15
-  mCollider: {fileID: 0}
+  mCollider: {fileID: 5887102178466584111}
   mWasMindedClip: {fileID: 7400000, guid: 8e093afab6caba64fb68826024f8ef72, type: 2}
   mBeingMined: {fileID: 0}
 --- !u!114 &-3630618786181441872
@@ -132,7 +132,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: -8205942904759812334}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
