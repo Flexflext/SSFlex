@@ -9,6 +9,8 @@ public class Bullet : MonoBehaviourPunCallbacks
     [SerializeField] private float timeTillDestroy = 4f;
     [SerializeField] private GameObject impactEffect;
 
+    private bool canDmgAgain = true;
+
     private void Start()
     {
         StartCoroutine(C_TimeTillDestoy(timeTillDestroy));
@@ -33,6 +35,7 @@ public class Bullet : MonoBehaviourPunCallbacks
 
     private void OnCollisionEnter(Collision collision)
     {
+        
         StopAllCoroutines();
         Instantiate(impactEffect, transform.position, Quaternion.identity);
 
@@ -40,11 +43,11 @@ public class Bullet : MonoBehaviourPunCallbacks
         // Check if is not null
         if (OnHit != null)
         {
+            //canDmgAgain = false;
             OnHit.Invoke(collision.gameObject);
         }
 
 
-        GetComponent<Rigidbody>().isKinematic = true;
-        //Destroy(this.gameObject);
+        Destroy(this.gameObject);
     }
 }

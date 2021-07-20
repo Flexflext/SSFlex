@@ -207,8 +207,13 @@ public class Gun : MonoBehaviourPunCallbacks
 
         Debug.Log(_gameobject.layer);
 
+        //if (_gameobject.CompareTag("Player"))
+        //{
+        //    Debug.Log("Fuck U");
+        //}
 
-        if (_gameobject.CompareTag("DmgPlayer"))
+
+        if (_gameobject.CompareTag("Player"))
         {
             Debug.Log("Hit Player");
             PlayerHealth health = _gameobject.GetComponentInParent<PlayerHealth>();
