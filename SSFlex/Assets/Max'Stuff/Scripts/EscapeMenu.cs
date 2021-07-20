@@ -5,6 +5,9 @@ using Photon.Pun;
 
 public class EscapeMenu : MonoBehaviour
 {
+    public static EscapeMenu Instance;
+
+
     [SerializeField]
     private GameObject mEscapeMenuContent;
 
@@ -13,8 +16,12 @@ public class EscapeMenu : MonoBehaviour
     [SerializeField]
     private GameObject mOptionsMenu;
 
+    public System.Action OnToggle;
+
     private void Awake()
     {
+        Instance = this;
+
         ToggleEscapeMenu();
     }
 
@@ -26,24 +33,41 @@ public class EscapeMenu : MonoBehaviour
 
     private void ToggleEscapeMenu()
     {
+        if (OnToggle != null)
+        {
+            OnToggle.Invoke();
+        }
+
         if (mEscapeMenuContent.activeSelf)
         {
             mPlayerHud.SetActive(true);
             mEscapeMenuContent.SetActive(false);
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
         else
         {
             mPlayerHud.SetActive(false);
             mEscapeMenuContent.SetActive(true);
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 
     public void ToggleOptionsMenu()
-    {
+    {  
+
         if (mOptionsMenu.activeSelf)
-            mOptionsMenu.SetActive(false);
+        {
+            mOptionsMenu.SetActive(false);           
+        }
         else
-            mOptionsMenu.SetActive(true);
+        {
+            mOptionsMenu.SetActive(true);  
+        }
+            
     }
 
     public void ResumeGame()
