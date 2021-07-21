@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: OriginTech_TMPro Title
   m_EditorClassIdentifier: 
-  hashCode: 598645573
+  hashCode: -1576417595
   material: {fileID: 3151659410835423036}
-  materialHashCode: -1594015419
+  materialHashCode: -571999035
   m_Version: 1.1.0
   m_SourceFontFileGUID: 0847e009c8654114bacd6633aafc6a23
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 0847e009c8654114bacd6633aafc6a23,
