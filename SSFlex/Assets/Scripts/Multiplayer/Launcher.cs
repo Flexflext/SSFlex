@@ -138,7 +138,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             // Prevents former rooms to still exist and only continues if the room which the master client has left
             // is actually removed.
-            if (_roomList[i].RemovedFromList)
+            if (_roomList[i].RemovedFromList || !_roomList[i].IsOpen)
             {
                 continue;
             }
@@ -160,6 +160,8 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void StartLobby()
     {
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+
         PhotonNetwork.LoadLevel(1);
 
     }

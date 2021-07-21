@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Realtime;
+using Photon.Pun;
 using TMPro;
 
-public class RoomListItem : MonoBehaviour
+public class RoomListItem : MonoBehaviourPunCallbacks
 {
     // Responsible for displaying room's name and by clicking it -> joining
 
@@ -21,6 +22,7 @@ public class RoomListItem : MonoBehaviour
 
     public void  OnClick()
     {
+
         Launcher.Instance.JoinRoom(info);
     }
 }
