@@ -47,11 +47,15 @@ public class PlayerHud : MonoBehaviourPunCallbacks
         Instance = this;
     }
 
-    public void SetResourceElements(float _maxMineDuration, float _miningProgress, float _currentResources)
+    public void MiningProgress(float _maxMineDuration, float _miningProgress)
     {
-        mCurrentResources.text = "" + _currentResources;
         mMiningProgress.maxValue = _maxMineDuration;
         mMiningProgress.value = _miningProgress;
+    }
+
+    public void SetCurrentResourceAmount(float _currentResources)
+    {
+        mCurrentResources.text = "" + _currentResources;
     }
 
     /// <summary>

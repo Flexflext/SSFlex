@@ -33,6 +33,9 @@ public class ResourceMiner : MonoBehaviour
             LookForResource();
         else
             mIsMining = false;
+
+
+        PlayerHud.Instance.SetCurrentResourceAmount(mCurrentResourceAmount);
     }
 
     private void LookForResource()

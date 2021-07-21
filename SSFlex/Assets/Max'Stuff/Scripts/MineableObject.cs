@@ -59,6 +59,8 @@ public class MineableObject : MonoBehaviourPunCallbacks
         {
             mCurrentMineDuration -= mMineSpeed * Time.deltaTime;
 
+            PlayerHud.Instance.MiningProgress(mMaxMineDuration, mCurrentMineDuration);
+
             //if (!mBeingMined.isPlaying)
             //    mBeingMined.Play();
         }
@@ -95,13 +97,15 @@ public class MineableObject : MonoBehaviourPunCallbacks
         if (mCollider.enabled)
             mCollider.enabled = false;
 
+        if (photonView.IsMine)
+        {
+            PhotonNetwork.Destroy(this.gameObject);
+            PhotonNetwork.RemoveRPCs(photonView);
+        }
+
         if (mMinedAnimClipLenght <= 0)
         {
-            if (photonView.IsMine)
-            {
-                PhotonNetwork.Destroy(this.gameObject);
-                PhotonNetwork.RemoveRPCs(photonView);
-            }
+            
         }
         else
             mMinedAnimClipLenght -= Time.deltaTime;
