@@ -64,7 +64,8 @@ public class Launcher : MonoBehaviourPunCallbacks
             return;
         }
 
-        PhotonNetwork.CreateRoom(roomName.text);
+        RoomOptions roomOpt = new RoomOptions { MaxPlayers = 4 };
+        PhotonNetwork.CreateRoom(roomName.text, roomOpt);
 
         // Prevents client to click on other buttons while room is being created.
         MenuManager.Instance.AdminLoadingMenu();
@@ -105,6 +106,11 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         errorText.text = "Room Creation Failed: " + _message;
         MenuManager.Instance.AdminErrorMenu();
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        Debug.Log("HAHA U LOOSE " + message);
     }
 
 
