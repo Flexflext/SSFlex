@@ -8804,7 +8804,7 @@ RectTransform:
   - {fileID: 334618854}
   - {fileID: 1209783050}
   m_Father: {fileID: 2075237636}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -11175,7 +11175,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: NAME HIER
+  m_text: "Call of RPC: S\xE4nkS Fotonics 2"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f361201e949961c48828cc5efb03ebbc, type: 2}
   m_sharedMaterial: {fileID: 3151659410835423036, guid: f361201e949961c48828cc5efb03ebbc,
@@ -14925,8 +14925,8 @@ RectTransform:
   - {fileID: 1969137942}
   - {fileID: 361911091}
   - {fileID: 1940089103}
-  - {fileID: 696581833}
   - {fileID: 1189897656}
+  - {fileID: 696581833}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -79617,7 +79617,7 @@ PrefabInstance:
     - target: {fileID: 7856194424714504763, guid: c09587a332271444aa846d29446e0cb8,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7856194424714504763, guid: c09587a332271444aa846d29446e0cb8,
         type: 3}

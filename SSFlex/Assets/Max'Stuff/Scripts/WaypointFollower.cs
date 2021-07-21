@@ -41,7 +41,7 @@ public class WaypointFollower : MonoBehaviour
         else if(mIsOnStartPos)
             mStartDelay -= Time.deltaTime;
 
-        if (mGameStarted)
+        if (mGameStarted && !mIsOnStartPos)
             MoveToStartPos();
     }
 
@@ -52,8 +52,6 @@ public class WaypointFollower : MonoBehaviour
 
     private void MoveToStartPos()
     {
-      
-
         if (transform.position != mStartPos.transform.position)
         {
             transform.position = Vector3.MoveTowards(transform.position, mStartPos.transform.position, mStartPosMoveSpeed * Time.deltaTime);

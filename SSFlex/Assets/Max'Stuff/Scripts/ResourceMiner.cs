@@ -21,6 +21,8 @@ public class ResourceMiner : MonoBehaviour
     [SerializeField]
     private LayerMask mResourceLayer;
 
+    [SerializeField]
+    private ParticleSystem mMiningParticle;
 
     private MineableObject mHitObj;
 
@@ -30,9 +32,15 @@ public class ResourceMiner : MonoBehaviour
     private void Update()
     {
         if (mBuildPlacer.IsInMineMode && Input.GetKey(KeyCode.Mouse0))
+        {
+            mMiningParticle.Play();
             LookForResource();
+        }
         else
+        {
+            mMiningParticle.Stop();
             mIsMining = false;
+        }
 
 
         PlayerHud.Instance.SetCurrentResourceAmount(mCurrentResourceAmount);
