@@ -35,6 +35,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         // Connects to the Photon's Master server using our own "PhotonServerSettings" File.
         PhotonNetwork.ConnectUsingSettings();
+        AudioManager.Instance.Play("MainTheme");
     }
 
     public void SetRoomName(string _roomName)

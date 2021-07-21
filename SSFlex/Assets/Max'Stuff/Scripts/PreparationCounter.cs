@@ -39,6 +39,9 @@ public class PreparationCounter : MonoBehaviour
     private void Start()
     {
         mPreparationTimer = mMaxPreparationTime;
+        AudioManager.Instance.Stop("MainTheme");
+        AudioManager.Instance.Play("Ambient");
+
     }
 
     private void Update()

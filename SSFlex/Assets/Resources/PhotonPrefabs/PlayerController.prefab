@@ -1105,6 +1105,9 @@ MonoBehaviour:
   airDrag: 1
   isOnStone: 0
   isOnGravel: 0
+  isMoving: 0
+  isRunning: 0
+  isSneaking: 0
 --- !u!114 &1370586008316802725
 MonoBehaviour:
   m_ObjectHideFlags: 0

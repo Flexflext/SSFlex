@@ -3689,21 +3689,21 @@ MonoBehaviour:
     Spread: 0
     Loop: 0
     Source: {fileID: 0}
-  - Name: TPGrenadeExplosion
-    Clip: {fileID: 8300000, guid: 3054a4ecc721d4b4887efb3bcfd0816c, type: 3}
-    Volume: 1
+  - Name: Ambient
+    Clip: {fileID: 8300000, guid: b0babf3389e2b38479717e4a596652a1, type: 3}
+    Volume: 0.2
     Pitch: 1
-    SpatialBlend: 1
-    Spread: 360
-    Loop: 0
-    Source: {fileID: 0}
-  - Name: 
-    Clip: {fileID: 0}
-    Volume: 0
-    Pitch: 0
     SpatialBlend: 0
     Spread: 0
-    Loop: 0
+    Loop: 1
+    Source: {fileID: 0}
+  - Name: MainTheme
+    Clip: {fileID: 8300000, guid: 632262c2086e6384aaa31957369fd187, type: 3}
+    Volume: 0.2
+    Pitch: 1
+    SpatialBlend: 0
+    Spread: 0
+    Loop: 1
     Source: {fileID: 0}
   MainMixer: {fileID: 24100000, guid: 4ee0ca3552036d14684ddfb241abe092, type: 2}
   mixerGroup: {fileID: 24300002, guid: 4ee0ca3552036d14684ddfb241abe092, type: 2}
@@ -76980,80 +76980,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6038810353414128899}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &6681820623490257518
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1861293062480609920, guid: 57df24a015ccc924b95c48f48a93949a,
-        type: 3}
-      propertyPath: sceneViewId
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4316280016472061298, guid: 57df24a015ccc924b95c48f48a93949a,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 4316280016472061298, guid: 57df24a015ccc924b95c48f48a93949a,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4316280016472061298, guid: 57df24a015ccc924b95c48f48a93949a,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4316280016472061298, guid: 57df24a015ccc924b95c48f48a93949a,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4316280016472061298, guid: 57df24a015ccc924b95c48f48a93949a,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4316280016472061298, guid: 57df24a015ccc924b95c48f48a93949a,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4316280016472061298, guid: 57df24a015ccc924b95c48f48a93949a,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4316280016472061298, guid: 57df24a015ccc924b95c48f48a93949a,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4316280016472061298, guid: 57df24a015ccc924b95c48f48a93949a,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4316280016472061298, guid: 57df24a015ccc924b95c48f48a93949a,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4316280016472061298, guid: 57df24a015ccc924b95c48f48a93949a,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4424575407806829865, guid: 57df24a015ccc924b95c48f48a93949a,
-        type: 3}
-      propertyPath: m_Name
-      value: SyncShootPistolSound
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 57df24a015ccc924b95c48f48a93949a, type: 3}
 --- !u!4 &7025612386482452440
 Transform:
   m_ObjectHideFlags: 0
