@@ -12,17 +12,41 @@ public class RoomListItem : MonoBehaviourPunCallbacks
 
     [SerializeField] private TMP_Text text;
 
+    [SerializeField]
+    private float mRoomFullDisplayDuration;
+    private int mMaxPlayerCount;
+
+    [SerializeField]
+    private TextMeshProUGUI mText_PlayerCount;
+    [SerializeField]
+    private TextMeshProUGUI mText_RoomFull;
+
     public RoomInfo info;
 
     public void SetUp(RoomInfo _info)
     {
+        mMaxPlayerCount = GameManager.Instance.MaxPlayer;
+
         info = _info;
         text.text = _info.Name;
+
+        mText_PlayerCount.text = "" + info.PlayerCount + "/" + mMaxPlayerCount;
     }
 
     public void  OnClick()
     {
+        if(info.PlayerCount < mMaxPlayerCount)
+            Launcher.Instance.JoinRoom(info);
+        else
+            StartCoroutine(RommFullDisplay());
+    }
 
-        Launcher.Instance.JoinRoom(info);
+    private IEnumerator RommFullDisplay()
+    {
+        mText_RoomFull.gameObject.SetActive(true);
+        yield return new WaitForSeconds(mRoomFullDisplayDuration);
+        mText_RoomFull.gameObject.SetActive(false);
+
+        StopAllCoroutines();
     }
 }
