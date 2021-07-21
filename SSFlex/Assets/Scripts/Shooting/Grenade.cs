@@ -21,6 +21,7 @@ public class Grenade : MonoBehaviourPunCallbacks
     {
         yield return new WaitForSeconds(_time);
         Instantiate(explosion, transform.position, Quaternion.identity);
+        
 
         // Do Dmg
         Explode();
@@ -48,5 +49,13 @@ public class Grenade : MonoBehaviourPunCallbacks
                 HitAnything.Invoke(col.gameObject, percent);
             }
         }
+
+        
+    }
+
+    [PunRPC]
+    public void SyncGrenade(string _audioName)
+    {
+        AudioManager.Instance.Play(_audioName);
     }
 }

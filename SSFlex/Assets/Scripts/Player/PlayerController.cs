@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using System.IO;
 
 public class PlayerController : MonoBehaviour
 {
@@ -45,7 +46,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForce;
     [SerializeField] private float groundDrag;
     [SerializeField] private float airDrag;
-    [SerializeField] private bool isOnStone, isOnGravel;
+    public bool isOnStone, isOnGravel;
 
     // Non-visible References
     private PlayerShooting shooting;
@@ -61,7 +62,7 @@ public class PlayerController : MonoBehaviour
 
    
 
-    private bool isMoving, isRunning, isSneaking;
+    public bool isMoving, isRunning, isSneaking;
 
     private Vector2 input;
 
@@ -132,6 +133,7 @@ public class PlayerController : MonoBehaviour
 
         // Audio
         AudioMixing();
+        
     }
 
     void FixedUpdate()
@@ -286,18 +288,15 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Audio
-    //public void DisplayAudioMixing()
-    //{
-    //    photonView.RPC("DisplayTeam", RpcTarget.AllBufferedViaServer);
-    //}
+    public void SyncAudio(string _prefabName, Vector3 _prefabPosition)
+    {
+        PhotonNetwork.Instantiate(_prefabName, _prefabPosition, Quaternion.identity);
+    }
 
 
-    
+
     private void AudioMixing()
     {
-        
-
-
         if (isStoneGrounded && !isGravelGrounded)
         {
             Debug.Log("isonstone");
@@ -307,6 +306,11 @@ public class PlayerController : MonoBehaviour
             {
                 isStoneWalking = true;
                 AudioManager.Instance.PlayRandom("StoneWalk", 3);
+
+                //if (photonView.IsMine)
+                //{
+                //    photonView.RPC("SyncAudio", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncStepsStone"), this.transform.position);
+                //}
             }
 
             if (isRunning && !isStoneWalking)
@@ -314,6 +318,11 @@ public class PlayerController : MonoBehaviour
                 isStoneRunning = true;
                 AudioManager.Instance.PlayRandom("StoneRun", 4);
                 AudioManager.Instance.Play("BreathingRun");
+
+                //if (photonView.IsMine)
+                //{
+                //    photonView.RPC("SyncAudio", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncStepsStone"), this.transform.position);
+                //}
             }
         }
         else
@@ -329,6 +338,11 @@ public class PlayerController : MonoBehaviour
             {
                 isGravelWalking = true;
                 AudioManager.Instance.PlayRandom("GravelWalk", 1);
+
+                //if (photonView.IsMine)
+                //{
+                //    photonView.RPC("SyncAudio", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncStepsGravel"), this.transform.position);
+                //}
             }
 
             if (isRunning && !isGravelWalking)
@@ -336,6 +350,11 @@ public class PlayerController : MonoBehaviour
                 isGravelRunning = true;
                 AudioManager.Instance.PlayRandom("GravelRun", 2);
                 AudioManager.Instance.Play("BreathingRun");
+
+                //if (photonView.IsMine)
+                //{
+                //    photonView.RPC("SyncAudio", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncStepsGravel"), this.transform.position);
+                //}
             }
         }
         else
@@ -366,6 +385,12 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
+    //[PunRPC]
+    //public void SyncAudio(string _audioName)
+    //{
+    //    AudioManager.Instance.Play(_audioName);
+    //}
     #endregion 
 
     IEnumerator JumpAnimatorTimer()

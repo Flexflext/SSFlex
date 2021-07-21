@@ -87,6 +87,8 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     [SerializeField]
     private PlayerGFXChange mTeamGfx;
 
+    private Vector3 audioPosition;
+
     private bool imAiming;
     public bool ImAiming => imAiming;
 
@@ -163,8 +165,12 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
                 StartCoroutine(C_MeeleTimer(meeleTime));
                 //Set Animator
                 animator.SetTrigger("isMeeleing");
-                AudioManager.Instance.Play("Melee");
                 StartCoroutine(MeleeAnimation());
+
+                if (photonView.IsMine)
+                {
+                    photonView.RPC("SyncAudio", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncMelee"), this.transform.position);
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.Q) && !isGrenadeThrowing && !isMeeleing && canThrowGrenade && !isSwitching)
@@ -239,19 +245,31 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
                     thirdPersonAnimator.SetBool("isShooting", true);
                     if (currentGun == AR)
                     {
-                        AudioManager.Instance.Play("ShootAR");
+                        if (photonView.IsMine)
+                        {
+                            photonView.RPC("SyncAudio", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncShootAR"), this.transform.position);
+                        }
                     }
                     if (currentGun == Shotgun)
                     {
-                        AudioManager.Instance.Play("ShootShotgun");
+                        if (photonView.IsMine)
+                        {
+                            photonView.RPC("SyncAudio", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncShootShotgun"), this.transform.position);
+                        }
                     }
                     if (currentGun == Sniper)
                     {
-                        AudioManager.Instance.Play("ShootSniper");
+                        if (photonView.IsMine)
+                        {
+                            photonView.RPC("SyncAudio", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncShootSniper"), this.transform.position);
+                        }
                     }
                     if (currentGun == Pistol)
                     {
-                        AudioManager.Instance.Play("ShootPistol");
+                        if (photonView.IsMine)
+                        {
+                            photonView.RPC("SyncAudio", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncShootPistolSound"), this.transform.position);
+                        }
                     }
                 }
                 else
@@ -539,16 +557,35 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     private IEnumerator GrenadeAudioTimer()
     {
-        AudioManager.Instance.Play("GrenadeStart");
-        yield return new WaitForSeconds(6);
-        AudioManager.Instance.Play("GrenadeExplosion");
+
+        if (photonView.IsMine)
+        {
+            photonView.RPC("SyncAudio", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncGrenadeStart"), this.transform.position);
+        }
+
+        yield return new WaitForSeconds(5);
+
+        if (photonView.IsMine)
+        {
+            photonView.RPC("SyncAudio", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncGrenadeExplosion"), this.transform.position);
+        }
     }
 
     private IEnumerator ReloadAudioTimer()
     {
-        AudioManager.Instance.Play("ReloadStart");
+        //AudioManager.Instance.Play("ReloadStart");
+
+        if (photonView.IsMine)
+        {
+            photonView.RPC("SyncAudio", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncReloadStart"), this.transform.position);
+        }
         yield return new WaitForSeconds(1f);
-        AudioManager.Instance.Play("ReloadEnd");
+        //AudioManager.Instance.Play("ReloadEnd");
+
+        if (photonView.IsMine)
+        {
+            photonView.RPC("SyncAudio", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncReloadEnd"), this.transform.position);
+        }
     }
 
     private IEnumerator ReloadAnimatorTimer()
@@ -609,6 +646,16 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             PlayerHud.Instance.DisplayDmgToObj();
         }
     }
+
+
+    // Instantiates a 3D AudioPrefab for everyone at a specific point.
+    [PunRPC]
+    public void SyncAudio(string _prefabName, Vector3 _prefabPosition)
+    {
+        PhotonNetwork.Instantiate(_prefabName, _prefabPosition, Quaternion.identity);
+    }
+
+
 
     private IEnumerator C_GrenadeRegenTimer(float _time)
     {

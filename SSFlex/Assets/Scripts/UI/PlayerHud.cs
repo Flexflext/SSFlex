@@ -37,10 +37,14 @@ public class PlayerHud : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject killFeedPos;
 
 
+
     [SerializeField]
     private Slider mMiningProgress;
     [SerializeField]
     private TextMeshProUGUI mCurrentResources;
+
+
+    private int currentKills;
 
     private void Awake()
     {
@@ -152,7 +156,8 @@ public class PlayerHud : MonoBehaviourPunCallbacks
     /// <param name="_amount"></param>
     public void ChangeKillAmount(int _amount)
     {
-        killAmount.text = _amount.ToString();
+        currentKills += _amount;
+        killAmount.text = currentKills.ToString();
     }
 
     /// <summary>

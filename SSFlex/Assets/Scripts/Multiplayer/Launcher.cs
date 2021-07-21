@@ -35,6 +35,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         // Connects to the Photon's Master server using our own "PhotonServerSettings" File.
         PhotonNetwork.ConnectUsingSettings();
+        AudioManager.Instance.Play("MainTheme");
     }
 
     public void SetRoomName(string _roomName)
@@ -63,7 +64,8 @@ public class Launcher : MonoBehaviourPunCallbacks
             return;
         }
 
-        PhotonNetwork.CreateRoom(roomName.text);
+        RoomOptions roomOpt = new RoomOptions { MaxPlayers = 4 };
+        PhotonNetwork.CreateRoom(roomName.text, roomOpt);
 
         // Prevents client to click on other buttons while room is being created.
         MenuManager.Instance.AdminLoadingMenu();
@@ -106,6 +108,11 @@ public class Launcher : MonoBehaviourPunCallbacks
         MenuManager.Instance.AdminErrorMenu();
     }
 
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        Debug.Log("HAHA U LOOSE " + message);
+    }
+
 
     public void JoinRoom(RoomInfo _info)
     {
@@ -137,7 +144,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             // Prevents former rooms to still exist and only continues if the room which the master client has left
             // is actually removed.
-            if (_roomList[i].RemovedFromList)
+            if (_roomList[i].RemovedFromList || !_roomList[i].IsOpen)
             {
                 continue;
             }
@@ -159,6 +166,8 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void StartLobby()
     {
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+
         PhotonNetwork.LoadLevel(1);
 
     }
