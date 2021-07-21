@@ -11,6 +11,10 @@ public class MenuManager : MonoBehaviour
     public static MenuManager Instance;
 
     [SerializeField]
+    private float mRoomFullDisplayDuration;
+    
+
+    [SerializeField]
     private GameObject mMainMenu;
     [SerializeField]
     private GameObject mLoadingScreen;
@@ -35,6 +39,8 @@ public class MenuManager : MonoBehaviour
     private TextMeshProUGUI mEnterRoomNameText;
     [SerializeField]
     private TextMeshProUGUI mEnterPlayerNameText;
+    [SerializeField]
+    private TextMeshProUGUI mText_RoomFull;
 
     [SerializeField]
     private string[] mEnterRoomNameMessages;
@@ -247,6 +253,21 @@ public class MenuManager : MonoBehaviour
             int rndIdx = Random.Range(0, mEnterPlayerNameMessages.Length);
             mEnterPlayerNameText.text = mEnterPlayerNameMessages[rndIdx];
         }
+    }
+
+    public void AdminServerFullMenu()
+    {
+        StartCoroutine(RommFullDisplay());
+    }
+
+    private IEnumerator RommFullDisplay()
+    {
+        mText_RoomFull.gameObject.SetActive(true);
+        new WaitForSeconds(mRoomFullDisplayDuration);
+        mText_RoomFull.gameObject.SetActive(false);
+
+        StopCoroutine(RommFullDisplay());
+        return null;
     }
 
     public void CreateRoomFromLauncher()

@@ -5,6 +5,9 @@ using UnityEngine;
 public class WaypointFollower : MonoBehaviour
 {
     [SerializeField]
+    private GameObject mStartPos;
+
+    [SerializeField]
     private List<GameObject> mWaypoints;
 
     [SerializeField]
@@ -13,6 +16,10 @@ public class WaypointFollower : MonoBehaviour
     [SerializeField]
     private float mMovementccelaration;
 
+    [SerializeField]
+    private float mStartPosMoveSpeed;
+    [SerializeField]
+    private float mStartDamping;
 
     [SerializeField]
     private float mMaxDamping;
@@ -24,21 +31,48 @@ public class WaypointFollower : MonoBehaviour
     private float mStartDelay;
 
     private int mWaypointIdx;
+    private bool mIsOnStartPos;
+    private bool mGameStarted;
 
     private void Update()
     {
         if (mStartDelay <= 0)
+            SetFollowBehaviour();
+        else if(mIsOnStartPos)
+            mStartDelay -= Time.deltaTime;
+
+        if (mGameStarted)
+            MoveToStartPos();
+    }
+
+    public void StartGame()
+    {
+        mGameStarted = true;
+    }
+
+    private void MoveToStartPos()
+    {
+      
+
+        if (transform.position != mStartPos.transform.position)
         {
-            if (mCurrentMovementSpeed < mMaxMovementSpeed)
-                mCurrentMovementSpeed += mMovementccelaration * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, mStartPos.transform.position, mStartPosMoveSpeed * Time.deltaTime);
 
-            if(mCurrentDamping < mMaxDamping)
-                mCurrentDamping += mDampingModifier * Time.deltaTime;
-
-            FollowWaypoints();
+            mStartPosMoveSpeed -= mStartDamping * Time.deltaTime;
         }
-        else
-            mStartDelay -= Time.deltaTime;   
+        else if (transform.position == mStartPos.transform.position)
+            mIsOnStartPos = true;
+    }
+
+    private void SetFollowBehaviour()
+    {
+        if (mCurrentMovementSpeed < mMaxMovementSpeed)
+            mCurrentMovementSpeed += mMovementccelaration * Time.deltaTime;
+
+        if (mCurrentDamping < mMaxDamping)
+            mCurrentDamping += mDampingModifier * Time.deltaTime;
+
+        FollowWaypoints();
     }
       
     private void FollowWaypoints()

@@ -7,13 +7,16 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager Instance;
+
+    public int MaxPlayer => mMaxPlayer;
+    public float Fov => mFov;
+    public float MouseSensitivity => mMouseSensitivity;
     public EWeaponsAndUtensils StartWeapon => mStartWeapon;
 
+    [SerializeField]
+    private int mMaxPlayer;
 
     private OptionsManager mOptions;
-    [SerializeField]
-    private GameObject mEscapeMenu;
-    private GameObject mPlayerHUD;
 
     private float mFov;
     private float mMouseSensitivity;

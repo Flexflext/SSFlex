@@ -110,7 +110,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        Debug.Log("HAHA U LOOSE " + message);
+        MenuManager.Instance.AdminServerFullMenu();
     }
 
 
