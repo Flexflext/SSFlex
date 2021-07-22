@@ -12,19 +12,21 @@ public class MineableObject : MonoBehaviourPunCallbacks
     [SerializeField]
     private float mMaxMineDuration;
     private float mCurrentMineDuration;
-
+    [SerializeField]
+    private float mDissolveTime;
 
     [Header("Components")]
     [SerializeField]
     private Collider mCollider;
     [SerializeField]
-    private AnimationClip mWasMindedClip;
-
-
-    [Header("Particle System")]
+    private MeshRenderer mMeshRenderer;
     [SerializeField]
-    private ParticleSystem mBeingMined;
+    private AudioSource mAudio;
+    [SerializeField]
+    private AudioClip mSFX_BeingMined;
 
+    [SerializeField]
+    Material mDissolveMaterial;
 
     private ResourceMiner mMiner;
 
@@ -36,7 +38,6 @@ public class MineableObject : MonoBehaviourPunCallbacks
     private void Start()
     {
         mCurrentMineDuration = mMaxMineDuration;
-        mMinedAnimClipLenght = mWasMindedClip.length;
     }
 
     private void Update()
@@ -61,14 +62,14 @@ public class MineableObject : MonoBehaviourPunCallbacks
 
             PlayerHud.Instance.MiningProgress(mMaxMineDuration, mCurrentMineDuration);
 
-            //if (!mBeingMined.isPlaying)
-            //    mBeingMined.Play();
+            if(mAudio.clip != mSFX_BeingMined)
+                mAudio.clip = mSFX_BeingMined;
+
+            if (!mAudio.isPlaying)
+                mAudio.Play();
         }
-        //else if (!mIsBeingMined)
-        //{
-        //    if (mBeingMined.isPlaying)
-        //        mBeingMined.Stop();
-        //}
+        else
+            mAudio.Stop();
     }
 
     public int MineResource(float _mineSpeed, ResourceMiner _miner)
@@ -92,22 +93,19 @@ public class MineableObject : MonoBehaviourPunCallbacks
     }
 
 
-    private void ResourceHasBeenMined()
+    private IEnumerator ResourceHasBeenMined()
     {
         if (mCollider.enabled)
             mCollider.enabled = false;
+
+        mMeshRenderer.material = mDissolveMaterial;
+
+        yield return new WaitForSeconds(mDissolveTime);
 
         if (photonView.IsMine)
         {
             PhotonNetwork.Destroy(this.gameObject);
             PhotonNetwork.RemoveRPCs(photonView);
         }
-
-        if (mMinedAnimClipLenght <= 0)
-        {
-            
-        }
-        else
-            mMinedAnimClipLenght -= Time.deltaTime;
     }
 }

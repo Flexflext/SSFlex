@@ -19,10 +19,16 @@ public class ResourceMiner : MonoBehaviour
     [SerializeField]
     private Camera mMainCam;
     [SerializeField]
+    private Animator mAnimator;
+    [SerializeField]
     private LayerMask mResourceLayer;
+    [SerializeField]
+    private AudioSource mAudio;
 
     [SerializeField]
     private ParticleSystem mMiningParticle;
+    [SerializeField]
+    private AudioClip mSFX_Mining;
 
     private MineableObject mHitObj;
 
@@ -34,11 +40,22 @@ public class ResourceMiner : MonoBehaviour
         if (mBuildPlacer.IsInMineMode && Input.GetKey(KeyCode.Mouse0))
         {
             mMiningParticle.Play();
+
+            if (mAudio.clip != mSFX_Mining)
+                mAudio.clip = mSFX_Mining;
+
+            if(!mAudio.isPlaying)
+                mAudio.Play();
+
+            //mAnimator.SetBool("Farm", true);
+
             LookForResource();
         }
         else
         {
             mMiningParticle.Stop();
+            //mAnimator.SetBool("Farm", false);
+            mAudio.Stop();
             mIsMining = false;
         }
 

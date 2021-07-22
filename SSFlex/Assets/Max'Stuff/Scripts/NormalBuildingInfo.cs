@@ -45,7 +45,9 @@ public class NormalBuildingInfo : MonoBehaviourPunCallbacks
     [SerializeField]
     private EClipSideSlots mDefaultSideSlot;
     [SerializeField]
-    private EClipFaceSlots mDefaultFaceSlot;
+    private EClipFaceSlots mDefaultFaceSlot_First;
+    [SerializeField]
+    private EClipFaceSlots mDefaultFaceSlot_Second;
     [Header("The dimension that provides the actual scale of the Building")]
     [SerializeField]
     private AvailableBuildingDimensions.BuildingDimensions.EBuildingDimensions mCurrentDimension;
@@ -61,6 +63,11 @@ public class NormalBuildingInfo : MonoBehaviourPunCallbacks
     private ParticleSystem mDamagedParticle;
     [SerializeField]
     private ParticleSystem mBuildParticle;
+
+    [SerializeField]
+    private AudioSource mAudio;
+    [SerializeField]
+    private AudioClip mSFX_BuildAudio;
 
     private Color mDamagedColour;
 
@@ -87,9 +94,12 @@ public class NormalBuildingInfo : MonoBehaviourPunCallbacks
 
 
         mBuildParticle.Play();
+        mAudio.clip = mSFX_BuildAudio;
+        mAudio.Play();
 
         AddClipSlotSide(mDefaultSideSlot);
-        AddClipSlotFace(mDefaultFaceSlot);
+        AddClipSlotFace(mDefaultFaceSlot_First);
+        AddClipSlotFace(mDefaultFaceSlot_Second);
     }
 
 
@@ -127,8 +137,7 @@ public class NormalBuildingInfo : MonoBehaviourPunCallbacks
         mDamagedColour = new Color(mRFloat, 0, 0, 50);
         mDamagedColour = Color.HSVToRGB(0, mColourStartValue + mRFloat, 1);
         mDamagedParticle.Play();
-
-        //mMeshRenderer.material.color = mDamagedColour;
+        
 
         if (photonView.IsMine)
         {
@@ -141,6 +150,7 @@ public class NormalBuildingInfo : MonoBehaviourPunCallbacks
         }
 
         photonView.RPC("MateChange", RpcTarget.AllBufferedViaServer, mDamagedColour.r, mDamagedColour.g, mDamagedColour.b, mDamagedColour.a);
+
 
         if (mHealth <= 0)
         {
