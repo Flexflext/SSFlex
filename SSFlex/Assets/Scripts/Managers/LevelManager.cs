@@ -7,7 +7,7 @@ public class LevelManager : MonoBehaviourPunCallbacks
 {
     public static LevelManager Instance;
 
-    private Dictionary<int, bool> playerDead = new Dictionary<int, bool>();
+    private Dictionary<string, bool> playerDead = new Dictionary<string, bool>();
 
     private void Awake()
     {
@@ -15,13 +15,27 @@ public class LevelManager : MonoBehaviourPunCallbacks
     }
 
 
-    public void UpdateDictionary(int _id, bool _lifebool)
+    public void AddDictionary(string _id, bool _lifebool)
+    {
+        photonView.RPC("RPC_AddDictionary", RpcTarget.All, _id, _lifebool);
+    }
+
+    public void UpdateDictionary(string _id, bool _lifebool)
     {
         photonView.RPC("RPC_UpdateDictionary", RpcTarget.All, _id, _lifebool);
     }
 
     [PunRPC]
-    private void RPC_UpdateDictionary(int _id, bool _lifebool)
+    private void RPC_UpdateDictionary(string _id, bool _lifebool)
+    {
+        if (playerDead.ContainsKey(_id))
+        {
+            playerDead[_id] = _lifebool;
+        }
+    }
+
+    [PunRPC]
+    private void RPC_AddDictionary(string _id, bool _lifebool)
     {
         playerDead.Add(_id, _lifebool);
     }
@@ -48,17 +62,34 @@ public class LevelManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public int CheckIfWon()
+    public void CheckIfWon()
     {
+        photonView.RPC("RPC_CheckIfWon", RpcTarget.All);
+    }
+
+
+    [PunRPC]
+    private void RPC_CheckIfWon()
+    {
+        Time.timeScale = 0;
+
         foreach (var player in playerDead)
         {
-            if (player.Value)
+            if (player.Key == PhotonNetwork.NetworkingClient.UserId)
             {
-                return player.Key;
+                if (player.Value)
+                {
+                    //Open the Menu when Won
+                    EscapeMenu.Instance.OpenEndMenu("WUHU U Did it", PhotonNetwork.NetworkingClient.NickName);
+                }
+                else
+                {
+
+                    //Open the Menu when dead
+                    EscapeMenu.Instance.OpenEndMenu("Git Gud", "Not U");
+                }
             }
         }
-
-        return 0;
     }
 
 }

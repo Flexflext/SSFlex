@@ -30,6 +30,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
+        LevelManager.Instance.AddDictionary(photonView.Owner.UserId, true);
         maxHealth = health;
         maxShield = shield;
     }
@@ -136,6 +137,14 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
             object[] content = new object[] { photonView.Owner.NickName };
             RaiseEventOptions eventOptions = new RaiseEventOptions { TargetActors = new int[] { _actornum } };
             PhotonNetwork.RaiseEvent(ON_DEATH, content, eventOptions, SendOptions.SendReliable);
+
+            LevelManager.Instance.UpdateDictionary(photonView.Owner.UserId, false);
+
+            if (LevelManager.Instance.CheckIfTheOnlyOneAlive())
+            {
+                LevelManager.Instance.CheckIfWon();
+            }
+            
 
             PhotonNetwork.Destroy(this.gameObject);
             dead = true;

@@ -67,6 +67,8 @@ MonoBehaviour:
   - SyncAudio
   - SyncGrenade
   - RPC_UpdateDictionary
+  - RPC_AddDictionary
+  - RPC_CheckIfWon
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
