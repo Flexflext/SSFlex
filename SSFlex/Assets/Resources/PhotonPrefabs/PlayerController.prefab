@@ -1134,16 +1134,17 @@ MonoBehaviour:
   maxGrenadeDmg: 200
   grenadePrefab: {fileID: 2788992215005824281, guid: 8e1b3f557862f5546b645b43342f3bd0,
     type: 3}
-  range: 0.5
+  range: 0.75
   dmg: 30
   swordPosition: {fileID: 3081653781137685744}
   allDmgLayers:
     serializedVersion: 2
-    m_Bits: 16
+    m_Bits: 917303
   Sniper: {fileID: 2703382973258273900}
   AR: {fileID: 3927443214775788892}
   Shotgun: {fileID: 2703382973323045817}
   Pistol: {fileID: 2703382973997453279}
+  fov: 0
   mThirdPersonAR: {fileID: 8699579774364542005}
   mThirdPersonShotgun: {fileID: 6973161906842448724}
   mThirdPersonSniper: {fileID: 7246251687090254558}
@@ -1918,6 +1919,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ParticleSystem_Mining
       objectReference: {fileID: 0}
+    - target: {fileID: 1175390675036421810, guid: adbf0ad81f982f84a8191f63ef0f9a62,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 6856406785664688247, guid: adbf0ad81f982f84a8191f63ef0f9a62,
         type: 3}
       propertyPath: m_RootOrder
@@ -1941,17 +1947,17 @@ PrefabInstance:
     - target: {fileID: 6856406785664688247, guid: adbf0ad81f982f84a8191f63ef0f9a62,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.8
+      value: 0.962
       objectReference: {fileID: 0}
     - target: {fileID: 6856406785664688247, guid: adbf0ad81f982f84a8191f63ef0f9a62,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.16
+      value: 0.079
       objectReference: {fileID: 0}
     - target: {fileID: 6856406785664688247, guid: adbf0ad81f982f84a8191f63ef0f9a62,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.04
+      value: 0.04
       objectReference: {fileID: 0}
     - target: {fileID: 6856406785664688247, guid: adbf0ad81f982f84a8191f63ef0f9a62,
         type: 3}
@@ -2145,7 +2151,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 152028411, guid: fc80979f393058542a06d78eef397530, type: 3}
       propertyPath: dmg
-      value: 1
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 152028411, guid: fc80979f393058542a06d78eef397530, type: 3}
       propertyPath: gunImg
@@ -2170,7 +2176,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 152028411, guid: fc80979f393058542a06d78eef397530, type: 3}
       propertyPath: bulletSpeed
-      value: 2000
+      value: 2500
       objectReference: {fileID: 0}
     - target: {fileID: 152028411, guid: fc80979f393058542a06d78eef397530, type: 3}
       propertyPath: currentAmmo
@@ -2202,7 +2208,7 @@ PrefabInstance:
     - target: {fileID: 1370586006739449291, guid: fc80979f393058542a06d78eef397530,
         type: 3}
       propertyPath: dmg
-      value: 10
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 1370586006739449291, guid: fc80979f393058542a06d78eef397530,
         type: 3}
@@ -2223,7 +2229,7 @@ PrefabInstance:
     - target: {fileID: 1370586006739449291, guid: fc80979f393058542a06d78eef397530,
         type: 3}
       propertyPath: bulletSpeed
-      value: 2750
+      value: 4000
       objectReference: {fileID: 0}
     - target: {fileID: 1370586006739449291, guid: fc80979f393058542a06d78eef397530,
         type: 3}
@@ -2299,7 +2305,7 @@ PrefabInstance:
     - target: {fileID: 1370586008147488376, guid: fc80979f393058542a06d78eef397530,
         type: 3}
       propertyPath: dmg
-      value: 20
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 1370586008147488376, guid: fc80979f393058542a06d78eef397530,
         type: 3}
@@ -2495,6 +2501,7 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 2665147370467928966, guid: fc80979f393058542a06d78eef397530, type: 3}
     - {fileID: 7186200868188944339, guid: fc80979f393058542a06d78eef397530, type: 3}
+    - {fileID: 7455369555480066907, guid: fc80979f393058542a06d78eef397530, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: fc80979f393058542a06d78eef397530, type: 3}
 --- !u!4 &2070718484313483526 stripped
 Transform:
@@ -3161,6 +3168,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: DmgPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581479019245049259, guid: 1c3c602747259ae4f816a036b7b4688e,
+        type: 3}
+      propertyPath: dmg
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 1581479019245049259, guid: 1c3c602747259ae4f816a036b7b4688e,
         type: 3}

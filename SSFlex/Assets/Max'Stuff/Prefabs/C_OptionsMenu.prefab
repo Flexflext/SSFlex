@@ -1002,11 +1002,6 @@ MonoBehaviour:
   mMusicMixer: {fileID: 0}
   mSFXMixer: {fileID: 0}
   mResolutionDropDown: {fileID: 7856194425010088834}
-  mAllowedRefreshRates:
-  - 60
-  - 75
-  - 144
-  - 240
   mGraphicDropDown: {fileID: 7856194424704380104}
   mMusicSlider: {fileID: 7856194425979029095}
   mSFXSlider: {fileID: 7856194426020960733}
@@ -4398,10 +4393,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 7856194424838565880}
   m_HandleRect: {fileID: 7856194425005289544}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 100
+  m_MinValue: 60
+  m_MaxValue: 110
   m_WholeNumbers: 0
-  m_Value: 50
+  m_Value: 100
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -4779,10 +4774,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 7856194426397644704}
   m_HandleRect: {fileID: 7856194425336152516}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 100
+  m_MinValue: 0.1
+  m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 50
+  m_Value: 0.2
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:

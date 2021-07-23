@@ -47,14 +47,14 @@ public class ResourceMiner : MonoBehaviour
             if(!mAudio.isPlaying)
                 mAudio.Play();
 
-            //mAnimator.SetBool("Farm", true);
+            mAnimator.SetBool("Farm", true);
 
             LookForResource();
         }
         else
         {
             mMiningParticle.Stop();
-            //mAnimator.SetBool("Farm", false);
+            mAnimator.SetBool("Farm", false);
             mAudio.Stop();
             mIsMining = false;
         }

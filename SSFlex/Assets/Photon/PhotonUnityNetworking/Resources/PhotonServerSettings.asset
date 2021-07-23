@@ -70,6 +70,7 @@ MonoBehaviour:
   - RPC_AddDictionary
   - RPC_CheckIfWon
   - SyncAudioMovement
+  - RPC_StartTime
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

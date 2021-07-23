@@ -43,9 +43,9 @@ public class PlayerLook : MonoBehaviourPunCallbacks
 
 
         //Changes the Mouse Sens to the Game Managers
-        //ChangeMouseSens();
+        ChangeMouseSens();
         // Add Event Listener to GameManager Event
-        //GameManager.Instance.OnMouseSensChange += ChangeMouseSens;
+        GameManager.Instance.OnMouseSensChange += ChangeMouseSens;
 
         //Lock the mouse
         Cursor.lockState = CursorLockMode.Locked;
@@ -104,8 +104,8 @@ public class PlayerLook : MonoBehaviourPunCallbacks
     /// </summary>
     private void ChangeMouseSens()
     {
-        //sensX = GameManager.Instance.MouseSens;
-        //sensY = GameManager.Instance.MouseSens;
+        sensX = GameManager.Instance.MouseSensitivity;
+        sensY = GameManager.Instance.MouseSensitivity;
     }
 
 
@@ -114,4 +114,10 @@ public class PlayerLook : MonoBehaviourPunCallbacks
         Debug.Log("Hier");
         canLook = !canLook;
     }
+
+    private void OnDestroy()
+    {
+        GameManager.Instance.OnMouseSensChange -= ChangeMouseSens;
+    }
+
 }

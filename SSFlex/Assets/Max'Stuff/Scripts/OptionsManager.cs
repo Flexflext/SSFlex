@@ -155,11 +155,31 @@ public class OptionsManager : MonoBehaviour
     public void SetFov(float _value)
     {
         mFov = _value;
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.Fov = mFov;
+
+            if (GameManager.Instance.OnFovChange != null)
+            {
+                GameManager.Instance.OnFovChange.Invoke();
+            }
+        }
     }
 
     public void SetMouseSensitivity(float _value)
     {
         mMouseSensitivity = _value;
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.MouseSensitivity = mMouseSensitivity;
+
+            if (GameManager.Instance.OnMouseSensChange != null)
+            {
+                GameManager.Instance.OnMouseSensChange.Invoke();
+            }
+        }
     }
 
     public void SetGraphicQuality(int _graphicQualityIdx)

@@ -67,6 +67,17 @@ public class LevelManager : MonoBehaviourPunCallbacks
         photonView.RPC("RPC_CheckIfWon", RpcTarget.All);
     }
 
+    public void StartTime()
+    {
+        photonView.RPC("RPC_StartTime", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void RPC_StartTime()
+    {
+        Time.timeScale = 1;
+    }
+
 
     [PunRPC]
     private void RPC_CheckIfWon()

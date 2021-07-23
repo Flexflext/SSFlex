@@ -100,6 +100,7 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
     public void LoadMainMenu()
     {
         PhotonNetwork.LeaveRoom();
+        LevelManager.Instance.StartTime();
 
         LevelManager.Instance.UpdateDictionary(PhotonNetwork.NetworkingClient.UserId, false);
 
@@ -114,6 +115,7 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
 
     public void RestartRound()
     {
+        LevelManager.Instance.StartTime();
         PhotonNetwork.LoadLevel(1);
     }
 
@@ -134,7 +136,7 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
         endText.text = _message;
         winnerText.text = $"Winner: {_winner}";
 
-        if (PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.NetworkingClient.LocalPlayer.IsMasterClient)
         {
             startAgainButton.SetActive(true);
         }

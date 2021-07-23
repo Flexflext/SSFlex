@@ -8,9 +8,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager Instance;
 
+    public System.Action OnFovChange;
+    public System.Action OnMouseSensChange;
+
     public int MaxPlayer => mMaxPlayer;
-    public float Fov => mFov;
-    public float MouseSensitivity => mMouseSensitivity;
+    public float Fov { get{ return mFov; } set { mFov = value; } }
+    public float MouseSensitivity { get { return mMouseSensitivity; } set { mMouseSensitivity = value; } }
     public EWeaponsAndUtensils StartWeapon => mStartWeapon;
 
     [SerializeField]
@@ -18,8 +21,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private OptionsManager mOptions;
 
-    private float mFov;
-    private float mMouseSensitivity;
+    private float mFov = 100f;
+    private float mMouseSensitivity = 0.2f;
 
     private EWeaponsAndUtensils mStartWeapon;
 

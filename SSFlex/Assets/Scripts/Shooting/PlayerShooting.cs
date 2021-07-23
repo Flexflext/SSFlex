@@ -62,6 +62,8 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     [SerializeField] private Gun Shotgun;
     [SerializeField] private Gun Pistol;
 
+    [SerializeField] private float fov;
+
     [SerializeField]
     private GameObject mThirdPersonAR;
     [SerializeField]
@@ -96,6 +98,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     private float meeleTime = 1.2f;
 
     private bool isSwitching;
+    private bool canDoDmgAgain = true;
 
     int weaponIdx;
     int toolIdx;
@@ -120,8 +123,10 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        
+        GameManager.Instance.OnFovChange += ChangeFov;
+        ChangeFov();
     }
+
     private void OnPreRender()
     {
         if (photonView.IsMine)
@@ -202,13 +207,13 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             //Check weather to aim in or Out
             if (!currentGun.IsAiming && imAiming)
             {
-                currentGun.ZoomIn(ref cam, 100, Time.deltaTime);
+                currentGun.ZoomIn(ref cam, fov, Time.deltaTime);
             }
             else
             {
                 if (!imAiming)
                 {
-                    currentGun.ZoomOut(ref cam, 100, Time.deltaTime);
+                    currentGun.ZoomOut(ref cam, fov, Time.deltaTime);
                 }
 
             }
@@ -337,6 +342,13 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
             #endregion
 
+        }
+        else
+        {
+            if (!imAiming)
+            {
+                currentGun.ZoomOut(ref cam, fov, Time.deltaTime);
+            }
         }
 
     }
@@ -511,6 +523,8 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             return;
         }
 
+        Debug.Log("Meele");
+
         Collider[] allDmgColliders = Physics.OverlapSphere(swordPosition.position, range, allDmgLayers);
 
         foreach (Collider dmgObj in allDmgColliders)
@@ -523,6 +537,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     private IEnumerator C_MeeleTimer(float _time)
     {
         yield return new WaitForSeconds(_time / 6);
+        
         DoMeeleDmg();
 
         if (currentGun == primaryGun)
@@ -610,7 +625,6 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         float grenadeDmg =( maxGrenadeDmg * ( _percent));
         
 
-
         HitAnything(grenadeDmg, _gameobject);
 
     }
@@ -618,22 +632,18 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     private void HitAnything(float _dmg, GameObject _gameobject)
     {
         Debug.Log("Hit Smth");
-        if (!photonView.IsMine)
+        if (!photonView.IsMine || !canDoDmgAgain)
         {
             return;
         }
 
-        Debug.Log(_gameobject.layer);
-
-        //if (_gameobject.CompareTag("Player"))
-        //{
-        //    Debug.Log("Fuck U");
-        //}
+        canDoDmgAgain = false;
+        StartCoroutine(C_TimeTillDmgAgain());
 
 
-        if (_gameobject.CompareTag("Player"))
+        if (_gameobject.CompareTag("Player") || _gameobject.layer == 14 || _gameobject.CompareTag("DmgPlayer"))
         {
-            Debug.Log("Hit Player");
+            Debug.LogWarning("Hit Player");
             PlayerHealth health = _gameobject.GetComponentInParent<PlayerHealth>();
             health.TakeDamage(_dmg, photonView.OwnerActorNr);
             Debug.Log(_dmg);
@@ -645,6 +655,13 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             _gameobject.GetComponent<NormalBuildingInfo>().TakeDamage(_dmg);
             PlayerHud.Instance.DisplayDmgToObj();
         }
+    }
+
+    private IEnumerator C_TimeTillDmgAgain()
+    {
+        yield return new WaitForSeconds(0.05f);
+
+        canDoDmgAgain = true;
     }
 
 
@@ -718,10 +735,16 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         PlayerHud.Instance.ChangeAmmoAmount(currentGun.BulletsInMag, currentGun.CurrentAmmo);
     }
 
-    //public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
-    //{
+    private void ChangeFov()
+    {
+        fov = GameManager.Instance.Fov;
+    }
 
-    //}
+
+    private void OnDestroy()
+    {
+        GameManager.Instance.OnFovChange -= ChangeFov;
+    }
 
     private void OnDrawGizmos()
     {
