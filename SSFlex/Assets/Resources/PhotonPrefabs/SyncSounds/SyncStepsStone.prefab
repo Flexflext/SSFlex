@@ -164,5 +164,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fecfcd31e2f0d540a7ffebcf1acba3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 0}
-  isStoneStep: 0
+  isStoneStep: 1
