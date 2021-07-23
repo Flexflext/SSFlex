@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class LoopDestroyer : MonoBehaviour
 {
-    [SerializeField] private PlayerController playerController;
+    private PlayerController playerController;
     [SerializeField] private bool isStoneStep;
 
+
+    private void Awake()
+    {
+        playerController = FindObjectOfType<PlayerController>().GetComponent<PlayerController>();
+    }
     private void Update()
     {
         AudioDestroyer();

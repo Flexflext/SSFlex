@@ -288,7 +288,8 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Audio
-    public void SyncAudio(string _prefabName, Vector3 _prefabPosition)
+    [PunRPC]
+    public void SyncAudioMovement(string _prefabName, Vector3 _prefabPosition)
     {
         PhotonNetwork.Instantiate(_prefabName, _prefabPosition, Quaternion.identity);
     }
@@ -297,6 +298,19 @@ public class PlayerController : MonoBehaviour
 
     private void AudioMixing()
     {
+        //if (isStoneGrounded && !isGravelGrounded)
+        //{
+        //    isOnStone = true;
+        //    if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D) && !isStoneRunning)
+        //    {
+        //        isStoneWalking = true;
+        //        if (photonView.IsMine)
+        //        {
+        //            photonView.RPC("SyncAudioMovement", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncStepsStone"), this.transform.position);
+        //        }
+        //    }
+        //}
+
         if (isStoneGrounded && !isGravelGrounded)
         {
             Debug.Log("isonstone");
@@ -306,11 +320,11 @@ public class PlayerController : MonoBehaviour
             {
                 isStoneWalking = true;
                 AudioManager.Instance.PlayRandom("StoneWalk", 3);
+                if (photonView.IsMine)
+                {
+                    photonView.RPC("SyncAudioMovement", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncStepsStone"), this.transform.position);
+                }
 
-                //if (photonView.IsMine)
-                //{
-                //    photonView.RPC("SyncAudio", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncStepsStone"), this.transform.position);
-                //}
             }
 
             if (isRunning && !isStoneWalking)
