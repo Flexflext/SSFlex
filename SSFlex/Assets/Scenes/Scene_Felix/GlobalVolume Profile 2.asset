@@ -145,7 +145,7 @@ MonoBehaviour:
   - {fileID: 2228639809820652979}
   - {fileID: -6129247580419137860}
   - {fileID: 6327135575936678862}
-  - {fileID: 2894363362178789482}
+  - {fileID: 2762504107814827879}
   - {fileID: 7670520209145849621}
 --- !u!114 &2228639809820652979
 MonoBehaviour:
@@ -171,7 +171,7 @@ MonoBehaviour:
     m_Value: 22.9
     min: -100
     max: 100
---- !u!114 &2894363362178789482
+--- !u!114 &2762504107814827879
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -186,21 +186,21 @@ MonoBehaviour:
   active: 1
   m_AdvancedMode: 0
   shadows:
-    m_OverrideState: 0
-    m_Value: {x: 1, y: 0.97797847, z: 0.99449563, w: 0.25263894}
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 1, z: 1, w: -0.1589404}
   midtones:
     m_OverrideState: 0
-    m_Value: {x: 1, y: 0.9588581, z: 0.9705854, w: 0}
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
   highlights:
-    m_OverrideState: 0
-    m_Value: {x: 1, y: 0.7277676, z: 0.9688299, w: -0.7503412}
-  shadowsStart:
     m_OverrideState: 1
+    m_Value: {x: 1, y: 1, z: 1, w: -0.13245033}
+  shadowsStart:
+    m_OverrideState: 0
     m_Value: 0
     min: 0
   shadowsEnd:
-    m_OverrideState: 1
-    m_Value: 0.5
+    m_OverrideState: 0
+    m_Value: 0.3
     min: 0
   highlightsStart:
     m_OverrideState: 0
@@ -229,7 +229,7 @@ MonoBehaviour:
     m_Value: 0.5
   contrast:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 28
     min: -100
     max: 100
   colorFilter:

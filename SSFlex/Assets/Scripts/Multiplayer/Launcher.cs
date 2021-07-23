@@ -46,6 +46,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     // When client is successfully connected to the master server this will be called.
     public override void OnConnectedToMaster()
     {
+        Debug.Log("Huhu");
         PhotonNetwork.JoinLobby();
         PhotonNetwork.AutomaticallySyncScene = true;
     }
