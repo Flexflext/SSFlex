@@ -621,9 +621,12 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             return;
         }
 
+        
 
         float grenadeDmg =( maxGrenadeDmg * ( _percent));
-        
+
+
+
 
         HitAnything(grenadeDmg, _gameobject);
 
@@ -631,19 +634,23 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     private void HitAnything(float _dmg, GameObject _gameobject)
     {
-        Debug.Log("Hit Smth");
-        if (!photonView.IsMine || !canDoDmgAgain)
+        if (!photonView.IsMine)
         {
+
             return;
         }
-
-        canDoDmgAgain = false;
-        StartCoroutine(C_TimeTillDmgAgain());
 
 
         if (_gameobject.CompareTag("Player") || _gameobject.layer == 14 || _gameobject.CompareTag("DmgPlayer"))
         {
-            Debug.LogWarning("Hit Player");
+            if (!canDoDmgAgain)
+            {
+                return;
+            }
+
+            canDoDmgAgain = false;
+            StartCoroutine(C_TimeTillDmgAgain());
+
             PlayerHealth health = _gameobject.GetComponentInParent<PlayerHealth>();
             health.TakeDamage(_dmg, photonView.OwnerActorNr);
             Debug.Log(_dmg);
@@ -659,7 +666,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     private IEnumerator C_TimeTillDmgAgain()
     {
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(0.08f);
 
         canDoDmgAgain = true;
     }
