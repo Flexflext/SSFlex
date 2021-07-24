@@ -4871,7 +4871,7 @@ MonoBehaviour:
   mDefaultSideSlot: 0
   mDefaultFaceSlot_First: 0
   mDefaultFaceSlot_Second: 0
-  mCurrentDimension: 2
+  mCurrentDimension: 3
   mMeshRenderer: {fileID: 2154109005823829857}
   mBuildLayer:
     serializedVersion: 2

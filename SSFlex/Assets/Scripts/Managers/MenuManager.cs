@@ -292,6 +292,7 @@ public class MenuManager : MonoBehaviour
 
     public void LoadMainMenu()
     {
+        Destroy(GameManager.Instance.gameObject);
         Destroy(RoomManager.Instance.gameObject);
         PhotonNetwork.LoadLevel(0);
     }

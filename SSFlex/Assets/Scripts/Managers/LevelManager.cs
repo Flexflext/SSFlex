@@ -9,9 +9,18 @@ public class LevelManager : MonoBehaviourPunCallbacks
 
     private Dictionary<string, bool> playerDead = new Dictionary<string, bool>();
 
+    [SerializeField]
+    private ResourceSpawner mResourceSpawner;
+    
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void Start()
+    {
+        if(photonView.Owner.IsMasterClient)
+            mResourceSpawner.SpawnResources();
     }
 
 
@@ -82,8 +91,6 @@ public class LevelManager : MonoBehaviourPunCallbacks
     [PunRPC]
     private void RPC_CheckIfWon()
     {
-        Time.timeScale = 0;
-
         foreach (var player in playerDead)
         {
             if (player.Key == PhotonNetwork.NetworkingClient.UserId)
