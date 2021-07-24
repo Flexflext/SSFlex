@@ -190,6 +190,7 @@ MonoBehaviour:
   weaponImg: {fileID: 8638982697514852808}
   killerText: {fileID: 8638982696578813618}
   victimText: {fileID: 8638982697440499610}
+  killImg: {fileID: 21300000, guid: 8dfc1222829b0234fafc291436d54630, type: 3}
 --- !u!114 &8638982696584022706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,7 +204,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destroyTime: 10
-  destroyNetwork: 1
+  destroyNetwork: 0
 --- !u!114 &-1246430526336613999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,10 +220,11 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 3
+  Synchronization: 2
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 0}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
