@@ -5,7 +5,9 @@ using Photon.Pun;
 
 public class PlayerLook : MonoBehaviourPunCallbacks
 {
-    // Script for the Player to Look Around (Cam Control)
+    // Script von Felix
+    // Purpose: Script for the Player to Look Around (Cam Control)
+
 
     [Header("Stats")]
     [SerializeField] private float sensX = 100f;
@@ -24,15 +26,17 @@ public class PlayerLook : MonoBehaviourPunCallbacks
     private float currentAdsSensMultiplier = 1f;
 
     private float xRotation = 0f;
-    private float yRotation = 0f;
+    private float yRotation = 0f; 
 
     private bool canLook = true;
 
 
     private void Start()
     {
+        // Sub to Toggle Event 
         EscapeMenu.Instance.OnToggle += ChangeCanLook;
 
+        // Check that that the Script is Only Run if the Owner
         if (!photonView.IsMine)
         {
             return;
@@ -54,6 +58,7 @@ public class PlayerLook : MonoBehaviourPunCallbacks
 
     private void Update()
     {
+        // Check that that the Script is Only Run if the Owner
         if (!photonView.IsMine)
         {
             return;
@@ -90,6 +95,7 @@ public class PlayerLook : MonoBehaviourPunCallbacks
     /// <param name="_yrecoil"></param>
     public void AddRecoil(float _xrecoil, float _yrecoil)
     {
+        // Check that that the Script is Only Run if the Owner
         if (!photonView.IsMine)
         {
             return;
@@ -108,15 +114,19 @@ public class PlayerLook : MonoBehaviourPunCallbacks
         sensY = GameManager.Instance.MouseSensitivity;
     }
 
-
+    /// <summary>
+    /// Change the bool if the Player Can Look Around
+    /// </summary>
     private void ChangeCanLook()
     {
         Debug.Log("Hier");
         canLook = !canLook;
     }
 
+    
     private void OnDestroy()
     {
+        // Unsub from Toggle Event
         GameManager.Instance.OnMouseSensChange -= ChangeMouseSens;
     }
 

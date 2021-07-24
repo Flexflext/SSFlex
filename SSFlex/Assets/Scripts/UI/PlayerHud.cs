@@ -7,6 +7,9 @@ using Photon.Pun;
 
 public class PlayerHud : MonoBehaviourPunCallbacks
 {
+    // Script von Felix
+    // Purpose: PlayerHud Funtions to Chnange Different Displays on the Hud
+
     public static PlayerHud Instance;
 
     [Header("Shield and Health")]
@@ -52,12 +55,21 @@ public class PlayerHud : MonoBehaviourPunCallbacks
         Instance = this;
     }
 
+    /// <summary>
+    /// Display a MiningProgress
+    /// </summary>
+    /// <param name="_maxMineDuration"></param>
+    /// <param name="_miningProgress"></param>
     public void MiningProgress(float _maxMineDuration, float _miningProgress)
     {
         mMiningProgress.maxValue = _maxMineDuration;
         mMiningProgress.value = _miningProgress;
     }
 
+    /// <summary>
+    /// Sets the Current Rescource Amount
+    /// </summary>
+    /// <param name="_currentResources"></param>
     public void SetCurrentResourceAmount(float _currentResources)
     {
         mCurrentResources.text = "" + _currentResources;
@@ -71,11 +83,13 @@ public class PlayerHud : MonoBehaviourPunCallbacks
     /// <param name="_tookDmg"></param>
     public void ChangeShieldAmount(float _max, float _current, bool _tookDmg)
     {
+        //Displays a Got Hit Animation
         if (_tookDmg)
         {
             shieldAmimator.Play("GotHitAnimation");
         }
 
+        //Shows what hsieldDisplay< on the Hud and Changes the Shieldbar Fillamount and Text
         float shieldPercent = _current / _max;
 
         shieldDisplay.color = shieldColorOverLife.Evaluate(shieldPercent);
@@ -92,12 +106,15 @@ public class PlayerHud : MonoBehaviourPunCallbacks
     /// <param name="_current"></param>
     public void ChangeHealthAmount(float _max, float _current)
     {
+        // Change the Health Amount and Displays on the Hud
+
         float healthPercent = _current / _max;
 
         healthBar.fillAmount = healthPercent;
 
         healthDisplay.alpha = 1 - healthPercent;
 
+        //Check that there wont be a 0 on the Health Number
         if (_current > 0.5f)
         {
             healthText.text = ((int)_current).ToString();
@@ -185,9 +202,15 @@ public class PlayerHud : MonoBehaviourPunCallbacks
     {
         Instantiate(killSmthObj, this.transform);
 
+        //RPC Event to Display a KillFeed Kill
         photonView.RPC("RPC_SpawnObj",RpcTarget.All, _killername, _victimname);
     }
 
+    /// <summary>
+    /// RPC Call to Spawn a Kill Feed Kill
+    /// </summary>
+    /// <param name="_killername"></param>
+    /// <param name="_victimname"></param>
     [PunRPC]
     private void RPC_SpawnObj(string _killername, string _victimname)
     {
