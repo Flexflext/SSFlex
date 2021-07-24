@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4628376213179672541}
   - component: {fileID: 4628376213179672542}
   - component: {fileID: 4628376213179672543}
-  - component: {fileID: 4628376213179672512}
+  - component: {fileID: 9063845108725401177}
   m_Layer: 0
   m_Name: SyncStepsStone
   m_TagString: Untagged
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObservedComponentsFoldoutOpen: 1
   Group: 0
-  prefixField: -1
+  prefixField: 0
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
@@ -152,7 +152,7 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &4628376213179672512
+--- !u!114 &9063845108725401177
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -161,7 +161,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 4628376213179672513}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fecfcd31e2f0d540a7ffebcf1acba3a, type: 3}
+  m_Script: {fileID: 11500000, guid: 2b3aae3142ebc514a9d5c9703b3fe952, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isStoneStep: 1
