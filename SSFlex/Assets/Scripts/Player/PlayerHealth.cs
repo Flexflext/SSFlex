@@ -38,10 +38,10 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-        //if (!photonView.IsMine)
-        //{
-        //    return;
-        //}
+        if (!photonView.IsMine)
+        {
+            return;
+        }
 
         if (shield <= maxShield && !dead)
         {
@@ -51,13 +51,18 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
             }
             else
             {
+                if (!regenEffect.isPlaying)
+                {
+                    photonView.RPC("RPC_RegenEffect", RpcTarget.All, true);
+                }
+
                 regenEffect.Play();
 
                 shield += Time.deltaTime * regenPerSecond;
 
                 if (shield >= maxShield)
                 {
-                    regenEffect.Stop();
+                    photonView.RPC("RPC_RegenEffect", RpcTarget.All, false);
                 }
 
                 if (photonView.IsMine)
@@ -70,25 +75,20 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
 
     public void TakeDamage(float _dmg, int _actornum)
     {
-        if (!photonView.IsMine)
-        {
-            impactEffect.Play();
-        }
+        photonView.RPC("RPC_TakeDamage", RpcTarget.All, _dmg, _actornum);
+    }
 
-        float difference = shield - _dmg;
-        currentTime = timeUntilShieldRegen;
-
-        if (difference >= 0)
+    [PunRPC]
+    private void RPC_RegenEffect(bool _onoff)
+    {
+        if (_onoff)
         {
-            shield -= _dmg;
+            regenEffect.Play();
         }
         else
         {
-            shield = 0f;
-            health += difference;
+            regenEffect.Stop();
         }
-
-        photonView.RPC("RPC_TakeDamage", RpcTarget.All, _dmg, _actornum);
     }
 
     [PunRPC]
@@ -96,6 +96,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
     {
         if (!photonView.IsMine)
         {
+            impactEffect.Play();
             return;
         }
 
