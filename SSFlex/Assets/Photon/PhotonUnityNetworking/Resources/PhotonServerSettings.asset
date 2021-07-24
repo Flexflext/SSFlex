@@ -71,10 +71,9 @@ MonoBehaviour:
   - RPC_CheckIfWon
   - SyncAudioMovement
   - RPC_StartTime
-  - DestroyObject
-  - MineResource
-  - AddResources
-  - DestroyGO
+  - RPC_ChangeFeedContent
+  - RPC_SpawnObj
+  - RPC_RegenEffect
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

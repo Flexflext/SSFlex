@@ -2892,6 +2892,8 @@ MonoBehaviour:
   deathMenu: {fileID: 9167509546212115155}
   killerText: {fileID: 6188344833328063587}
   killFeedPos: {fileID: 1951743519}
+  killFeed: {fileID: 8638982696584022716, guid: cf176e7b3f6484845b331f7db424c271,
+    type: 3}
   mMiningProgress: {fileID: 1765616142}
   mCurrentResources: {fileID: 2079236039}
 --- !u!114 &529573223209336651

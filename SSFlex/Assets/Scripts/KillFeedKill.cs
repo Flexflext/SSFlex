@@ -1,19 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 using UnityEngine.UI;
 using TMPro;
 
-public class KillFeedKill : MonoBehaviour
+public class KillFeedKill : MonoBehaviourPunCallbacks
 {
     [SerializeField] private Image weaponImg;
     [SerializeField] private TMP_Text killerText;
     [SerializeField] private TMP_Text victimText;
+    [SerializeField] private Sprite killImg;
 
-    public void ChangeFeedContent(Sprite _weaponimg, string _killername, string _victimname)
+    public void ChangeFeedContent(string _killername, string _victimname)
     {
-        weaponImg.sprite = _weaponimg;
+        weaponImg.sprite = killImg;
         killerText.text = _killername;
-        victimText.text = _victimname;
+        victimText.text = _victimname;      
     }
 }
