@@ -153,7 +153,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             return;
         }
 
-        if (!PreparationCounter.Instance.PreparationPhase && !mChooseWeapon)
+        if (!RoundStartManager.Instance.PreparationPhase && !mChooseWeapon)
         {
             mChooseWeapon = true;
             farmMode = false;
