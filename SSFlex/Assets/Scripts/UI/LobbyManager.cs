@@ -85,8 +85,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if(!mTeamSet)
             InputNumberKeyValidation();
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-            ReturnMenu();   
+        //if (Input.GetKeyDown(KeyCode.Escape))
+        //    ReturnMenu();   
     }
 
     private void InputNumberKeyValidation()

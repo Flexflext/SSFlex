@@ -144,6 +144,7 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
 
         mCurrentPlaceholder = mNormalWallPlaceholder;
         mCurrentBuilding = mNormalWall;
+        mCurrentDimension = mCurrentPlaceholder.GetComponent<PlaceholderScript>().CurrentDimension;
 
         mPlaceholderScript = mCurrentPlaceholder.GetComponent<PlaceholderScript>();
         mCurrentCollider = mNormalWall.GetComponentInChildren<Collider>();
@@ -212,7 +213,7 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     /// 
     /// 1. Sets the position of the build point on the hit position
     /// 2. Checks if the player is looking at an building on which he can clip the one he wishes to build
-    /// 3. 
+    /// 3. Calculates the Dot product for side and up clip to determine on which side the building has to clip
     /// </summary>
     private void ManageBuildingClip()
     {
@@ -234,8 +235,6 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
                 if (mHitObjInfo == null || mHitObjInfo.gameObject != hit.collider.gameObject)
                     mHitObjInfo = mHitObj.GetComponent<NormalBuildingInfo>();
 
-                if(mCurrentDimension != mCurrentPlaceholder.GetComponent<PlaceholderScript>().CurrentDimension)
-                    mCurrentDimension = mCurrentPlaceholder.GetComponent<PlaceholderScript>().CurrentDimension;
 
                 Vector3 stupidArtistHeightAdj = new Vector3(mHitObj.transform.position.x, mHitObj.transform.position.y + (mAvailableDimensions.mBuildingDimensions[(int)mCurrentDimension].y / 2), mHitObj.transform.position.z);
                 dirVec = stupidArtistHeightAdj - hitPos;
@@ -258,8 +257,30 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// Behaviour for the clipped building
+    /// 
+    /// 1.  Calculates the Direction vector to the Building 
+    /// 2.  Calculates the dotproduct to hit hit object
+    /// 3.  Sets the RelativeHitDot either minus or plus in accordance to the Hit object rotation
+    /// 4.  Gets the dimensions of the Hit object
+    /// 5.  Adds both, the Hit object and the to be build objects Dimensions, together
+    /// 6.  Checks on which position the building should clip on by checking the Dot product and Object rotation
+    /// 
+    ///     The Buildings all have Slots on each side and its front aswell as its behind
+    ///    
+    /// 7.  The face slots get added upon building, the side slots get added from the building itself
+    /// 8.  If a slot is found, the position on which the building ought to be placed is calculated by adding the Transformed Direction
+    ///     of the combined scale of both buildings to the position of the Hit object
+    /// 10. If the building that the player wants to build NOT a normal wall and on the upper side of the Hit object, the build height gets adjusted
+    /// 11. Calls SetClippedBuildingRotation to set the buildings rotation and SetClippedBuildingPos with the calculated position
+    /// 12. If the player hits the left mouse button, the choosen building will be Instantiated at the position of the placeholder
+    /// 13. Sets the building is on ground level if it is
+    /// </summary>
     private void GetClippedBuildingPos_Side()
     {
+        bool clipFound = true;
+
         Vector3 dirToHitObj = mHitObj.transform.position - transform.position;
 
         mRelativeHitDot = Vector3.Dot(mHitObj.transform.forward, dirToHitObj);
@@ -299,7 +320,6 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
                     posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(0, 0, totalPlaceAdj.z / mThicknessAdj));
                     mHitSlotToAdd_Face = NormalBuildingInfo.EClipFaceSlots.front;
                     mCurrentSlotToAdd_Face = NormalBuildingInfo.EClipFaceSlots.behind;
-
                 }
                 else if (mRelativeHitDot > 0 && !mHitObjInfo.OccupiedFaceSlots.Contains(NormalBuildingInfo.EClipFaceSlots.behind))
                 {
@@ -338,9 +358,10 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         {
             mHitSlotToAdd_Face = NormalBuildingInfo.EClipFaceSlots.none;
             mCurrentSlotToAdd_Face = NormalBuildingInfo.EClipFaceSlots.none;
+            clipFound = false;
         }
 
-        if(mDotProductSide >= mClipThreshold_Side || mDotProductSide <= -mClipThreshold_Side || mDotProductSide < mClipThreshold_Side && mDotProductSide > -mClipThreshold_Side)
+        if (mDotProductSide >= mClipThreshold_Side || mDotProductSide <= -mClipThreshold_Side || mDotProductSide < mClipThreshold_Side && mDotProductSide > -mClipThreshold_Side)
         {
             if (mDotProductSide >= mClipThreshold_Side)
             {
@@ -370,6 +391,8 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
                     }
                 }
             }
+            else
+                clipFound = false;
 
             if (mDotProductSide <= -mClipThreshold_Side)
             {
@@ -409,16 +432,18 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
             }
         }
         else
-            Debug.Log("No valid Clip Pos");
+            clipFound = false;
 
-        //if (mAvailableDimensions.mBuildingDimensions[(int)mCurrentDimension == mAvailableDimensions.mBuildingDimensions)
-        //{
+        if (mCurrentDimension != BuildingDimensions.EBuildingDimensions.normalWall && mDotProductSide < mClipThreshold_Side && mDotProductSide > -mClipThreshold_Side)
+            posToSet.y -= mAvailableDimensions.mHeightAdjDimensions[(int)mCurrentDimension];
 
-        //}
-
-
-        SetClippedBuildingRotation();
-        SetClippedBuildingPos(posToSet);
+        if(posToSet != Vector3.zero && clipFound)
+        {
+            SetClippedBuildingRotation();
+            SetClippedBuildingPos(posToSet);
+        }
+        else
+            SetBuildingNormal(mBuildPoint.transform.position);
 
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && mPlaceholderScript.ValidPosition)
@@ -432,25 +457,34 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
 
             if (currentBuilding.transform.position.y > mCurrentPlaceholder.transform.position.y)
                 currenBuildingInfo.SetFirstFloor();
-
-            if (mCurrentSlotToAdd_Face != NormalBuildingInfo.EClipFaceSlots.none)
-                currenBuildingInfo.AddClipSlotFace(mCurrentSlotToAdd_Face);
         }
     }
 
+    /// <summary>
+    /// Sets the rotation of the clipped building as the rotation of the hit object
+    /// </summary>
     private void SetClippedBuildingRotation( )
     {
         mCurrentPlaceholder.transform.eulerAngles = new Vector3(mHitObj.transform.eulerAngles.x, mHitObj.transform.eulerAngles.y + mRotFloat, mHitObj.transform.eulerAngles.z);
     }
 
+    /// <summary>
+    /// Sets the position of the placeholder to the calculated position
+    /// </summary>
+    /// <param name="_posToAdj"></param>
     private void SetClippedBuildingPos(Vector3 _posToAdj)
     {
-        if (_posToAdj != Vector3.zero )
-            mCurrentPlaceholder.transform.position = _posToAdj;
-        else
-            SetBuildingNormal(mBuildPoint.transform.position);
+        SetBuildingNormal(mBuildPoint.transform.position);
+        mCurrentPlaceholder.transform.position = _posToAdj;
     }
 
+    /// <summary>
+    /// The Normal building behaviour
+    /// 
+    /// 1. Rounds the position of the building point
+    /// 2. Sets the position and rotation of the placeholder 
+    /// 3. If the player hits the left mouse button, the choosen building will be Instantiated at the position of the placeholder
+    /// </summary>
     private void SetBuildingNormal(Vector3 _posToSet)
     {
         float posHeightY = 0;
@@ -474,6 +508,9 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// Toggles between the build and farm mode
+    /// </summary>
     private void ChangeModeType()
     {
         if (Input.GetKeyDown(KeyCode.B))
@@ -491,6 +528,9 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// Toggles between the different buildings and their respective placeholder
+    /// </summary>
     private void ChangeBuildType()
     {
         if (Input.GetKeyDown(KeyCode.E))
@@ -498,12 +538,17 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
             TogglePlaceholder(mAllPlaceholder[mBuidlIdx]);
             ToggleBuilding(mAllBuildings[mBuidlIdx]);
 
+            mCurrentDimension = mCurrentPlaceholder.GetComponent<PlaceholderScript>().CurrentDimension;
+
             mBuidlIdx++;
             if (mBuidlIdx >= mAllBuildings.Count)
                 mBuidlIdx = 0;
         }
     }
 
+    /// <summary>
+    /// Toggles the Placeholder of the buildings
+    /// </summary>
     private void TogglePlaceholder(GameObject _currentPlaceholder)
     {
         foreach (GameObject placeholder in mAllPlaceholder)
@@ -519,6 +564,9 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// Toggle the buildings
+    /// </summary>
     private void ToggleBuilding(GameObject _currentBuilding)
     {
         foreach (GameObject building in mAllBuildings)

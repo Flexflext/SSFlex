@@ -195,7 +195,7 @@ MonoBehaviour:
     m_Bits: 256
   mValidMaterial: {fileID: 2100000, guid: fefd3e03a314e40469adeb978d9e5549, type: 2}
   mUnvalidMaterial: {fileID: 2100000, guid: 1beefccdfb0a3c448819827966d6bbda, type: 2}
-  mCurrentDimension: 2
+  mCurrentDimension: 3
 --- !u!1 &1206471796
 GameObject:
   m_ObjectHideFlags: 0
@@ -378,7 +378,7 @@ MonoBehaviour:
     m_Bits: 256
   mValidMaterial: {fileID: 2100000, guid: fefd3e03a314e40469adeb978d9e5549, type: 2}
   mUnvalidMaterial: {fileID: 2100000, guid: 1beefccdfb0a3c448819827966d6bbda, type: 2}
-  mCurrentDimension: 3
+  mCurrentDimension: 4
 --- !u!1 &1558243586
 GameObject:
   m_ObjectHideFlags: 0
@@ -612,7 +612,7 @@ MonoBehaviour:
     m_Bits: 256
   mValidMaterial: {fileID: 2100000, guid: fefd3e03a314e40469adeb978d9e5549, type: 2}
   mUnvalidMaterial: {fileID: 2100000, guid: 1beefccdfb0a3c448819827966d6bbda, type: 2}
-  mCurrentDimension: 1
+  mCurrentDimension: 2
 --- !u!136 &3038697585602085919
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -759,7 +759,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.01
-  far clip plane: 2
+  far clip plane: 3.5
   field of view: 70
   orthographic: 0
   orthographic size: 5
@@ -1298,8 +1298,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mMaxBuildRange: 10
   mMaxBuildHeight: 10
-  mClipThreshold_Side: 1.5
-  mClipThreshold_Up: 0.35
+  mClipThreshold_Side: 1.75
+  mClipThreshold_Up: 0.15
   mThicknessAdj: 0
   mBuildPoint: {fileID: 376500126}
   mMainCam: {fileID: 1370586007883492911}

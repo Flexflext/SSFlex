@@ -81,8 +81,7 @@ public class ResourceMiner : MonoBehaviour
             if (mHitObj != null)
             {
                 mIsMining = true;
-                if (mHitObj.MineResource(mMineSpeed, this) > 0)
-                    mCurrentResourceAmount += mHitObj.MineResource(mMineSpeed, this);
+                mHitObj.MineResource(mMineSpeed, this);
             }
             else
                 mIsMining = false;
@@ -97,5 +96,10 @@ public class ResourceMiner : MonoBehaviour
     public void SubtractResource(int _toSubtract)
     {
         mCurrentResourceAmount -= _toSubtract;
+    }
+
+    public void AddResource(int _toAdd)
+    {
+        mCurrentResourceAmount += _toAdd;
     }
 }
