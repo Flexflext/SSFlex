@@ -25,6 +25,15 @@ namespace AvailableBuildingDimensions
         new Vector3(5f, 4.9f, 2.2f),
         new Vector3(3.95f, 1f, 0.4f),
         new Vector3(3.6f, 4.9f,7.8f)
-        };  
+        };
+
+        public readonly float[] mHeightAdjDimensions =
+        {
+            0,
+            0,
+            2.6f,
+            1.3f,
+            2.15f
+        };
     }
 }

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using System.IO;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
+using System;
 
 public class MineableObject : MonoBehaviourPunCallbacks
 {
@@ -72,7 +75,7 @@ public class MineableObject : MonoBehaviourPunCallbacks
             mAudio.Stop();
     }
 
-    public int MineResource(float _mineSpeed, ResourceMiner _miner)
+    public void MineResource(float _mineSpeed, ResourceMiner _miner)
     {
         if(mMiner != _miner)
         {
@@ -85,11 +88,9 @@ public class MineableObject : MonoBehaviourPunCallbacks
         {
             mWasMined = true;
 
+            _miner.AddResource(mResourceValue);
             StartCoroutine("ResourceHasBeenMined");
-            return mResourceValue;
         }
-        else
-            return default;
     }
 
 
@@ -102,10 +103,22 @@ public class MineableObject : MonoBehaviourPunCallbacks
 
         yield return new WaitForSeconds(mDissolveTime);
 
+        //if (photonView.IsMine && PhotonNetwork.LocalPlayer == photonView.Owner)
+        //    photonView.RPC("DestroyGO", RpcTarget.AllBufferedViaServer);
+
         if (photonView.IsMine)
         {
+            //PhotonNetwork.RemoveRPCs(photonView);
             PhotonNetwork.Destroy(this.gameObject);
-            PhotonNetwork.RemoveRPCs(photonView);
         }
+
+        StopCoroutine(ResourceHasBeenMined());
+    }
+
+    [PunRPC]
+    private void DestroyGO()
+    {
+        PhotonNetwork.Destroy(this.gameObject);
+        PhotonNetwork.RemoveRPCs(photonView);
     }
 }

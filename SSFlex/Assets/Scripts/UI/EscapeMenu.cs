@@ -99,8 +99,12 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
 
     public void LoadMainMenu()
     {
-        PhotonNetwork.LeaveRoom();
-        LevelManager.Instance.StartTime();
+        StartCoroutine(Disconnect());
+
+        //PhotonNetwork.LeaveRoom();
+        //PhotonNetwork.LeaveLobby();
+
+        
 
         LevelManager.Instance.UpdateDictionary(PhotonNetwork.NetworkingClient.UserId, false);
 
@@ -109,13 +113,30 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
             LevelManager.Instance.CheckIfWon();
         }
 
+
+        LevelManager.Instance.StartTime();
+    }
+
+    private IEnumerator Disconnect()
+    {
+        PhotonNetwork.Disconnect();
+        while (PhotonNetwork.IsConnected)
+            yield return null;
+
         Destroy(RoomManager.Instance.gameObject);
+        Destroy(GameManager.Instance.gameObject);
         PhotonNetwork.LoadLevel(0);
     }
 
     public void RestartRound()
     {
+        //PhotonNetwork.AutomaticallySyncScene = true;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         LevelManager.Instance.StartTime();
+
         PhotonNetwork.LoadLevel(1);
     }
 
