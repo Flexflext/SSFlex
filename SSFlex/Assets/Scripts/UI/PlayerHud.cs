@@ -35,6 +35,7 @@ public class PlayerHud : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject deathMenu;
     [SerializeField] private TMP_Text killerText;
     [SerializeField] private GameObject killFeedPos;
+    [SerializeField] private GameObject killFeed;
 
 
 
@@ -184,9 +185,15 @@ public class PlayerHud : MonoBehaviourPunCallbacks
     {
         Instantiate(killSmthObj, this.transform);
 
-        GameObject killFeedObj = PhotonNetwork.Instantiate(System.IO.Path.Combine("PhotonPrefabs", "KillFeedKill"), killFeedPos.transform.position, Quaternion.identity);
+        photonView.RPC("RPC_SpawnObj",RpcTarget.All, _killername, _victimname);
+    }
+
+    [PunRPC]
+    private void RPC_SpawnObj(string _killername, string _victimname)
+    {
+        GameObject killFeedObj = Instantiate(killFeed, killFeedPos.transform.position, Quaternion.identity);
         killFeedObj.transform.parent = killFeedPos.transform;
-        killFeedObj.GetComponent<KillFeedKill>().ChangeFeedContent(_weapon, _killername, _victimname);
+        killFeedObj.GetComponent<KillFeedKill>().ChangeFeedContent(_killername, _victimname);
     }
 
     /// <summary>

@@ -106,6 +106,8 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     private bool farmMode = true;
 
+    private bool canShoot = true;
+
     private bool mChooseWeapon;
 
     private void Awake()
@@ -123,6 +125,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        EscapeMenu.Instance.OnToggle += CanShootToggle;
         GameManager.Instance.OnFovChange += ChangeFov;
         ChangeFov();
     }
@@ -158,6 +161,16 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             mChooseWeapon = true;
             farmMode = false;
             SwitchWeapon(primaryGun, secondaryGun);
+        }
+
+        if (!imAiming)
+        {
+            currentGun.ZoomOut(ref cam, fov, Time.deltaTime);
+        }
+
+        if (!canShoot)
+        {
+            return;
         }
 
         if (!farmMode)
@@ -342,13 +355,6 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
             #endregion
 
-        }
-        else
-        {
-            if (!imAiming)
-            {
-                currentGun.ZoomOut(ref cam, fov, Time.deltaTime);
-            }
         }
 
     }
@@ -621,9 +627,12 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             return;
         }
 
+        
 
         float grenadeDmg =( maxGrenadeDmg * ( _percent));
-        
+
+
+
 
         HitAnything(grenadeDmg, _gameobject);
 
@@ -631,19 +640,23 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     private void HitAnything(float _dmg, GameObject _gameobject)
     {
-        Debug.Log("Hit Smth");
-        if (!photonView.IsMine || !canDoDmgAgain)
+        if (!photonView.IsMine)
         {
+
             return;
         }
-
-        canDoDmgAgain = false;
-        StartCoroutine(C_TimeTillDmgAgain());
 
 
         if (_gameobject.CompareTag("Player") || _gameobject.layer == 14 || _gameobject.CompareTag("DmgPlayer"))
         {
-            Debug.LogWarning("Hit Player");
+            if (!canDoDmgAgain)
+            {
+                return;
+            }
+
+            canDoDmgAgain = false;
+            StartCoroutine(C_TimeTillDmgAgain());
+
             PlayerHealth health = _gameobject.GetComponentInParent<PlayerHealth>();
             health.TakeDamage(_dmg, photonView.OwnerActorNr);
             Debug.Log(_dmg);
@@ -659,11 +672,10 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     private IEnumerator C_TimeTillDmgAgain()
     {
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(0.08f);
 
         canDoDmgAgain = true;
     }
-
 
     // Instantiates a 3D AudioPrefab for everyone at a specific point.
     [PunRPC]
@@ -671,8 +683,6 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.Instantiate(_prefabName, _prefabPosition, Quaternion.identity);
     }
-
-
 
     private IEnumerator C_GrenadeRegenTimer(float _time)
     {
@@ -707,6 +717,17 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         thirdPersonAnimator.SetBool("isStabbing", false);
     }
 
+    private void ChangeFov()
+    {
+        fov = GameManager.Instance.Fov;
+    }
+
+    private void CanShootToggle()
+    {
+        Debug.Log("Hier");
+        canShoot = !canShoot;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!photonView.IsMine)
@@ -735,19 +756,9 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         PlayerHud.Instance.ChangeAmmoAmount(currentGun.BulletsInMag, currentGun.CurrentAmmo);
     }
 
-    private void ChangeFov()
-    {
-        fov = GameManager.Instance.Fov;
-    }
-
-
     private void OnDestroy()
     {
         GameManager.Instance.OnFovChange -= ChangeFov;
-    }
-
-    private void OnDrawGizmos()
-    {
-        //Gizmos.DrawSphere(swordPosition.position, range);
+        EscapeMenu.Instance.OnToggle -= CanShootToggle;
     }
 }
