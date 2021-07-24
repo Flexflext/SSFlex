@@ -4869,7 +4869,8 @@ MonoBehaviour:
   mColourStartValue: 0.3
   mExtendMod: 2
   mDefaultSideSlot: 0
-  mDefaultFaceSlot: 2
+  mDefaultFaceSlot_First: 0
+  mDefaultFaceSlot_Second: 0
   mCurrentDimension: 2
   mMeshRenderer: {fileID: 2154109005823829857}
   mBuildLayer:
