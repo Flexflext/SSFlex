@@ -1094,6 +1094,8 @@ MonoBehaviour:
   thirdPersonPistol: {fileID: 5432218386940344791}
   thirdPersonMesh: {fileID: 7445667072083592960}
   thirdPersonPlayer: {fileID: 1047755998731914617}
+  stoneStepPrefab: {fileID: 4628376213179672513, guid: 63a8d1c72578580419b97fa471c5ef26,
+    type: 3}
   thirdPersonAnimator: {fileID: 3253832158568025572}
   moveDir: {x: 0, y: 0, z: 0}
   currentPlayerSpeed: 0
@@ -1108,6 +1110,10 @@ MonoBehaviour:
   isMoving: 0
   isRunning: 0
   isSneaking: 0
+  isStoneWalking: 0
+  isStoneRunning: 0
+  isGravelWalking: 0
+  isGravelRunning: 0
 --- !u!114 &1370586008316802725
 MonoBehaviour:
   m_ObjectHideFlags: 0

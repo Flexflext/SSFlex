@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject thirdPersonPistol;
     [SerializeField] private GameObject thirdPersonMesh;
     [SerializeField] private GameObject thirdPersonPlayer;
+    [SerializeField] private GameObject stoneStepPrefab;
 
     [SerializeField] private Animator thirdPersonAnimator;
 
@@ -54,6 +55,7 @@ public class PlayerController : MonoBehaviour
     private Animator fpsAnimator;
     private PhotonView photonView;
     private PlayerShooting playerShooting;
+    
 
     // Non-visible Stats
     // Movement
@@ -70,7 +72,7 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded, isStoneGrounded, isGravelGrounded;
     private bool useGravity = true;
 
-    private bool isStoneWalking, isStoneRunning, isGravelWalking, isGravelRunning;
+    public bool isStoneWalking, isStoneRunning, isGravelWalking, isGravelRunning;
 
 
     private void Awake()
@@ -301,13 +303,20 @@ public class PlayerController : MonoBehaviour
         //if (isStoneGrounded && !isGravelGrounded)
         //{
         //    isOnStone = true;
-        //    if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D) && !isStoneRunning)
+        //    if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D) && !isStoneRunning && isStoneWalking == false)
         //    {
+        //        Debug.Log("WASD");
         //        isStoneWalking = true;
         //        if (photonView.IsMine)
         //        {
+        //            Debug.Log("instantiated");
         //            photonView.RPC("SyncAudioMovement", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncStepsStone"), this.transform.position);
         //        }
+        //    }
+        //    if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D) && !isStoneRunning && isStoneWalking == true)
+        //    {
+        //        Debug.Log("WADSD Off");
+        //        isStoneWalking = false;
         //    }
         //}
 
@@ -315,15 +324,31 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("isonstone");
             isOnStone = true;
-
+            
             if (isMoving && !isStoneRunning)
             {
+                //if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D) && !isStoneRunning && isStoneWalking == false)
+                //{
+                //    Debug.Log("WASD");
+                //    isStoneWalking = true;
+                //    if (photonView.IsMine)
+                //    {
+                //        Debug.Log("instantiated");
+                //        photonView.RPC("SyncAudioMovement", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncStepsStone"), this.transform.position);
+                //    }
+                //}
+                //if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D) && !isStoneRunning && isStoneWalking == true)
+                //{
+                //    Debug.Log("WADSD Off");
+                //    isStoneWalking = false;
+                //    PhotonNetwork.Destroy(stoneStepPrefab);
+                //}
                 isStoneWalking = true;
                 AudioManager.Instance.PlayRandom("StoneWalk", 3);
-                if (photonView.IsMine)
-                {
-                    photonView.RPC("SyncAudioMovement", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncStepsStone"), this.transform.position);
-                }
+                //if (photonView.IsMine)
+                //{
+                //    photonView.RPC("SyncAudioMovement", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncStepsStone"), this.transform.position);
+                //}
 
             }
 

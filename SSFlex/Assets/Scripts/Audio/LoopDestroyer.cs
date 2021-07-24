@@ -19,15 +19,15 @@ public class LoopDestroyer : MonoBehaviour
 
     private void AudioDestroyer()
     {
-        if (!playerController.isOnStone && isStoneStep == true)
+        if (playerController.isStoneWalking == false && isStoneStep == true)
         {
             Destroy(this.gameObject);
         }
-        if (!playerController.isOnGravel && isStoneStep == false)
+        if (playerController.isGravelWalking == false && isStoneStep == false)
         {
             Destroy(this.gameObject);
         }
-        if (!playerController.isMoving || playerController.isSneaking)
+        if (playerController.isSneaking)
         {
             Destroy(this.gameObject);
         }
