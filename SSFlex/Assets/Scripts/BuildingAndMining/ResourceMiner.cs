@@ -1,11 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Photon.Pun;
 using UnityEngine;
-using Photon.Pun;
-using Photon.Realtime;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 
+/// <summary>
+/// Written by Max
+/// 
+/// This script manages the Player behaviour while mining
+/// </summary>
 public class ResourceMiner : MonoBehaviourPunCallbacks
 {
     public int ResourceAmount => mCurrentResourceAmount;
@@ -16,6 +17,8 @@ public class ResourceMiner : MonoBehaviourPunCallbacks
     private float mMineSpeed;
     [SerializeField]
     private float mMaxMineDistance;
+    [SerializeField]
+    private int mCurrentResourceAmount;
 
     [Header("Components")]
     [SerializeField]
@@ -37,14 +40,19 @@ public class ResourceMiner : MonoBehaviourPunCallbacks
     private MineableObject mHitObj;
 
     private bool mIsMining;
-    private int mCurrentResourceAmount = 50;
 
+    /// <summary>
+    /// Sets the start resource amount
+    /// </summary>
     private void Start()
     {
         if (photonView.IsMine)
             PlayerHud.Instance.SetCurrentResourceAmount(mCurrentResourceAmount);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     private void Update()
     {
         if (mBuildPlacer.IsInMineMode && Input.GetKey(KeyCode.Mouse0))
@@ -85,9 +93,7 @@ public class ResourceMiner : MonoBehaviourPunCallbacks
 
             if (mHitObj != null)
             {
-
                 mIsMining = true;
-                //mHitObj.MineResource(mMineSpeed, this);
 
                 if (mHitObj.MineResource(mMineSpeed, this) > 0)
                 {
@@ -110,5 +116,8 @@ public class ResourceMiner : MonoBehaviourPunCallbacks
     public void SubtractResource(int _toSubtract)
     {
         mCurrentResourceAmount -= _toSubtract;
+
+        if (photonView.IsMine)
+            PlayerHud.Instance.SetCurrentResourceAmount(mCurrentResourceAmount);
     }
 }

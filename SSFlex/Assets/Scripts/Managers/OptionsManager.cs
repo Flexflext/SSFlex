@@ -41,20 +41,10 @@ public class OptionsManager : MonoBehaviour
 
     [Header("Audio Slider")]
     [SerializeField]
-    private Slider mMusicSlider;
-    [SerializeField]
-    private Slider mSFXSlider;
-    //[SerializeField]
-    //private Slider mVoiceSlider;
+    private Slider mVolumen;
 
     private float mFov;
     private float mMouseSensitivity;
-
-
-    //private void Awake()
-    //{
-    //    mVolumen = FindObjectOfType<AudioVolumen>();
-    //}
 
     /// <summary>
     /// Reads out all the available resolutions to display them properly
@@ -88,40 +78,6 @@ public class OptionsManager : MonoBehaviour
         }
     }
 
-    ///// <summary>
-    ///// Adjusts the slider so they portray the right values after scene loading
-    ///// </summary>
-    //private void Update()
-    //{
-    //    mMusicMixer.SetFloat("Volume", Mathf.Log10(mVolumen.MusicVolumen) * 20);
-    //    mMusicSlider.value = mVolumen.MusicVolumen;
-
-    //    mVoiceMixer.SetFloat("Voice", Mathf.Log10(mVolumen.VoiceVolumen) * 20);
-    //    mVoiceSlider.value = mVolumen.VoiceVolumen;
-
-    //    mSFXMixer.SetFloat("SFX", Mathf.Log10(mVolumen.SFXVolumen) * 20);
-    //    mSFXSlider.value = mVolumen.SFXVolumen;
-    //}
-
-    /// <summary>
-    /// Method to adjust the Audio
-    /// </summary>
-    public void SetMusicVolumen(float _volume)
-    {
-        //mMusicMixer.SetFloat("Volume", Mathf.Log10(_volume) * 20);
-        //mVolumen.MusicVolumen = _volume;
-    }
-    public void SetVoiceVolumen(float _volume)
-    {
-        //mVoiceMixer.SetFloat("Voice", Mathf.Log10(_volume) * 20);
-        //mVolumen.VoiceVolumen = _volume;
-    }
-    public void SetSFXVolumen(float _volume)
-    {
-        //mSFXMixer.SetFloat("SFX", Mathf.Log10(_volume) * 20);
-        //mVolumen.SFXVolumen = _volume;
-    }
-
     /// <summary>
     /// Method to toggle between fullscreen or windowed
     /// </summary>
@@ -152,6 +108,9 @@ public class OptionsManager : MonoBehaviour
         Debug.Log("Quit Game");
     }
 
+    /// <summary>
+    /// Sets the Fov to the choosen value
+    /// </summary>
     public void SetFov(float _value)
     {
         mFov = _value;
@@ -167,6 +126,9 @@ public class OptionsManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sets the Mouse Sensitivity to the choosen value
+    /// </summary>
     public void SetMouseSensitivity(float _value)
     {
         mMouseSensitivity = _value;
@@ -182,6 +144,9 @@ public class OptionsManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sets the Graphic Quality to the choosen value
+    /// </summary>
     public void SetGraphicQuality(int _graphicQualityIdx)
     {
         QualitySettings.SetQualityLevel(_graphicQualityIdx);

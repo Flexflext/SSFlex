@@ -129,14 +129,15 @@ public class MineableObject : MonoBehaviourPunCallbacks
             return default;
     }
 
+    /// <summary>
+    /// Disables the collider and Destroyes the Object after the given time
+    /// </summary>
     private IEnumerator ResourceHasBeenMined()
     {
         if (mCollider.enabled)
             mCollider.enabled = false;
 
-
         yield return new WaitForSeconds(mDissolveTime);
-
 
         if (photonView.IsMine)
         {
@@ -146,6 +147,9 @@ public class MineableObject : MonoBehaviourPunCallbacks
         StopCoroutine(ResourceHasBeenMined());
     }
 
+    /// <summary>
+    /// Counts down the time value of the shader
+    /// </summary>
     private IEnumerator DissolveMaterial()
     {
         float value = -mCutoffHeight;

@@ -84,6 +84,12 @@ public class MenuManager : MonoBehaviour
         };
     }
 
+    private void Update()
+    {
+        if (mRoomMenu.activeSelf)
+            mMainMenu.SetActive(false);
+    }
+
     public void AdminMainMenu()
     {
         if (mMainMenu != null)

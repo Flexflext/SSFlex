@@ -1330,6 +1330,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mMineSpeed: 3
   mMaxMineDistance: 10
+  mCurrentResourceAmount: 50
   mBuildPlacer: {fileID: 279627001}
   mMainCam: {fileID: 1370586007883492911}
   mAnimator: {fileID: 1370586007487966453}

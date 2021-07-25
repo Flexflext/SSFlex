@@ -126,7 +126,7 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
     /// 
     /// 1. Tries to Disconnect from the Server
     /// 2. If the player is disconnected the RoomManager and GameManager instances will be destroyed to negate a photonViewID doubling
-    /// 3. Load the Main Menu
+    /// 3. Loads the Main Menu
     /// </summary>
     private IEnumerator Disconnect()
     {
@@ -140,7 +140,7 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
     }
 
     /// <summary>
-    /// 
+    /// Restart the Round
     /// </summary>
     public void RestartRound()
     {
