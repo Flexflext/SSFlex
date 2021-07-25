@@ -15,6 +15,9 @@ public enum Team
 
 public class PlayerGFXChange : MonoBehaviourPunCallbacks
 {
+    // Script von Felix
+    // Purpose: Leben vom Spieler + VFX Play
+
     [SerializeField] private Team team;
     public Team CurrentTeam => team;
 
@@ -23,8 +26,6 @@ public class PlayerGFXChange : MonoBehaviourPunCallbacks
     [SerializeField] private Material robotBlue;
     [SerializeField] private Material robotYellow;
     [SerializeField] private Material robotGreen;
-
-    private List<Material> mAllMats;
 
     private Material mCurrentMat;
 
@@ -36,20 +37,18 @@ public class PlayerGFXChange : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        mAllMats = new List<Material>()
-        {
-            robotRed,
-            robotBlue,
-            robotYellow,
-            robotGreen
-        };
-
+        // Change the Player Gfx to the given Team Color (Material)
         ChangePlayerGfx(team);
     }
 
 
+    /// <summary>
+    /// Change the Player Gfx to the given Team Color (Material)
+    /// </summary>
+    /// <param name="_team"></param>
     public void ChangePlayerGfx(Team _team)
     {
+        // Set CurrentMat
         switch (_team)
         {
             case Team.Red:
@@ -68,8 +67,10 @@ public class PlayerGFXChange : MonoBehaviourPunCallbacks
                 break;
         }
 
+        // Chnage the Gfx to the Current Material
         ChangeGfx(mCurrentMat);
 
+        // Check if photon view is mine to set Custom Proertie
         if (photonView.IsMine)
         {
             Hashtable hash = new Hashtable();
@@ -78,6 +79,11 @@ public class PlayerGFXChange : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// Event Function to CHnage the Custom Propertie on all Instances of the Game
+    /// </summary>
+    /// <param name="targetPlayer"></param>
+    /// <param name="changedProps"></param>
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
         if (!photonView.IsMine && targetPlayer == photonView.Owner)
@@ -86,6 +92,10 @@ public class PlayerGFXChange : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// Change all Player Materials to the currentMat
+    /// </summary>
+    /// <param name="_currentMat"></param>
     private void ChangeGfx(Material _currentMat)
     {
         foreach (SkinnedMeshRenderer renderer in robots)
