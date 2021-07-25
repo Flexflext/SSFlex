@@ -4,6 +4,12 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
 
+
+/// <summary>
+/// Written by Max
+/// 
+/// Manages some Game Infos
+/// </summary>
 public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager Instance;
@@ -12,6 +18,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public System.Action OnMouseSensChange;
 
     public int MaxPlayer => mMaxPlayer;
+    // Gets and sets mouse Sensitivity and FOV
     public float Fov { get{ return mFov; } set { mFov = value; } }
     public float MouseSensitivity { get { return mMouseSensitivity; } set { mMouseSensitivity = value; } }
     public EWeaponsAndUtensils StartWeapon => mStartWeapon;
@@ -33,10 +40,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         else
             Destroy(this.gameObject);
 
-        DontDestroyOnLoad(this.gameObject);
-
-
-      
+        DontDestroyOnLoad(this.gameObject);     
     }
 
     private void Update()
@@ -49,12 +53,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         mStartWeapon = _startWeapon;
     }
 
-    //public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
-    //{
-    //    if (!photonView.IsMine && targetPlayer == photonView.Owner)
-    //        mPlayerShooting.DisplayObject((int)changedProps["weaponKey"]);
-    //}
-
+    /// <summary>
+    /// Gets the chosen oprion of the player and safes them
+    /// </summary>
     private void GetOptions()
     {
         if (mOptions == null)

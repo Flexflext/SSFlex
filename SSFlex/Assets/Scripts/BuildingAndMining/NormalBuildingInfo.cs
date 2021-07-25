@@ -1,11 +1,20 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
-using ExitGames.Client.Photon;
+using System.Collections.Generic;
+using UnityEngine;
 
+
+/// <summary>
+/// Written by Max
+/// 
+/// This script hold all data of a build building
+/// </summary>
 public class NormalBuildingInfo : MonoBehaviourPunCallbacks
 {
+    /// <summary>
+    /// The side slots of the building
+    /// </summary>
     public enum EClipSideSlots
     {
         up,
@@ -15,6 +24,9 @@ public class NormalBuildingInfo : MonoBehaviourPunCallbacks
         none
     }
 
+    /// <summary>
+    /// The face slots of the building
+    /// </summary>
     public enum EClipFaceSlots
     {
         front,
@@ -77,16 +89,15 @@ public class NormalBuildingInfo : MonoBehaviourPunCallbacks
     private float mRFloat;
     private bool mIsFirstFloor;
 
-    private void Update()
-    {
-        //Debug.DrawRay(mMeshRenderer.bounds.center, transform.right * (mMeshRenderer.bounds.extents.x + mExtendMod));
-    }
-
     private void Awake()
     {
         mOccupiedSideSlots = new List<EClipSideSlots>();
         mOccupiedFaceSlots = new List<EClipFaceSlots>();
     }
+
+    /// <summary>
+    /// Sets the default face and side Slots
+    /// </summary>
     private void Start()
     {
         GetNeighboursSide();
@@ -102,32 +113,56 @@ public class NormalBuildingInfo : MonoBehaviourPunCallbacks
         AddClipSlotFace(mDefaultFaceSlot_Second);
     }
 
-
+    /// <summary>
+    /// Adds a clipped building to the given side slot
+    /// </summary>
     public void AddClipSlotSide(EClipSideSlots _slotToAdd)
     {
         mOccupiedSideSlots.Add(_slotToAdd);
     }
 
+    /// <summary>
+    /// Adds a clipped building to the given face slot
+    /// </summary>
     public void AddClipSlotFace(EClipFaceSlots _slotToAdd)
     {
         mOccupiedFaceSlots.Add(_slotToAdd);
     }
 
+    /// <summary>
+    /// Sets the buildig to be on ground Level
+    /// </summary>
     public void SetFirstFloor()
     {
         mIsFirstFloor = true;
     }
 
+    /// <summary>
+    /// Removes a clipped building to the given face slot
+    /// </summary>
     public void RemoveClipSlotSide(EClipSideSlots _slotToRemove)
     {
         mOccupiedSideSlots.Remove(_slotToRemove);
     }
 
+    /// <summary>
+    /// Removes a clipped building to the given face slot
+    /// </summary>
     public void RemoveClipSlotFront(EClipFaceSlots _slotToRemove)
     {
         mOccupiedFaceSlots.Remove(_slotToRemove);
     }
 
+    /// <summary>
+    /// RPC call from the player upon shooting at the wall
+    /// 
+    /// 1. The player calles the Take Damage
+    /// Now the colour value of the buildings material hat to be updated.
+    /// 2. Creates Hashtable with 4 floats, RGBA and takes the values of the Damaged colour
+    /// 3. Updates the custom property wth the hashtables value
+    /// 4. Calls the MateChange method for all clients with the given value
+    /// 5. Destroyes the GO ofer the Network if the health falls under or on zero and removes his RPC
+    /// </summary>
     [PunRPC]
     public void TakeDamage(float _damage)
     {
@@ -162,12 +197,18 @@ public class NormalBuildingInfo : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// RPC call to let all players see the Colour change in the material
+    /// </summary>
     [PunRPC]
     private void MateChange(float _r, float _g, float _b,float _a)
     {
         mMeshRenderer.material.color = new Color(_r,_g,_b,_a);
     }
 
+    /// <summary>
+    /// Property Update for the Colour value
+    /// </summary>
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
         if (!photonView.IsMine && targetPlayer == photonView.Owner)
@@ -176,6 +217,7 @@ public class NormalBuildingInfo : MonoBehaviourPunCallbacks
         }
     }
 
+    #region raycasts to check for neighbouring buildings
     private void GetNeighboursSide()
     {
         RaycastHit hitRight;
@@ -227,4 +269,5 @@ public class NormalBuildingInfo : MonoBehaviourPunCallbacks
             }          
         }
     }
+    #endregion
 }

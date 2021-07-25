@@ -4,6 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+
+/// <summary>
+/// Written by Max
+/// 
+/// This Script randomly spawns Resource stones into the given boudns
+/// </summary>
 public class ResourceSpawner : MonoBehaviourPunCallbacks
 {
     [SerializeField]
@@ -17,7 +23,10 @@ public class ResourceSpawner : MonoBehaviourPunCallbacks
     [SerializeField]
     private Collider mCollider;
 
-
+    /// <summary>
+    /// 1. Takes a randome rotation and position aswell as a random resource prefab
+    /// 2. Instantiates it over the Network
+    /// </summary>
     public void SpawnResource()
     {
         for (int i = 0; i < mAmountOfSpawns; i++)

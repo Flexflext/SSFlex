@@ -90,6 +90,8 @@ public class MenuManager : MonoBehaviour
             mMainMenu.SetActive(false);
     }
 
+
+    #region Toggles the various Menus
     public void AdminMainMenu()
     {
         if (mMainMenu != null)
@@ -234,12 +236,24 @@ public class MenuManager : MonoBehaviour
             mEnterPlayerNameText.text = mEnterPlayerNameMessages[rndIdx];
         }
     }
+    private void CloseMenus(GameObject _menuToCheck)
+    {
+        foreach (GameObject menu in mAllMenus)
+        {
+            if (menu != _menuToCheck && menu != null)
+                menu.SetActive(false);
+        }
+    }
 
     public void AdminServerFullMenu()
     {
         StartCoroutine(RommFullDisplay());
     }
+    #endregion
 
+    /// <summary>
+    /// Displays a message if the room is full and the player tries to enter
+    /// </summary>
     private IEnumerator RommFullDisplay()
     {
         mText_RoomFull.gameObject.SetActive(true);
@@ -250,26 +264,24 @@ public class MenuManager : MonoBehaviour
         return null;
     }
 
+    /// <summary>
+    /// Creates a room from the launcher
+    /// </summary>
     public void CreateRoomFromLauncher()
     {
         if(mPlayerNameInput.text.Length > 0)
             Launcher.Instance.CreateRoom();
     }
 
-    private void CloseMenus(GameObject _menuToCheck)
-    {
-        foreach (GameObject menu in mAllMenus)
-        {
-            if (menu != _menuToCheck && menu != null)
-                menu.SetActive(false);
-        }
-    }
 
     public void QuitGame()
     {
         Application.Quit();
     }
 
+    /// <summary>
+    /// Destroyes the Instances for the Game and Room Manager so they dont double in the main menu
+    /// </summary>
     public void LoadMainMenu()
     {
         Destroy(GameManager.Instance.gameObject);
