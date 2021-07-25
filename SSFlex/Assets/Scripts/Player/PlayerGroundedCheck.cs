@@ -43,7 +43,11 @@ public class PlayerGroundedCheck : MonoBehaviour
             playerController.SetIsBuildLayerGroundedState(true);
         }
         // Just Trigger with Ground
-        playerController.SetIsGroundedState(true);
+
+        if (_other.gameObject.layer != 5 || _other.gameObject.layer != 19)
+        {
+            playerController.SetIsGroundedState(true);
+        }  
     }
 
     private void OnTriggerExit(Collider _other)

@@ -1207,7 +1207,7 @@ MonoBehaviour:
   timeUntilShieldRegen: 5
   regenPerSecond: 10
   impactEffect: {fileID: 1676757721523387770}
-  impactEffectShield: {fileID: 0}
+  impactEffectShield: {fileID: 6763434330141127467}
   regenEffect: {fileID: 7029569183256148174}
 --- !u!136 &1370586008316802745
 CapsuleCollider:
@@ -6348,15 +6348,15 @@ SkinnedMeshRenderer:
     type: 3}
   m_PrefabInstance: {fileID: 5597529074658276564}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &3884973837844697668 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8666148436300932752, guid: 1c3c602747259ae4f816a036b7b4688e,
-    type: 3}
-  m_PrefabInstance: {fileID: 5597529074658276564}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7982158161341829602 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2551352441445459254, guid: 1c3c602747259ae4f816a036b7b4688e,
+    type: 3}
+  m_PrefabInstance: {fileID: 5597529074658276564}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3884973837844697668 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8666148436300932752, guid: 1c3c602747259ae4f816a036b7b4688e,
     type: 3}
   m_PrefabInstance: {fileID: 5597529074658276564}
   m_PrefabAsset: {fileID: 0}
@@ -6796,6 +6796,12 @@ PrefabInstance:
 --- !u!4 &6763434330141127464 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3222272335827228463, guid: d7990757cde7092488efd900ca0bf43a,
+    type: 3}
+  m_PrefabInstance: {fileID: 8172700911529010183}
+  m_PrefabAsset: {fileID: 0}
+--- !u!2083052967 &6763434330141127467 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 3222272335827228460, guid: d7990757cde7092488efd900ca0bf43a,
     type: 3}
   m_PrefabInstance: {fileID: 8172700911529010183}
   m_PrefabAsset: {fileID: 0}
