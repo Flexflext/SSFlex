@@ -118,10 +118,12 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         playerLook = GetComponent<PlayerLook>();
         controller = GetComponent<PlayerController>();
 
+        // Check wich gun is First
         primaryWeaponIdx = GameManager.Instance.StartWeapon;
 
         mLoadout = new List<GameObject>();
 
+        // Choose a Gun 
         ChooseGun();
     }
 
@@ -148,6 +150,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
+        //Check that Photonview is Mine
         if (!photonView.IsMine)
         {
             return;
@@ -159,6 +162,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             return;
         }
 
+        //Check if Prep Phase is Over
         if (!RoundStartManager.Instance.PreparationPhase && !mChooseWeapon)
         {
             mChooseWeapon = true;
@@ -166,21 +170,28 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             SwitchWeapon(primaryGun, secondaryGun);
         }
 
-        if (!imAiming)
-        {
-            currentGun.ZoomOut(ref cam, fov, Time.deltaTime);
-        }
-
+        
+        //CHck if Can Even Shoot
         if (!canShoot)
         {
+            //Check that isnt Aiming and Sets Fov Acorrdingly
+            if (!imAiming)
+            {
+                currentGun.ZoomOut(ref cam, fov, Time.deltaTime);
+            }
+
             return;
         }
 
+
+        //Check that isnt in Farm Mode to Stop Alll Weapon Funktions in FarmMode
         if (!farmMode)
         {
             
+            //Chck for Player Input to Attack witch a Meele Attack
             if (Input.GetKeyDown(KeyCode.F) && !isMeeleing && !isGrenadeThrowing && !isSwitching)
             {
+                //Set Meele Bool + Interrupt Reload + StartCoroutine for Starting anothewr meele Attack
                 isMeeleing = true;
                 InterruptReload();
                 StartCoroutine(C_MeeleTimer(meeleTime));
@@ -188,18 +199,21 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
                 animator.SetTrigger("isMeeleing");
                 StartCoroutine(MeleeAnimation());
 
+                //Check if photonView is Mine to Start a Sound
                 if (photonView.IsMine)
                 {
                     photonView.RPC("SyncAudio", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncMelee"), this.transform.position);
                 }
             }
 
+            //Check for Player Input to Throw a Grenade
             if (Input.GetKeyDown(KeyCode.Q) && !isGrenadeThrowing && !isMeeleing && canThrowGrenade && !isSwitching)
             {
+                // Set Bool + Interrupt Reload + StartCoroutine to be Able to start the another Grenade Throw
                 isGrenadeThrowing = true;
                 InterruptReload();
                 StartCoroutine(C_GrenadeTimer(grenadeTime));
-                //Set Animator
+                //Set Animator + Coroutine
                 animator.SetTrigger("GrenadeThrow");
                 StartCoroutine(PlayerGrenadeAnimator());
                 StartCoroutine(GrenadeAudioTimer());
@@ -214,8 +228,12 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
                 // Set Bool for Aiming, sets the CurrentAdsmultiplier + Sets Animator and Movement Speed
                 imAiming = true;
                 InterruptReload();
+                // Set the Ads Multiplier
                 playerLook.AdsMultiplier = currentGun.AdsMultiplier;
+                // Set the bool
                 animator.SetBool("isAiming", true);
+
+                // set the movemnt Multiplier
                 controller.MovementMultiplier *= currentGun.MovementMultiplier;
             }
 
@@ -223,10 +241,12 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             //Check weather to aim in or Out
             if (!currentGun.IsAiming && imAiming)
             {
+                // Set the CurrentZoom
                 currentGun.ZoomIn(ref cam, fov, Time.deltaTime);
             }
             else
             {
+                //Set the Aiming Zoom to Zoom Out
                 if (!imAiming)
                 {
                     currentGun.ZoomOut(ref cam, fov, Time.deltaTime);
@@ -240,6 +260,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
                 // Resets Bool for Aiming, Resets the CurrentAdsmultiplier + Resets Animator and Movement Speed
                 imAiming = false;
                 playerLook.AdsMultiplier = 1;
+                // Stop the Aiming Bool
                 animator.SetBool("isAiming", false);
                 controller.MovementMultiplier = 1f;
 
@@ -256,6 +277,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
                 // Start the Fireing of the CurrentGun
                 currentGun.StartFiring();
                 InterruptReload();
+                // Change the Ammon Amount
                 PlayerHud.Instance.ChangeAmmoAmount(currentGun.BulletsInMag, currentGun.CurrentAmmo);
 
                 // Check if is Fireing + has enough Ammo
@@ -264,6 +286,8 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
                     // Sets Animator
                     animator.SetBool("isShooting", true);
                     thirdPersonAnimator.SetBool("isShooting", true);
+
+                    // Check what gun to Play the Different Sounds
                     if (currentGun == AR)
                     {
                         if (photonView.IsMine)
@@ -304,7 +328,10 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             // update Fireing if Current gun is fireing
             if (currentGun.IsFiring && !currentGun.IsReloading)
             {
+                // update the Firening of the Current Gun
                 currentGun.UpdateFiring(Time.deltaTime);
+
+                // Change the Ammo Hud 
                 PlayerHud.Instance.ChangeAmmoAmount(currentGun.BulletsInMag, currentGun.CurrentAmmo);
             }
             else // Sets Bool if aint fireing
@@ -332,7 +359,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             // Check for Player input
             if (Input.GetKeyDown(KeyCode.R) && !isMeeleing && currentGun.BulletsInMag < currentGun.MagSize && !isGrenadeThrowing && !currentGun.IsReloading && !isSwitching)
             {
-                //Start Reloading
+                //Start Reloading and Set all Animation Trigger + Resets the Stop Reload Trigger
                 currentGun.StartReload();
                 StartCoroutine(ReloadAudioTimer());
                 animator.SetTrigger("isReloading");
@@ -340,6 +367,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
                 StartCoroutine(ReloadAnimatorTimer());
             }
 
+            //Update the Reload
             currentGun.ReloadGun(Time.deltaTime);
 
             #endregion
@@ -349,25 +377,42 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             //Check for Wich gun to use as Next weapon
             if (Input.GetKeyDown(KeyCode.Alpha1) && !currentGun.IsAiming && !imAiming && currentGun != primaryGun && !isSwitching)
             {
+                // Switch Primary to Secondary
                 SwitchWeapon(primaryGun, secondaryGun);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2) && !currentGun.IsAiming && !imAiming && currentGun != secondaryGun && !isSwitching)
             {
+                // Switch Secondary to Primary
                 SwitchWeapon(secondaryGun, primaryGun);
             }
 
             #endregion
 
         }
+        else
+        {
+            //Check that isnt Aiming
+            if (!imAiming)
+            {
+                currentGun.ZoomOut(ref cam, fov, Time.deltaTime);
+            }
+        }
 
     }
 
+    /// <summary>
+    /// Choose wich Gun to Set as CurrentGun
+    /// </summary>
     public void ChooseGun()
     {
+        // Set Animator to FarmMode
         animator.SetBool("Farm", false);
+
+        //Change Primary and Secondary Weapons
         secondaryGun = Pistol;
         mSecondaryThridPersonGun = mThirdPersonPistol;
 
+        //Check wich Gun to Equip as Secondary
         switch (primaryWeaponIdx)
         {
             case EWeaponsAndUtensils.AR:
@@ -386,7 +431,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
                 break;
         }
 
-
+        //Add the Loadaout and Display via Rpc Call
         mLoadout.Add(farmTool);
         mLoadout.Add(mPrimaryThridPersonGun);
         mLoadout.Add(mSecondaryThridPersonGun);
@@ -398,22 +443,36 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             photonView.RPC("DisplayObject", RpcTarget.OthersBuffered, (int)mCurrentLoadoutIdx);         
     }
 
+    /// <summary>
+    /// Switch the Weapon and Starts the Coroutine
+    /// </summary>
+    /// <param name="_switchtogun"></param>
+    /// <param name="_switchfromgun"></param>
     private void SwitchWeapon(Gun _switchtogun, Gun _switchfromgun)
     {
+        // Set Animator to Start the Switch
         animator.SetBool(_switchfromgun.GunName, false);
         thirdPersonAnimator.SetBool(_switchfromgun.GunName, false);
 
-
+        // Start the Coroutine to switch the weapon
         StartCoroutine(C_WeaponSwitch(_switchtogun, _switchfromgun));
     }
 
+    /// <summary>
+    /// Coroutine to Switch the CurrentWeapon and Display on the Hud + Plays all Animations
+    /// </summary>
+    /// <param name="_switchtogun"></param>
+    /// <param name="_switchfromgun"></param>
+    /// <returns></returns>
     private IEnumerator C_WeaponSwitch(Gun _switchtogun, Gun _switchfromgun)
     {
+        //Check if im thew owner of the photonview and CHnage the Hud Elements
         if (photonView.IsMine)
         {
             PlayerHud.Instance.ChangeWeaponImg(_switchtogun.GunImg, _switchfromgun.GunImg);
         }
         
+        // tart the Animation and wait .25 secondsa to Switch an actuall current weapon
         isSwitching = true;
         animator.SetBool(_switchtogun.GunName, true);
         thirdPersonAnimator.SetBool(_switchtogun.GunName, true);
@@ -425,7 +484,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
         currentGun = _switchtogun;
 
-
+        // Check the Loadout
         if (currentGun == secondaryGun && !isMeeleing)
             mCurrentLoadoutIdx = ELoadout.secondaryWeapon;
         else if(!isMeeleing)
@@ -434,7 +493,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             mCurrentLoadoutIdx = ELoadout.knife;
 
 
-        //Changes the Ads Multiplier
+        //Changes the Ads Multiplier and Resets it
         if (imAiming)
         {
             playerLook.AdsMultiplier = currentGun.AdsMultiplier;
@@ -449,8 +508,10 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         if(photonView.IsMine)
             photonView.RPC("DisplayObject", RpcTarget.OthersBuffered, (int)mCurrentLoadoutIdx);
 
+        // Activate the Current weapon
         currentGun.gameObject.SetActive(true);
 
+        // Chang the Ammo Amount
         if (photonView.IsMine)
         {
             PlayerHud.Instance.ChangeAmmoAmount(currentGun.BulletsInMag, currentGun.CurrentAmmo);
@@ -497,6 +558,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             return;
         }
 
+        // interrupt Reload + Sets the Trigger
         currentGun.StopReload();
         animator.SetTrigger("StopReload");
     }
@@ -506,25 +568,33 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
     /// </summary>
     private void ThrowGrenade()
     {
+        // Check that is Mine
         if (!photonView.IsMine)
         {
             return;
         }
 
+        // Calculate the Direction and Instantiates a GameObject
         Vector3 direction = (crossHairTarget.position - grenadeThrowPosition.position).normalized + Vector3.up / 4;
 
         GameObject grenade = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Grenade"), grenadeThrowPosition.position, Quaternion.identity);
 
         Rigidbody grendadeRb = grenade.GetComponent<Rigidbody>();
 
+        // Adds Force to Grenade and adds Event
         grendadeRb.AddForce(direction * grenadeSpeed, ForceMode.Impulse);
 
         grenade.GetComponent<Grenade>().HitAnything += HitAnythingWithGrenade;
 
         canThrowGrenade = false;
+
+        // Start the Reload Timer
         StartCoroutine(C_GrenadeRegenTimer(regenTime));
     }
 
+    /// <summary>
+    /// Do a Meele Attack and Check all Colliders that were hit
+    /// </summary>
     private void DoMeeleDmg()
     {
         if (!photonView.IsMine)
@@ -532,21 +602,29 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             return;
         }
 
-        Debug.Log("Meele");
+        //Debug.Log("Meele");
 
+        // Check for all Hit Colliders with the Sphere Cast
         Collider[] allDmgColliders = Physics.OverlapSphere(swordPosition.position, range, allDmgLayers);
+
 
         foreach (Collider dmgObj in allDmgColliders)
         {
-            Debug.Log("Do " + dmg + " Dmg to: " + dmgObj.gameObject.name);
+            //Debug.Log("Do " + dmg + " Dmg to: " + dmgObj.gameObject.name);
             HitAnything(dmg, dmgObj.gameObject);
         }
     }
 
+    /// <summary>
+    /// Wait till do actuall Meele Dmg to Fit Animation
+    /// </summary>
+    /// <param name="_time"></param>
+    /// <returns></returns>
     private IEnumerator C_MeeleTimer(float _time)
     {
         yield return new WaitForSeconds(_time / 6);
         
+        // Do Meele Dmg after  time of Meele Attack
         DoMeeleDmg();
 
         if (currentGun == primaryGun)
