@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class ShotGun : Gun
 {
+    // Script von Felix
+    // Purpose: Shotgun Function
+
     [SerializeField] protected Vector2[] spreadPattern;
     [SerializeField] protected Transform camTransform;
     
 
-
+    /// <summary>
+    /// Fire Bullets of Shotgun in Spread Pattern
+    /// </summary>
     protected override void FireBullet()
     {
         // No more Reloading

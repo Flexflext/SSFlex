@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class CrossHairTarget : MonoBehaviour
 {
-    // Script to Determine where a Gun Should be Shooting
+    // Script von Felix
+    // Purpose: Script to Determine where a Gun Should be Shooting
 
     [SerializeField] private Camera cam;
 
@@ -15,6 +16,7 @@ public class CrossHairTarget : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Check that Cam is not null
         if (cam == null)
             return;
 
