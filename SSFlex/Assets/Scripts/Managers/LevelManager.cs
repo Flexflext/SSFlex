@@ -9,18 +9,9 @@ public class LevelManager : MonoBehaviourPunCallbacks
 
     private Dictionary<string, bool> playerDead = new Dictionary<string, bool>();
 
-    [SerializeField]
-    private ResourceSpawner mResourceSpawner;
-    
     private void Awake()
     {
         Instance = this;
-    }
-
-    private void Start()
-    {
-        if(photonView.Owner.IsMasterClient)
-            mResourceSpawner.SpawnResources();
     }
 
 

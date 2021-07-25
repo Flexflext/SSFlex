@@ -1,8 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
-public class ResourceMiner : MonoBehaviour
+
+public class ResourceMiner : MonoBehaviourPunCallbacks
 {
     public int ResourceAmount => mCurrentResourceAmount;
     public bool Mining => mIsMining;
@@ -82,6 +86,9 @@ public class ResourceMiner : MonoBehaviour
             {
                 mIsMining = true;
                 mHitObj.MineResource(mMineSpeed, this);
+
+                if (photonView.IsMine && mHitObj.Mined)
+                    mCurrentResourceAmount += mHitObj.Value;
             }
             else
                 mIsMining = false;
@@ -98,8 +105,17 @@ public class ResourceMiner : MonoBehaviour
         mCurrentResourceAmount -= _toSubtract;
     }
 
-    public void AddResource(int _toAdd)
+    public void AddResource(int _value)
     {
+        photonView.RPC("RPCAddResource", RpcTarget.All, _value);
+    }
+
+    [PunRPC]
+    private void RPCAddResource(int _toAdd)
+    {
+        if (!photonView.IsMine)
+            return;
+
         mCurrentResourceAmount += _toAdd;
     }
 }

@@ -5,10 +5,14 @@ using Photon.Pun;
 using System.IO;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 using System;
 
 public class MineableObject : MonoBehaviourPunCallbacks
 {
+    public bool Mined => mWasMined;
+    public int Value => mResourceValue;
+
     [Header("The value of the object and the time it takes to mine it")]
     [SerializeField]
     private int mResourceValue;
@@ -87,12 +91,20 @@ public class MineableObject : MonoBehaviourPunCallbacks
         if (mCurrentMineDuration <= 0)
         {
             mWasMined = true;
+            //mMiner.GetComponent<PhotonView>().RPC("AddResource", RpcTarget.All, mResourceValue);
 
-            _miner.AddResource(mResourceValue);
+            photonView.RPC("SetMined", RpcTarget.All, mWasMined);
+
+            //_miner.AddResource(mResourceValue);
             StartCoroutine("ResourceHasBeenMined");
         }
     }
 
+    [PunRPC]
+    private void SetMined(bool _setMined)
+    {
+        mWasMined = _setMined;
+    }
 
     private IEnumerator ResourceHasBeenMined()
     {
@@ -101,24 +113,18 @@ public class MineableObject : MonoBehaviourPunCallbacks
 
         mMeshRenderer.material = mDissolveMaterial;
 
+        photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+
         yield return new WaitForSeconds(mDissolveTime);
 
-        //if (photonView.IsMine && PhotonNetwork.LocalPlayer == photonView.Owner)
-        //    photonView.RPC("DestroyGO", RpcTarget.AllBufferedViaServer);
+
+        
 
         if (photonView.IsMine)
         {
-            //PhotonNetwork.RemoveRPCs(photonView);
-            PhotonNetwork.Destroy(this.gameObject);
+            PhotonNetwork.Destroy(gameObject);
         }
 
         StopCoroutine(ResourceHasBeenMined());
-    }
-
-    [PunRPC]
-    private void DestroyGO()
-    {
-        PhotonNetwork.Destroy(this.gameObject);
-        PhotonNetwork.RemoveRPCs(photonView);
     }
 }
