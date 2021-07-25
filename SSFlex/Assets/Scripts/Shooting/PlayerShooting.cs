@@ -26,7 +26,8 @@ public enum ELoadout
 
 public class PlayerShooting : MonoBehaviourPunCallbacks
 {
-    // Script for Player Shooting input
+    // Script von Felix
+    // Purpose: Script for Player Shooting input and Attacking
 
     [SerializeField] private Camera cam;
     [SerializeField] private EWeaponsAndUtensils primaryWeaponIdx;
@@ -112,6 +113,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
+        // Get Refernces
         animator = GetComponentInChildren<Animator>();
         playerLook = GetComponent<PlayerLook>();
         controller = GetComponent<PlayerController>();
@@ -125,6 +127,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        // Sub to OnEscape Meu Toggle Event
         EscapeMenu.Instance.OnToggle += CanShootToggle;
         GameManager.Instance.OnFovChange += ChangeFov;
         ChangeFov();

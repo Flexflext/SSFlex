@@ -74,6 +74,7 @@ MonoBehaviour:
   - RPC_ChangeFeedContent
   - RPC_SpawnObj
   - RPC_RegenEffect
+  - DestroyGO
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
