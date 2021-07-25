@@ -37,7 +37,13 @@ public class ResourceMiner : MonoBehaviourPunCallbacks
     private MineableObject mHitObj;
 
     private bool mIsMining;
-    private int mCurrentResourceAmount = 100;
+    private int mCurrentResourceAmount = 50;
+
+    private void Start()
+    {
+        if (photonView.IsMine)
+            PlayerHud.Instance.SetCurrentResourceAmount(mCurrentResourceAmount);
+    }
 
     private void Update()
     {
@@ -61,18 +67,13 @@ public class ResourceMiner : MonoBehaviourPunCallbacks
             mAnimator.SetBool("Farm", false);
             mAudio.Stop();
             mIsMining = false;
-        }
-
-
-        PlayerHud.Instance.SetCurrentResourceAmount(mCurrentResourceAmount);
+        }      
     }
 
     private void LookForResource()
     {
         if (mMainCam == null)
             return;
-
-        
 
         RaycastHit hit;
 
@@ -84,11 +85,17 @@ public class ResourceMiner : MonoBehaviourPunCallbacks
 
             if (mHitObj != null)
             {
-                mIsMining = true;
-                mHitObj.MineResource(mMineSpeed, this);
 
-                if (photonView.IsMine && mHitObj.Mined)
-                    mCurrentResourceAmount += mHitObj.Value;
+                mIsMining = true;
+                //mHitObj.MineResource(mMineSpeed, this);
+
+                if (mHitObj.MineResource(mMineSpeed, this) > 0)
+                {
+                    mCurrentResourceAmount += mHitObj.MineResource(mMineSpeed, this);
+
+                    if (photonView.IsMine)
+                        PlayerHud.Instance.SetCurrentResourceAmount(mCurrentResourceAmount);
+                }
             }
             else
                 mIsMining = false;
@@ -103,19 +110,5 @@ public class ResourceMiner : MonoBehaviourPunCallbacks
     public void SubtractResource(int _toSubtract)
     {
         mCurrentResourceAmount -= _toSubtract;
-    }
-
-    public void AddResource(int _value)
-    {
-        photonView.RPC("RPCAddResource", RpcTarget.All, _value);
-    }
-
-    [PunRPC]
-    private void RPCAddResource(int _toAdd)
-    {
-        if (!photonView.IsMine)
-            return;
-
-        mCurrentResourceAmount += _toAdd;
     }
 }

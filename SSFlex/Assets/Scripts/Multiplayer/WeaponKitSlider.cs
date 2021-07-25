@@ -130,8 +130,6 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
         mPhotonView.RPC("DisplayCurrentKit", RpcTarget.AllBufferedViaServer, mCurrentKitPos);
 
 
-        //GameManager.Instance.GetComponent<PhotonView>().RPC("SetStartWeapon", RpcTarget.AllBufferedViaServer, mCurrentKitPos, mCurrentTeam);
-
         GameManager.Instance.SetStartWeapon(mCurrentKitPos);
     }
 
@@ -150,9 +148,6 @@ public class WeaponKitSlider : MonoBehaviourPunCallbacks
 
 
         mPhotonView.RPC("DisplayCurrentKit", RpcTarget.AllBufferedViaServer, mCurrentKitPos);
-
-
-        //GameManager.Instance.GetComponent<PhotonView>().RPC("SetStartWeapon", RpcTarget.AllBufferedViaServer, mCurrentKitPos, mCurrentTeam);
 
         GameManager.Instance.SetStartWeapon(mCurrentKitPos);
     }

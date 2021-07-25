@@ -113,6 +113,8 @@ MonoBehaviour:
   mResourceValue: 10
   mMaxMineDuration: 15
   mDissolveTime: 2
+  mDissolveMuli: 40
+  mCutoffHeight: 50
   mCollider: {fileID: 5887102178466584111}
   mMeshRenderer: {fileID: 5859426996045362407}
   mAudio: {fileID: -9141830329943456032}
