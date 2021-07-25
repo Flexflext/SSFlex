@@ -4,6 +4,9 @@ using UnityEngine;
 [System.Serializable]
 public class Sound
 {
+    // Code: Haoke
+    // Purpose: Connected to the AudioManager and sets up the AudioSounds in the inspector.
+
     public string Name;
     public AudioClip Clip;
 

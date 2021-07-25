@@ -12,8 +12,17 @@ public class Launcher : MonoBehaviourPunCallbacks
 {
     // Code: Haoke
     // This script is responsible for:
-    // + Connecting to the PhotonServices.
-    // 
+    // - Connecting to the PhotonServices.
+    // - Setting up roomname.
+    // - Preventing clients from creating a room without typing anything in InputField.
+    // - Preventing clients to click on other buttons while room is being created.
+    // - Deleting all former playerLists so if master client leaves a former room and creates a new one, all former clients should be cleared.
+    // - Switching MasterClient Status to another client if master leaves room.
+    // - Providing players with an error message when room couln't be created.
+    // - Instantiating roomListItemPrefabs in the roomLstContainer and calling the setup Method with the roomInfo.
+    // - Preventing former rooms to still exist and only continues if the room, which the master client has left, is actually removed.
+    // - Instantiating the playerInfoPrefabs when joining the room and correctly alligning them.
+    // - Button Methods.
 
     public static Launcher Instance;
 
@@ -46,15 +55,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     // When client is successfully connected to the master server this will be called.
     public override void OnConnectedToMaster()
     {
-        Debug.Log("Huhu");
         PhotonNetwork.JoinLobby();
         PhotonNetwork.AutomaticallySyncScene = true;
-    }
-
-    // When client successfully joined the lobby the client is visualized by "Player + a random number from 0000 to 0999".
-    public override void OnJoinedLobby()
-    {
-        //MenuManager.Instance.AdminMainMenu();
     }
 
     public void CreateRoom()

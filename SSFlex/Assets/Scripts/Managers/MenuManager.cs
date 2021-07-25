@@ -8,6 +8,9 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
+    // Code: Haoke & Max
+    // Responsible for all the menu methods.
+
     public static MenuManager Instance;
 
     [SerializeField]

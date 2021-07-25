@@ -6,6 +6,7 @@ using System.IO;
 
 public class PlayerController : MonoBehaviour
 {
+    // Code: Haoke
     // This script is responsible for:
     // - Change of Speed
     // - Walking
@@ -47,14 +48,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForce;
     [SerializeField] private float groundDrag;
     [SerializeField] private float airDrag;
-    public bool isOnStone, isOnGravel;
 
     // Non-visible References
     private PlayerShooting shooting;
     private Rigidbody rb;
     private Animator fpsAnimator;
     private PhotonView photonView;
-    private PlayerShooting playerShooting;
     
 
     // Non-visible Stats
@@ -62,17 +61,15 @@ public class PlayerController : MonoBehaviour
     private float movementMultiplier = 1;
     public float MovementMultiplier { get { return movementMultiplier; } set { movementMultiplier = Mathf.Clamp01(value); } }
 
-   
-
-    public bool isMoving, isRunning, isSneaking;
+    private bool isMoving, isRunning, isSneaking;
 
     private Vector2 input;
 
     // Jump
     private bool isGrounded, isStoneGrounded, isGravelGrounded;
+    private bool isStoneWalking, isStoneRunning, isGravelWalking, isGravelRunning;
+    private bool isOnStone, isOnGravel;
     private bool useGravity = true;
-
-    public bool isStoneWalking, isStoneRunning, isGravelWalking, isGravelRunning;
 
 
     private void Awake()
@@ -120,7 +117,6 @@ public class PlayerController : MonoBehaviour
         // To seperate the controls of multiple players.
         if (!photonView.IsMine)
         {
-            Debug.Log("Player kinda works");
             return;
         }
 
@@ -132,41 +128,45 @@ public class PlayerController : MonoBehaviour
         PlayerAimMovement();
         PlayerJump();
 
-
         // Audio
         AudioMixing();
-        
     }
 
     void FixedUpdate()
     {
         if (!photonView.IsMine)
         {
-            Debug.Log("Player kinda works");
             return;
         }
 
-
+        // Physics for moving.
         rb.velocity = new Vector3(moveDir.normalized.x * currentPlayerSpeed * Time.fixedDeltaTime, rb.velocity.y, moveDir.normalized.z * currentPlayerSpeed * Time.fixedDeltaTime);
 
+        // Physics for jumping.
         rb.useGravity = false;
+
         if (useGravity)
         {
-            Debug.Log("using grav");
             rb.AddForce(Physics.gravity * (rb.mass * rb.mass));
         }
 
     }
 
+
     #region Movement
+    // Contains keybindings, functions, animators of:
+    // PlayerMoving()
+    // PlayerMovingAnimator()
+    // PlayerRun()
+    // PlayerSneak()
+    // PlayerAimMovement()
+    // PlayerJump()
     private void PlayerMoving()
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
 
         moveDir = transform.forward * vertical + transform.right * horizontal;
-        
-
 
         if (moveDir.magnitude >= 0.1f)
         {
@@ -191,6 +191,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Sets up TP Animator fpr walking.
     private void PlayerMovingAnimator()
     {
         input.x = Input.GetAxis("Horizontal");
@@ -200,6 +201,7 @@ public class PlayerController : MonoBehaviour
         thirdPersonAnimator.SetFloat("InputY", input.y);
     }
 
+    // Run.
     private void PlayerRun()
     {
         if (Input.GetKey(KeyCode.LeftShift) && isMoving == true && !shooting.ImAiming)
@@ -217,7 +219,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
+    // Sneak.
     private void PlayerSneak()
     {
         if (Input.GetKey(KeyCode.LeftControl) && isMoving == true)
@@ -233,6 +235,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Moving while aiming
     private void PlayerAimMovement()
     {
         if (isMoving && Input.GetKey(KeyCode.Mouse1))
@@ -254,6 +257,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Jump
     private void PlayerJump()
     {
         if (isGrounded)
@@ -272,8 +276,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-   
 
+
+
+    #endregion
+    #region Groundchecks
+    // Groundchecks for:
+    // - isGrounded
+    // - isStoneGrounded
+    // - isGravelGrounded
     public void SetIsGroundedState(bool _isGrounded)
     {
         isGrounded = _isGrounded;
@@ -288,68 +299,20 @@ public class PlayerController : MonoBehaviour
         isGravelGrounded = _isGravelGrounded;
     }
     #endregion
-
     #region Audio
-    [PunRPC]
-    public void SyncAudioMovement(string _prefabName, Vector3 _prefabPosition)
-    {
-        PhotonNetwork.Instantiate(_prefabName, _prefabPosition, Quaternion.identity);
-    }
 
-
+    // Audio for FirstPerson via AudioManager
 
     private void AudioMixing()
     {
-        //if (isStoneGrounded && !isGravelGrounded)
-        //{
-        //    isOnStone = true;
-        //    if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D) && !isStoneRunning && isStoneWalking == false)
-        //    {
-        //        Debug.Log("WASD");
-        //        isStoneWalking = true;
-        //        if (photonView.IsMine)
-        //        {
-        //            Debug.Log("instantiated");
-        //            photonView.RPC("SyncAudioMovement", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncStepsStone"), this.transform.position);
-        //        }
-        //    }
-        //    if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D) && !isStoneRunning && isStoneWalking == true)
-        //    {
-        //        Debug.Log("WADSD Off");
-        //        isStoneWalking = false;
-        //    }
-        //}
-
         if (isStoneGrounded && !isGravelGrounded)
         {
-            Debug.Log("isonstone");
             isOnStone = true;
             
             if (isMoving && !isStoneRunning)
             {
-                //if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D) && !isStoneRunning && isStoneWalking == false)
-                //{
-                //    Debug.Log("WASD");
-                //    isStoneWalking = true;
-                //    if (photonView.IsMine)
-                //    {
-                //        Debug.Log("instantiated");
-                //        photonView.RPC("SyncAudioMovement", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncStepsStone"), this.transform.position);
-                //    }
-                //}
-                //if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D) && !isStoneRunning && isStoneWalking == true)
-                //{
-                //    Debug.Log("WADSD Off");
-                //    isStoneWalking = false;
-                //    PhotonNetwork.Destroy(stoneStepPrefab);
-                //}
                 isStoneWalking = true;
                 AudioManager.Instance.PlayRandom("StoneWalk", 3);
-                //if (photonView.IsMine)
-                //{
-                //    photonView.RPC("SyncAudioMovement", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncStepsStone"), this.transform.position);
-                //}
-
             }
 
             if (isRunning && !isStoneWalking)
@@ -357,11 +320,6 @@ public class PlayerController : MonoBehaviour
                 isStoneRunning = true;
                 AudioManager.Instance.PlayRandom("StoneRun", 4);
                 AudioManager.Instance.Play("BreathingRun");
-
-                //if (photonView.IsMine)
-                //{
-                //    photonView.RPC("SyncAudio", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncStepsStone"), this.transform.position);
-                //}
             }
         }
         else
@@ -377,11 +335,6 @@ public class PlayerController : MonoBehaviour
             {
                 isGravelWalking = true;
                 AudioManager.Instance.PlayRandom("GravelWalk", 1);
-
-                //if (photonView.IsMine)
-                //{
-                //    photonView.RPC("SyncAudio", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncStepsGravel"), this.transform.position);
-                //}
             }
 
             if (isRunning && !isGravelWalking)
@@ -389,11 +342,6 @@ public class PlayerController : MonoBehaviour
                 isGravelRunning = true;
                 AudioManager.Instance.PlayRandom("GravelRun", 2);
                 AudioManager.Instance.Play("BreathingRun");
-
-                //if (photonView.IsMine)
-                //{
-                //    photonView.RPC("SyncAudio", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncStepsGravel"), this.transform.position);
-                //}
             }
         }
         else
@@ -424,12 +372,6 @@ public class PlayerController : MonoBehaviour
         }
 
     }
-
-    //[PunRPC]
-    //public void SyncAudio(string _audioName)
-    //{
-    //    AudioManager.Instance.Play(_audioName);
-    //}
     #endregion 
 
     IEnumerator JumpAnimatorTimer()
@@ -438,7 +380,4 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.8f);
         thirdPersonAnimator.SetBool("isJumping", false);
     }
-
-
-    
 }

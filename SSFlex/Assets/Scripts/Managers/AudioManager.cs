@@ -28,13 +28,9 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip[] runOnStoneSounds;
 
     public static AudioManager Instance;
-
-
-
-
+    
     private void Awake()
     {
-
         if (Instance == null)
         {
             Instance = this;
@@ -60,16 +56,10 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-
-
-
     void Start()
     {
         MainMixer.SetFloat("MasterVolume", Mathf.Log10(MasterVolume) * 20);
     }
-
-
-
 
     // For playing a Sound normally.
     public void Play(string name)
@@ -77,9 +67,6 @@ public class AudioManager : MonoBehaviour
         Sound s = Array.Find(sounds, sound => sound.Name == name);
         s.Source.Play();
     }
-
-
-
 
     // For playing random sounds.
     public void PlayRandom(string name, int index)
@@ -130,8 +117,6 @@ public class AudioManager : MonoBehaviour
 
 
 
-
-
     public void Stop(string name)
     {
         Sound s = Array.Find(sounds, sound => sound.Name == name);
@@ -140,15 +125,11 @@ public class AudioManager : MonoBehaviour
 
 
 
-
-
     public void SetMasterVolume(float _volume)
     {
         MasterVolume = _volume;
         MainMixer.SetFloat("MasterVolume", Mathf.Log10(MasterVolume) * 20);
     }
-
-
 
 
 
