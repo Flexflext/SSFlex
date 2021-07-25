@@ -8,10 +8,10 @@ using System.IO;
 public class PlayerManager : MonoBehaviour
 {
     private PhotonView photonView;
-    private Vector3 player1SpawnPoint = new Vector3(-90, 5, 0);
-    private Vector3 player2SpawnPoint = new Vector3(90, 5, 0);
-    private Vector3 player3SpawnPoint = new Vector3(0, 5, -90);
-    private Vector3 player4SpawnPoint = new Vector3(0, 5, 90);
+    private Vector3 player1SpawnPoint_Red = new Vector3(-110, 3, 0);
+    private Vector3 player2SpawnPoint_Blue = new Vector3(110, 3, 0);
+    private Vector3 player3SpawnPoint_Yellow = new Vector3(0, 3, -110);
+    private Vector3 player4SpawnPoint_Green = new Vector3(0, 3, 110);
 
     private Team team;
     GameObject player;
@@ -39,25 +39,25 @@ public class PlayerManager : MonoBehaviour
     private void CreateController()
     {
         // Instatntiates the PlayerController and sets its Spawnpoint.
-        player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), player1SpawnPoint, Quaternion.identity);
+        player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), player1SpawnPoint_Red, Quaternion.identity);
 
         switch (team)
         {
             case Team.Blue:
                 player.GetComponent<PlayerGFXChange>().ChangePlayerGfx(Team.Blue);
-                player.transform.position = player2SpawnPoint;
+                player.transform.position = player2SpawnPoint_Blue;
                 break;
             case Team.Red:
                 player.GetComponent<PlayerGFXChange>().ChangePlayerGfx(Team.Red);
-                player.transform.position = player1SpawnPoint;
+                player.transform.position = player1SpawnPoint_Red;
                 break;
             case Team.Yellow:
                 player.GetComponent<PlayerGFXChange>().ChangePlayerGfx(Team.Yellow);
-                player.transform.position = player3SpawnPoint;
+                player.transform.position = player3SpawnPoint_Yellow;
                 break;
             case Team.Green:
                 player.GetComponent<PlayerGFXChange>().ChangePlayerGfx(Team.Green);
-                player.transform.position = player4SpawnPoint;
+                player.transform.position = player4SpawnPoint_Green;
                 break;
             default:
                 break;

@@ -5,12 +5,16 @@ using Photon.Pun;
 
 public class DestroyAfterTime : MonoBehaviour
 {
+    // Script von Felix
+    // Purpose: Leben vom Spieler + VFX Play
+
     [SerializeField] private float destroyTime;
     [SerializeField] private bool destroyNetwork;
 
     // Start is called before the first frame update
     void Start()
     {
+        // Start the Destroy Coroutine
         StartCoroutine(C_TimeTillDestoy(destroyTime));
     }
 
@@ -23,6 +27,7 @@ public class DestroyAfterTime : MonoBehaviour
     {
         yield return new WaitForSeconds(_time);
 
+        // Check if the Obj should be destroyed by Network
         if (destroyNetwork)
         {
             PhotonNetwork.Destroy(this.gameObject);
