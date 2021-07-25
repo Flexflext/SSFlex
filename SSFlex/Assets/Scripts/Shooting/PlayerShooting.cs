@@ -27,6 +27,7 @@ public enum ELoadout
 public class PlayerShooting : MonoBehaviourPunCallbacks
 {
     // Script von Felix
+    // und teile von Max
     // Purpose: Script for Player Shooting input and Attacking
 
     [SerializeField] private Camera cam;
@@ -135,12 +136,14 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         ChangeFov();
     }
 
+    /// <summary>
+    /// Deaktiviert das Rendern der 3rd Person Waffe 
+    /// </summary>
     private void OnPreRender()
     {
         if (photonView.IsMine)
             mPrimaryThridPersonGun.GetComponent<Renderer>().enabled = false;
     }
-
     private void OnPostRender()
     {
         if (photonView.IsMine)

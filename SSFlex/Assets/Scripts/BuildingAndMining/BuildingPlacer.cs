@@ -236,7 +236,7 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
                     mHitObjInfo = mHitObj.GetComponent<NormalBuildingInfo>();
 
 
-                Vector3 stupidArtistHeightAdj = new Vector3(mHitObj.transform.position.x, mHitObj.transform.position.y + (mAvailableDimensions.mBuildingDimensions[(int)mCurrentDimension].y / 2), mHitObj.transform.position.z);
+                Vector3 stupidArtistHeightAdj = new Vector3(mHitObj.transform.position.x, mHitObj.transform.position.y + 2.075f, mHitObj.transform.position.z);
                 dirVec = stupidArtistHeightAdj - hitPos;
 
 
@@ -279,7 +279,6 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     /// </summary>
     private void GetClippedBuildingPos_Side()
     {
-        bool clipFound = true;
 
         Vector3 dirToHitObj = mHitObj.transform.position - transform.position;
 
@@ -358,7 +357,6 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         {
             mHitSlotToAdd_Face = NormalBuildingInfo.EClipFaceSlots.none;
             mCurrentSlotToAdd_Face = NormalBuildingInfo.EClipFaceSlots.none;
-            clipFound = false;
         }
 
         if (mDotProductSide >= mClipThreshold_Side || mDotProductSide <= -mClipThreshold_Side || mDotProductSide < mClipThreshold_Side && mDotProductSide > -mClipThreshold_Side)
@@ -369,7 +367,6 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
                 {
                     if (!mHitObjInfo.OccupiedSideSlots.Contains(NormalBuildingInfo.EClipSideSlots.left))
                         posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(-totalPlaceAdj.x, 0, 0));
-
                 }
                 else if (mRotFloat != 0)
                 {
@@ -391,8 +388,7 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
                     }
                 }
             }
-            else
-                clipFound = false;
+            
 
             if (mDotProductSide <= -mClipThreshold_Side)
             {
@@ -431,13 +427,12 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
                     posToSet = mHitObj.transform.position + mHitObj.transform.TransformDirection(new Vector3(0, totalPlaceAdj.y, 0));
             }
         }
-        else
-            clipFound = false;
+        
 
-        if (mCurrentDimension != BuildingDimensions.EBuildingDimensions.normalWall && mDotProductSide < mClipThreshold_Side && mDotProductSide > -mClipThreshold_Side && mCurrentSlotToAdd_Face == NormalBuildingInfo.EClipFaceSlots.none)
+        if (mCurrentDimension != BuildingDimensions.EBuildingDimensions.normalWall && mDotProductSide < mClipThreshold_Side && mDotProductSide > -mClipThreshold_Side)
             posToSet.y -= mAvailableDimensions.mHeightAdjDimensions[(int)mCurrentDimension];
 
-        if(posToSet != Vector3.zero && clipFound)
+        if (posToSet != Vector3.zero)
         {
             SetClippedBuildingRotation();
             SetClippedBuildingPos(posToSet);

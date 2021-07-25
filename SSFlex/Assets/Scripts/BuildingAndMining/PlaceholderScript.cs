@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using AvailableBuildingDimensions;
 
+
+/// <summary>
+/// Written by Max
+/// 
+/// This script contains several information about the building the player wants to build
+/// </summary>
 public class PlaceholderScript : MonoBehaviour
 {
     public BuildingDimensions.EBuildingDimensions CurrentDimension => mCurrentDimension;
@@ -46,6 +52,12 @@ public class PlaceholderScript : MonoBehaviour
         mAvailableDimensions = new BuildingDimensions();
     }
 
+    /// <summary>
+    /// 1. Checks if the Current position bool is valid or not and sets the material in accordance
+    /// 2. Several statements to check if the current placeholder position is a valid on or not
+    /// 
+    /// If the placeholder position is invalid the player cannot build a building
+    /// </summary>
     private void Update()
     {
         if(!mValidPosition)
@@ -69,28 +81,21 @@ public class PlaceholderScript : MonoBehaviour
             {
                 if (overlapColl[i].gameObject.CompareTag("ClipTag") && overlapColl[i].gameObject != this.gameObject && mBuildPlacer.HitObj != null && overlapColl[i].gameObject != mBuildPlacer.HitObj)
                 {
-                    Debug.Log("DD"); ;
                     mValidPosition = false;
                     return;
                 }
                 else if (overlapColl[i].gameObject.CompareTag("ClipTag") && overlapColl[i].gameObject != this.gameObject && mBuildPlacer.HitObj == null)
                 {
-                    Debug.Log("DD"); ;
-
                     mValidPosition = false;
                     return;
                 }
                 else if (overlapColl[i].gameObject.CompareTag("Blocker"))
                 {
-                    Debug.Log("DD"); ;
-
                     mValidPosition = false;
                     return;
                 }
                 else if (overlapColl[i].gameObject.CompareTag("Player"))
                 {
-                    Debug.Log("DD"); ;
-
                     mValidPosition = false;
                     return;
                 }
@@ -101,22 +106,4 @@ public class PlaceholderScript : MonoBehaviour
         else
             mValidPosition = false;
     }
-
-    
-
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if(!mBuildPlacer.IsClipped && other.CompareTag("Ground") || other.CompareTag("ClipTag"))
-    //        mValidPosition = false;
-    //    else if (mBuildPlacer.IsClipped && other.CompareTag("Ground") || other.CompareTag("ClipTag"))
-    //        mValidPosition = true;
-    //    else
-    //        mValidPosition = false;
-    //}
-
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if(other.CompareTag("ClipTag"))
-    //        mValidPosition = true;
-    //}
 }

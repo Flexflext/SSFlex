@@ -51,7 +51,7 @@ public class ResourceMiner : MonoBehaviourPunCallbacks
     }
 
     /// <summary>
-    /// 
+    /// Starts the ANimations ans Sound if the player is Mining
     /// </summary>
     private void Update()
     {
@@ -78,6 +78,14 @@ public class ResourceMiner : MonoBehaviourPunCallbacks
         }      
     }
 
+    /// <summary>
+    /// Resposible for trying to detect resources
+    /// 
+    /// 1. Cast a Raycst to check if the player is hitting something on the Resource layer
+    /// 2. If so, takes its MineableObject Components
+    /// 3. Calls MineResource on the HitObject if the return value is above zero and adds the given resources onto the player
+    /// 4. Updates the GUI
+    /// </summary>
     private void LookForResource()
     {
         if (mMainCam == null)
@@ -87,7 +95,6 @@ public class ResourceMiner : MonoBehaviourPunCallbacks
 
         if (Physics.Raycast(mMainCam.transform.position, mMainCam.transform.forward, out hit, 1000, mResourceLayer))
         {
-            Debug.Log("Looking for Resources");
             if (mHitObj == null)
                 mHitObj = hit.collider.gameObject.GetComponent<MineableObject>();
 
@@ -113,6 +120,10 @@ public class ResourceMiner : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// 1. Subtracts Resources upon building
+    /// 2. Updates the GUI
+    /// </summary>
     public void SubtractResource(int _toSubtract)
     {
         mCurrentResourceAmount -= _toSubtract;
