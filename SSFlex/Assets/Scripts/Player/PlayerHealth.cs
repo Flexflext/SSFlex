@@ -24,6 +24,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
 
     [Header("Refs")]
     [SerializeField] private VisualEffect impactEffect;
+    [SerializeField] private VisualEffect impactEffectShield;
     [SerializeField] private ParticleSystem regenEffect;
 
     //MaxStets
@@ -135,7 +136,16 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
         // Take Dmg only if the Networking Client is mine
         if (!photonView.IsMine)
         {
-            impactEffect.Play();
+            if (shield > 0)
+            {
+                impactEffectShield.Play();
+            }
+            else
+            {
+                impactEffect.Play();
+            }
+
+            
             return;
         }
 
