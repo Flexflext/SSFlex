@@ -114,7 +114,7 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
         }
 
 
-        LevelManager.Instance.StartTime();
+        //LevelManager.Instance.StartTime();
     }
 
     private IEnumerator Disconnect()
@@ -135,7 +135,7 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        LevelManager.Instance.StartTime();
+        //LevelManager.Instance.StartTime();
 
         PhotonNetwork.LoadLevel(1);
     }
