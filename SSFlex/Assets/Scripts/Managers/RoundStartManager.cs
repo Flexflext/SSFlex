@@ -1,9 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using Photon.Pun;
 using TMPro;
-using Photon.Pun;
+using UnityEngine;
 
+
+/// <summary>
+/// Written by Max
+/// 
+/// This Script Manages the when the round starts
+/// </summary>
 public class RoundStartManager : MonoBehaviour
 {
     public static RoundStartManager Instance;
@@ -44,6 +48,9 @@ public class RoundStartManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Counts down till it hits zero and deactivates the walls trozgh an RPC call
+    /// </summary>
     private void Update()
     {
         mPreparationTimer -= Time.deltaTime;
@@ -56,6 +63,9 @@ public class RoundStartManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// RPC call to deactivate the walls for everybody
+    /// </summary>
     [PunRPC]
     private void DeactivateWalls()
     {

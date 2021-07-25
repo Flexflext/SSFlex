@@ -469,7 +469,6 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     /// <param name="_posToAdj"></param>
     private void SetClippedBuildingPos(Vector3 _posToAdj)
     {
-        SetBuildingNormal(mBuildPoint.transform.position);
         mCurrentPlaceholder.transform.position = _posToAdj;
     }
 

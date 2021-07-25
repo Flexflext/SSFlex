@@ -29,7 +29,7 @@ Material:
     - Vector1_A8F42390: 50
     - Vector1_B07CDDE2: 0.02
     - Vector1_C2A5381F: 469.8
-    - _cutoffHeight: 31.231731
+    - _cutoffHeight: 33.942303
     m_Colors:
     - Color_95E8F2DE: {r: 0, g: 0, b: 0, a: 0}
     - Color_B03B4F44: {r: 0, g: 4, b: 3.560784, a: 0}

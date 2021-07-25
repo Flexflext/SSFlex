@@ -1,9 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using Photon.Pun;
 using TMPro;
-using Photon.Pun;
+using UnityEngine;
 
+
+/// <summary>
+/// Written by Max
+/// 
+/// This Script saves the player name trough playerprefs
+/// </summary>
 public class PlayerNameManager : MonoBehaviour
 {
     [SerializeField]

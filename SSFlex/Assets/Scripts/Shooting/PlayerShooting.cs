@@ -443,7 +443,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         mCurrentLoadoutIdx = ELoadout.farmTool;
 
         if (photonView.IsMine)
-            photonView.RPC("DisplayObject", RpcTarget.OthersBuffered, (int)mCurrentLoadoutIdx);         
+            photonView.RPC("DisplayObject", RpcTarget.All, (int)mCurrentLoadoutIdx);         
     }
 
     /// <summary>
@@ -509,7 +509,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
         //Changes the waepon and Changes the UI Images and Text
         if(photonView.IsMine)
-            photonView.RPC("DisplayObject", RpcTarget.OthersBuffered, (int)mCurrentLoadoutIdx);
+            photonView.RPC("DisplayObject", RpcTarget.All, (int)mCurrentLoadoutIdx);
 
         // Activate the Current weapon
         currentGun.gameObject.SetActive(true);
@@ -520,13 +520,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             PlayerHud.Instance.ChangeAmmoAmount(currentGun.BulletsInMag, currentGun.CurrentAmmo);
         }
 
-
-        if (photonView.IsMine)
-        {
-            Hashtable hash = new Hashtable();
-            hash.Add("weaponKey", (int)mCurrentLoadoutIdx);
-            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-        }
+        Debug.LogError(mCurrentLoadoutIdx);
 
         yield return new WaitForSeconds(0.25f);
         isSwitching = false;
@@ -534,7 +528,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
     [PunRPC]
     public void DisplayObject(int _currentWeapon)
-    {       
+    {
         for (int i = 0; i < mLoadout.Count; i++)
         {
             if (i == _currentWeapon)
@@ -548,7 +542,6 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
                 Debug.Log(mLoadout[i]);
             }
         }
-
     }
 
     /// <summary>
