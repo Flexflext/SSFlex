@@ -7,10 +7,12 @@ public class LevelManager : MonoBehaviourPunCallbacks
 {
     public static LevelManager Instance;
 
-    private Dictionary<string, bool> playerDead = new Dictionary<string, bool>();
+    private Dictionary<string, bool> playerDead;
 
     private void Awake()
     {
+
+        playerDead = new Dictionary<string, bool>();
         Instance = this;
     }
 
@@ -93,7 +95,6 @@ public class LevelManager : MonoBehaviourPunCallbacks
                 }
                 else
                 {
-
                     //Open the Menu when dead
                     EscapeMenu.Instance.OpenEndMenu("Git Gud", "Not U");
                 }
