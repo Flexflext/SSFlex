@@ -7,22 +7,18 @@ using TMPro;
 
 public class RoomListItem : MonoBehaviourPunCallbacks
 {
-    // Responsible for displaying room's name and by clicking it -> joining
-
+    // Code: Haoke
+    // Responsible for: Displaying room's name and by clicking it -> Player joins if it's not full.
 
     [SerializeField] private TMP_Text text;
-
-    [SerializeField]
-    private float mRoomFullDisplayDuration;
-    private int mMaxPlayerCount;
-
-    [SerializeField]
-    private TextMeshProUGUI mText_PlayerCount;
-    [SerializeField]
-    private TextMeshProUGUI mText_RoomFull;
+    [SerializeField] private TextMeshProUGUI mText_PlayerCount;
+    [SerializeField] private TextMeshProUGUI mText_RoomFull;
+    [SerializeField] private float mRoomFullDisplayDuration;
 
     public RoomInfo info;
+    private int mMaxPlayerCount;
 
+    // Displays room. 
     public void SetUp(RoomInfo _info)
     {
         mMaxPlayerCount = GameManager.Instance.MaxPlayer;
@@ -33,6 +29,9 @@ public class RoomListItem : MonoBehaviourPunCallbacks
         mText_PlayerCount.text = "" + info.PlayerCount + "/" + mMaxPlayerCount;
     }
 
+
+    // Button-Method for joining room.
+    // If room full, activate RoomFull UI.
     public void  OnClick()
     {
         if(info.PlayerCount < mMaxPlayerCount)

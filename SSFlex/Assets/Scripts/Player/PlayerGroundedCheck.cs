@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PlayerGroundedCheck : MonoBehaviour
 {
+    // Code: Haoke
+    // Responsible for: 
+    // - Trigger/Collisions with Ground, Stone and Gravel.
+
     private PlayerController playerController;
 
     private void Awake()
