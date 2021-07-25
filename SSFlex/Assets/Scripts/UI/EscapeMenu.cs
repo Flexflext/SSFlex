@@ -151,8 +151,15 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
     }
 
 
+
+    /// <summary>
+    /// Open the EndMenu to be able to Restart the Game
+    /// </summary>
+    /// <param name="_message"></param>
+    /// <param name="_winner"></param>
     public void OpenEndMenu(string _message, string _winner)
     {
+        // Toggles the Shooting
         if (OnToggle != null)
         {
             OnToggle.Invoke();
@@ -160,6 +167,7 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
 
         roundEnded = true;
 
+        // open the Endmenu
         endMenu.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -167,6 +175,7 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
         endText.text = _message;
         winnerText.text = $"Winner: {_winner}";
 
+        // Sets Restart Button Active if MasterClient or Activates the wait text if not Master Client
         if (PhotonNetwork.NetworkingClient.LocalPlayer.IsMasterClient)
         {
             startAgainButton.SetActive(true);
