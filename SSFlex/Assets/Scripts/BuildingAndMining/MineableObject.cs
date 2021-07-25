@@ -21,6 +21,11 @@ public class MineableObject : MonoBehaviourPunCallbacks
     private float mCurrentMineDuration;
     [SerializeField]
     private float mDissolveTime;
+    [SerializeField]
+    private float mDissolveMuli;
+    [SerializeField]
+    private float mCutoffHeight;
+
 
     [Header("Components")]
     [SerializeField]
@@ -49,16 +54,13 @@ public class MineableObject : MonoBehaviourPunCallbacks
 
     private void Update()
     {
+
         if (mMiner != null && mMiner.Mining)
             mIsBeingMined = true;
         else
             mIsBeingMined = false;
 
         MineProgress();
-
-        if (mWasMined)
-            ResourceHasBeenMined();
-
     }
 
     private void MineProgress()
@@ -79,10 +81,12 @@ public class MineableObject : MonoBehaviourPunCallbacks
             mAudio.Stop();
     }
 
-    public void MineResource(float _mineSpeed, ResourceMiner _miner)
+    public int MineResource(float _mineSpeed, ResourceMiner _miner)
     {
         if(mMiner != _miner)
         {
+            photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+
             mMiner = _miner;
             mMineSpeed = _mineSpeed;
             mCurrentMineDuration = mMaxMineDuration;
@@ -91,19 +95,17 @@ public class MineableObject : MonoBehaviourPunCallbacks
         if (mCurrentMineDuration <= 0)
         {
             mWasMined = true;
-            //mMiner.GetComponent<PhotonView>().RPC("AddResource", RpcTarget.All, mResourceValue);
 
-            photonView.RPC("SetMined", RpcTarget.All, mWasMined);
-
+            //if(photonView.IsMine)
             //_miner.AddResource(mResourceValue);
-            StartCoroutine("ResourceHasBeenMined");
-        }
-    }
+            mMeshRenderer.material = mDissolveMaterial;
+            StartCoroutine("DissolveMaterial");
 
-    [PunRPC]
-    private void SetMined(bool _setMined)
-    {
-        mWasMined = _setMined;
+            StartCoroutine("ResourceHasBeenMined");
+            return mResourceValue;
+        }
+        else
+            return default;
     }
 
     private IEnumerator ResourceHasBeenMined()
@@ -111,14 +113,9 @@ public class MineableObject : MonoBehaviourPunCallbacks
         if (mCollider.enabled)
             mCollider.enabled = false;
 
-        mMeshRenderer.material = mDissolveMaterial;
-
-        photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
 
         yield return new WaitForSeconds(mDissolveTime);
 
-
-        
 
         if (photonView.IsMine)
         {
@@ -126,5 +123,18 @@ public class MineableObject : MonoBehaviourPunCallbacks
         }
 
         StopCoroutine(ResourceHasBeenMined());
+    }
+
+    private IEnumerator DissolveMaterial()
+    {
+        float value = -mCutoffHeight;
+
+        while (value <= mCutoffHeight)
+        {
+            value += mDissolveMuli * Time.deltaTime;
+            mDissolveMaterial.SetFloat("_cutoffHeight", value);
+
+            yield return null;
+        }
     }
 }

@@ -82,10 +82,7 @@ public class PlayerGFXChange : MonoBehaviourPunCallbacks
     {
         if (!photonView.IsMine && targetPlayer == photonView.Owner)
         {
-            if (changedProps.ContainsValue("weaponKey"))
-                mPlayerShooting.DisplayObject((int)changedProps["weaponKey"]);
-            else
-                ChangePlayerGfx((Team)changedProps["TeamIndex"]);
+            ChangePlayerGfx((Team)changedProps["TeamIndex"]);   
         }
     }
 

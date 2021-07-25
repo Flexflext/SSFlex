@@ -67,7 +67,6 @@ public class MenuManager : MonoBehaviour
     {
         mAllMenus = new List<GameObject>()
         {
-            mMainMenu,
             mLoadingScreen,
             mOptionsMenu,
             mCreateRoomMenu,
@@ -92,14 +91,12 @@ public class MenuManager : MonoBehaviour
         if (mPlayerNameInput.isActiveAndEnabled)
         {
             AdminFindRoomMenu();
-            Debug.Log("DDDD");
             if (mMasterStartButton.activeSelf)
                 CreateRoomFromLauncher();
         }
         else if (mServerNameInput.isActiveAndEnabled)
         {
             AdminNameMenu();
-            Debug.Log("DDDD");
             mMasterStartButton.SetActive(true);
             mClientStartButton.SetActive(false);
         }
@@ -152,6 +149,8 @@ public class MenuManager : MonoBehaviour
             else
                 mOptionsMenu.SetActive(true);
         }
+
+        CloseMenus(mOptionsMenu);
     }
 
     public void AdminNameMenu()

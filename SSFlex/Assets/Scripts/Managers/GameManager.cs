@@ -44,11 +44,16 @@ public class GameManager : MonoBehaviourPunCallbacks
         GetOptions();
     }
 
-    [PunRPC]
     public void SetStartWeapon(EWeaponsAndUtensils _startWeapon)
     {
         mStartWeapon = _startWeapon;
     }
+
+    //public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    //{
+    //    if (!photonView.IsMine && targetPlayer == photonView.Owner)
+    //        mPlayerShooting.DisplayObject((int)changedProps["weaponKey"]);
+    //}
 
     private void GetOptions()
     {
