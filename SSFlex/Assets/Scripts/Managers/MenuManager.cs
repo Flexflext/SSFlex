@@ -77,43 +77,6 @@ public class MenuManager : MonoBehaviour
         };
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
-            InputEnterValidation();
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-            InputEscapeValidation();
-    }
-
-    private void InputEnterValidation()
-    {
-        if (mPlayerNameInput.isActiveAndEnabled)
-        {
-            AdminFindRoomMenu();
-            if (mMasterStartButton.activeSelf)
-                CreateRoomFromLauncher();
-        }
-        else if (mServerNameInput.isActiveAndEnabled)
-        {
-            AdminNameMenu();
-            mMasterStartButton.SetActive(true);
-            mClientStartButton.SetActive(false);
-        }
-        else if (mRoomMenu.activeSelf)
-            Launcher.Instance.StartLobby();
-    }
-
-    private void InputEscapeValidation()
-    {
-        if (mRoomMenu.activeSelf)
-            Launcher.Instance.LeaveRoom();
-        else if (mNameMenu.activeSelf || mCreateRoomMenu.activeSelf || mFindRoomMenu.activeSelf)
-            AdminMainMenu();
-        else if (mOptionsMenu.activeSelf)
-            AdmitOptionsMenu();
-    }
-
     public void AdminMainMenu()
     {
         if (mMainMenu != null)
@@ -155,6 +118,11 @@ public class MenuManager : MonoBehaviour
 
     public void AdminNameMenu()
     {
+        if (mCreateRoomMenu.activeSelf)
+            mCreateRoomMenu.SetActive(false);
+
+        Debug.Log("DDDD");
+
         if (!mServerNameInput.isActiveAndEnabled || mServerNameInput.text.Length > 0)
         {
             if (mNameMenu != null)

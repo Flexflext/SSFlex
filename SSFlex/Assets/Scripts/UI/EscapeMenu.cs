@@ -1,20 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Photon.Pun;
+using System.Collections;
 using UnityEngine;
-using Photon.Pun;
 
+/// <summary>
+/// Written by Max
+/// 
+/// 
+/// </summary>
 public class EscapeMenu : MonoBehaviourPunCallbacks
 {
     public static EscapeMenu Instance;
 
-
     [SerializeField]
     private GameObject mEscapeMenuContent;
-
     [SerializeField]
     private GameObject mPlayerHud;
     [SerializeField]
     private GameObject mOptionsMenu;
+
     [SerializeField] private GameObject endMenu;
     [SerializeField] private GameObject startAgainButton;
     [SerializeField] private GameObject waitForAdminText;
@@ -101,18 +104,12 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
     {
         StartCoroutine(Disconnect());
 
-        //PhotonNetwork.LeaveRoom();
-        //PhotonNetwork.LeaveLobby();
-
-        
-
         LevelManager.Instance.UpdateDictionary(PhotonNetwork.NetworkingClient.UserId, false);
 
         if (LevelManager.Instance.CheckIfTheOnlyOneAlive())
         {
             LevelManager.Instance.CheckIfWon();
         }
-
 
         LevelManager.Instance.StartTime();
     }
@@ -130,8 +127,6 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
 
     public void RestartRound()
     {
-        //PhotonNetwork.AutomaticallySyncScene = true;
-
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
