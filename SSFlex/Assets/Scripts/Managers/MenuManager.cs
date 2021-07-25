@@ -1,11 +1,15 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
-using Photon.Pun;
-using UnityEngine.SceneManagement;
+using UnityEngine;
 
+
+/// <summary>
+/// Written by Max
+/// 
+/// This Script Manages the different menus in the Main Menu Scene
+/// </summary>
 public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance;
@@ -200,7 +204,6 @@ public class MenuManager : MonoBehaviour
     {
         if (mPlayerNameInput.text.Length > 0)
         {
-
             if (mFindRoomMenu != null)
             {
                 if (mFindRoomMenu.activeSelf)
@@ -212,6 +215,7 @@ public class MenuManager : MonoBehaviour
 
                 mEnterPlayerNameText.gameObject.SetActive(false);
             }
+
             CloseMenus(mFindRoomMenu);
         }
         else
