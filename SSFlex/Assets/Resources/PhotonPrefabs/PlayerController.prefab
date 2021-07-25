@@ -1213,6 +1213,7 @@ MonoBehaviour:
   timeUntilShieldRegen: 5
   regenPerSecond: 10
   impactEffect: {fileID: 1676757721523387770}
+  impactEffectShield: {fileID: 0}
   regenEffect: {fileID: 7029569183256148174}
 --- !u!136 &1370586008316802745
 CapsuleCollider:
