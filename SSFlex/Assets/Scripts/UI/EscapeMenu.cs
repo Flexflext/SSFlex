@@ -33,9 +33,6 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
     private void Awake()
     {
         Instance = this;
-        mEscapeMenuContent.SetActive(false);
-
-        ToggleEscapeMenu();
     }
 
     private void Update()

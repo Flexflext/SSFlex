@@ -110,8 +110,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79fcd6725afb4ca4bb167c04b3762148, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mResourceValue: 10
-  mMaxMineDuration: 15
+  mResourceValue: 25
+  mMaxMineDuration: 7.5
   mDissolveTime: 2
   mDissolveMuli: 40
   mCutoffHeight: 50
