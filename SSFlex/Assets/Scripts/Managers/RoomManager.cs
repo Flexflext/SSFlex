@@ -54,6 +54,15 @@ public class RoomManager : MonoBehaviourPunCallbacks
             // Instantiates the PlayerManager
             GameObject playerManager = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
             playerManager.GetComponent<PlayerManager>().ChangeTeam(myTeam);
+
+            if (playerManager.GetComponent<PhotonView>().Owner.IsMasterClient)
+            {
+                ResourceSpawner[] allSpawner = FindObjectsOfType<ResourceSpawner>();
+                for (int i = 0; i < allSpawner.Length; i++)
+                {
+                    allSpawner[i].SpawnResource();
+                }
+            }
         }
     }
 

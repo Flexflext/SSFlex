@@ -434,7 +434,7 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         else
             clipFound = false;
 
-        if (mCurrentDimension != BuildingDimensions.EBuildingDimensions.normalWall && mDotProductSide < mClipThreshold_Side && mDotProductSide > -mClipThreshold_Side)
+        if (mCurrentDimension != BuildingDimensions.EBuildingDimensions.normalWall && mDotProductSide < mClipThreshold_Side && mDotProductSide > -mClipThreshold_Side && mCurrentSlotToAdd_Face == NormalBuildingInfo.EClipFaceSlots.none)
             posToSet.y -= mAvailableDimensions.mHeightAdjDimensions[(int)mCurrentDimension];
 
         if(posToSet != Vector3.zero && clipFound)
