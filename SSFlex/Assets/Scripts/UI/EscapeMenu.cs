@@ -3,18 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
+/// <summary>
+/// Written by Max
+/// 
+/// THis Script Manages the Escape Menu in the Main Scene
+/// </summary>
 public class EscapeMenu : MonoBehaviourPunCallbacks
 {
     public static EscapeMenu Instance;
 
-
+    // The content of the Escape Menu
     [SerializeField]
     private GameObject mEscapeMenuContent;
-
     [SerializeField]
     private GameObject mPlayerHud;
     [SerializeField]
     private GameObject mOptionsMenu;
+
     [SerializeField] private GameObject endMenu;
     [SerializeField] private GameObject startAgainButton;
     [SerializeField] private GameObject waitForAdminText;
@@ -28,6 +33,7 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
     private void Awake()
     {
         Instance = this;
+        mEscapeMenuContent.SetActive(false);
 
         ToggleEscapeMenu();
     }
@@ -38,6 +44,9 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
             ToggleEscapeMenu();
     }
 
+    /// <summary>
+    /// Toggle the Escape Menu 
+    /// </summary>
     private void ToggleEscapeMenu()
     {
         if (OnToggle != null)
@@ -59,8 +68,7 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
             {
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
-            }
-            
+            }           
         }
         else
         {
@@ -78,6 +86,9 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// Toggles the Options Menu
+    /// </summary>
     public void ToggleOptionsMenu()
     {  
 
@@ -88,23 +99,22 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
         else
         {
             mOptionsMenu.SetActive(true);  
-        }
-            
+        }          
     }
-
+     
     public void ResumeGame()
     {
         ToggleEscapeMenu();
     }
 
+    /// <summary>
+    /// Load the Player back into the Main Menu
+    /// 
+    /// 1. Starts Coroutine to initialize the Disconnect
+    /// </summary>
     public void LoadMainMenu()
     {
         StartCoroutine(Disconnect());
-
-        //PhotonNetwork.LeaveRoom();
-        //PhotonNetwork.LeaveLobby();
-
-        
 
         LevelManager.Instance.UpdateDictionary(PhotonNetwork.NetworkingClient.UserId, false);
 
@@ -112,11 +122,15 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
         {
             LevelManager.Instance.CheckIfWon();
         }
-
-
-        LevelManager.Instance.StartTime();
     }
 
+    /// <summary>
+    /// Coroutine to Disconnect the Player from the Server and load him back into the main menu
+    /// 
+    /// 1. Tries to Disconnect from the Server
+    /// 2. If the player is disconnected the RoomManager and GameManager instances will be destroyed to negate a photonViewID doubling
+    /// 3. Load the Main Menu
+    /// </summary>
     private IEnumerator Disconnect()
     {
         PhotonNetwork.Disconnect();
@@ -128,14 +142,13 @@ public class EscapeMenu : MonoBehaviourPunCallbacks
         PhotonNetwork.LoadLevel(0);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void RestartRound()
     {
-        //PhotonNetwork.AutomaticallySyncScene = true;
-
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-
-        LevelManager.Instance.StartTime();
 
         PhotonNetwork.LoadLevel(1);
     }

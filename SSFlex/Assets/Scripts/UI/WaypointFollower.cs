@@ -1,7 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Wirtten by Max
+/// 
+/// This Script is used in the Main Menu to let the Camera Follow Waypoints around the Map
+/// </summary>
 public class WaypointFollower : MonoBehaviour
 {
     [SerializeField]
@@ -50,6 +54,10 @@ public class WaypointFollower : MonoBehaviour
         mGameStarted = true;
     }
 
+    /// <summary>
+    /// Moves the Camera to the predetermined start position
+    /// Add a dampong to its movement upon reaching the Start position
+    /// </summary>
     private void MoveToStartPos()
     {
         if (transform.position != mStartPos.transform.position)
@@ -62,6 +70,9 @@ public class WaypointFollower : MonoBehaviour
             mIsOnStartPos = true;
     }
 
+    /// <summary>
+    /// Lets the Camera accelerate after each waypoint
+    /// </summary>
     private void SetFollowBehaviour()
     {
         if (mCurrentMovementSpeed < mMaxMovementSpeed)
@@ -73,6 +84,10 @@ public class WaypointFollower : MonoBehaviour
         FollowWaypoints();
     }
       
+    /// <summary>
+    /// The next waypoint in line will be the move position to which the camera is moving
+    /// The camera also rotates towards said point with an added Slerp
+    /// </summary>
     private void FollowWaypoints()
     {
         if (transform.position != mWaypoints[mWaypointIdx].transform.position)

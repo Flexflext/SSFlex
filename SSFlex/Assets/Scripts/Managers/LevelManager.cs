@@ -5,6 +5,9 @@ using Photon.Pun;
 
 public class LevelManager : MonoBehaviourPunCallbacks
 {
+    // Script von Felix
+    // Purpose: Manager for the Game
+
     public static LevelManager Instance;
 
     private Dictionary<string, bool> playerDead;
@@ -16,17 +19,27 @@ public class LevelManager : MonoBehaviourPunCallbacks
         Instance = this;
     }
 
-
+    // Add to Dictionary if is Alive
     public void AddDictionary(string _id, bool _lifebool)
     {
         photonView.RPC("RPC_AddDictionary", RpcTarget.All, _id, _lifebool);
     }
 
+    /// <summary>
+    /// Update Dictionary witch RPC Call
+    /// </summary>
+    /// <param name="_id"></param>
+    /// <param name="_lifebool"></param>
     public void UpdateDictionary(string _id, bool _lifebool)
     {
         photonView.RPC("RPC_UpdateDictionary", RpcTarget.All, _id, _lifebool);
     }
 
+    /// <summary>
+    /// Update the Dictionary wich new value
+    /// </summary>
+    /// <param name="_id"></param>
+    /// <param name="_lifebool"></param>
     [PunRPC]
     private void RPC_UpdateDictionary(string _id, bool _lifebool)
     {
@@ -36,16 +49,26 @@ public class LevelManager : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// Add to Dictionary RPC Call witch id and bool
+    /// </summary>
+    /// <param name="_id"></param>
+    /// <param name="_lifebool"></param>
     [PunRPC]
     private void RPC_AddDictionary(string _id, bool _lifebool)
     {
         playerDead.Add(_id, _lifebool);
     }
 
+    /// <summary>
+    /// Check if the Only one left alive in the Dictionary
+    /// </summary>
+    /// <returns></returns>
     public bool CheckIfTheOnlyOneAlive()
     {
         int peopleAlive = 0;
 
+        // Chek how many alive 
         foreach (var player in playerDead)
         {
             if (player.Value)
@@ -54,6 +77,7 @@ public class LevelManager : MonoBehaviourPunCallbacks
             }
         }
 
+        // Retuirn true if the only one alive else return false
         if (peopleAlive < 2)
         {
             return true;
@@ -64,23 +88,17 @@ public class LevelManager : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// Check if Won witch RPC Call
+    /// </summary>
     public void CheckIfWon()
     {
         photonView.RPC("RPC_CheckIfWon", RpcTarget.All);
     }
 
-    public void StartTime()
-    {
-        photonView.RPC("RPC_StartTime", RpcTarget.All);
-    }
-
-    [PunRPC]
-    private void RPC_StartTime()
-    {
-        Time.timeScale = 1;
-    }
-
-
+    /// <summary>
+    /// Check if Won RPC Call and opens the Menu accordinly
+    /// </summary>
     [PunRPC]
     private void RPC_CheckIfWon()
     {

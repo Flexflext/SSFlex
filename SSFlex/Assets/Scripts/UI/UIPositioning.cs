@@ -1,7 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/// <summary>
+/// Written by Max
+/// 
+/// This script is used to position the Player name above his picked Team
+/// </summary>
 public class UIPositioning : MonoBehaviour
 {
     [SerializeField]
@@ -26,6 +29,9 @@ public class UIPositioning : MonoBehaviour
     [SerializeField]
     private Camera mMainCam;
 
+    /// <summary>
+    /// Translates the World coordinates of the anke point into Screen coordinates and lets the mimik it position
+    /// </summary>
     private void Update()
     {
         Vector3 ankerPos = mMainCam.WorldToScreenPoint(mAnkerPoint.transform.position);

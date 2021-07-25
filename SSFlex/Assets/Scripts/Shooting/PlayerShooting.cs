@@ -632,6 +632,7 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         else
             SwitchWeapon(secondaryGun, primaryGun);
 
+        // RPC Call 
         if (photonView.IsMine)
             photonView.RPC("DisplayObject", RpcTarget.OthersBuffered, mCurrentLoadoutIdx);
 
@@ -643,23 +644,34 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         else
             SwitchWeapon(secondaryGun, primaryGun);
 
+        // RPC Call 
         if (photonView.IsMine)
             photonView.RPC("DisplayObject", RpcTarget.OthersBuffered, mCurrentLoadoutIdx);
     }
 
+    /// <summary>
+    /// Throw Grenade After some Time
+    /// </summary>
+    /// <param name="_time"></param>
+    /// <returns></returns>
     private IEnumerator C_GrenadeTimer(float _time)
     {
         yield return new WaitForSeconds(_time - _time * 1 / 3f);
-
+        // Throw Grenade
         ThrowGrenade();
         yield return new WaitForSeconds(_time * 1 / 3f);
 
+        // Throw grenade bool  = false to be able to do other shit again
         isGrenadeThrowing = false;
     }
 
+    /// <summary>
+    /// Play Audio Sounds for Explosion
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator GrenadeAudioTimer()
     {
-
+        // Throw Sound
         if (photonView.IsMine)
         {
             photonView.RPC("SyncAudio", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncGrenadeStart"), this.transform.position);
@@ -667,12 +679,17 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
 
         yield return new WaitForSeconds(5);
 
+        // Explosion Sound
         if (photonView.IsMine)
         {
             photonView.RPC("SyncAudio", RpcTarget.Others, Path.Combine("PhotonPrefabs", "SyncSounds", "SyncGrenadeExplosion"), this.transform.position);
         }
     }
 
+    /// <summary>
+    /// Play Audio of Reload
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator ReloadAudioTimer()
     {
         //AudioManager.Instance.Play("ReloadStart");
@@ -690,6 +707,10 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// Reload Animation Timer for 3rd Person Char
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator ReloadAnimatorTimer()
     {
         thirdPersonAnimator.SetBool("isReloading", true);
@@ -707,18 +728,20 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         {
             return;
         }
-
-        
-
+    
+        // Check how much dmg to do to with Grenade
         float grenadeDmg =( maxGrenadeDmg * ( _percent));
 
-
-
-
+        // Hit Anything with Grenade
         HitAnything(grenadeDmg, _gameobject);
 
     }
 
+    /// <summary>
+    /// Do Dmg to different Colliders
+    /// </summary>
+    /// <param name="_dmg"></param>
+    /// <param name="_gameobject"></param>
     private void HitAnything(float _dmg, GameObject _gameobject)
     {
         if (!photonView.IsMine)
@@ -727,23 +750,27 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             return;
         }
 
-
+        // Check if hit Player
         if (_gameobject.CompareTag("Player") || _gameobject.layer == 14 || _gameobject.CompareTag("DmgPlayer"))
         {
+            // Check if Can do Dmg (only do dmg to Player on one collider)
             if (!canDoDmgAgain)
             {
                 return;
             }
 
+            // Coroutine to do dmg again
             canDoDmgAgain = false;
             StartCoroutine(C_TimeTillDmgAgain());
 
+            // Try to do Dmg to Player
             PlayerHealth health = _gameobject.GetComponentInParent<PlayerHealth>();
             health.TakeDamage(_dmg, photonView.OwnerActorNr);
             Debug.Log(_dmg);
 
             PlayerHud.Instance.DisplayDmgToPlayer();
         }
+        // Do Dmg to Object
         else if (_gameobject.layer == 8)
         {
             _gameobject.GetComponent<NormalBuildingInfo>().TakeDamage(_dmg);
@@ -751,6 +778,10 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// Timer till can Do Dmg again
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator C_TimeTillDmgAgain()
     {
         yield return new WaitForSeconds(0.08f);
@@ -765,6 +796,11 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         PhotonNetwork.Instantiate(_prefabName, _prefabPosition, Quaternion.identity);
     }
 
+    /// <summary>
+    /// Wait time till Player can throw another grenade and Displays on Hud
+    /// </summary>
+    /// <param name="_time"></param>
+    /// <returns></returns>
     private IEnumerator C_GrenadeRegenTimer(float _time)
     {
 
@@ -774,16 +810,20 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         {
             curTime += Time.deltaTime;
 
-
+            // Display Current Time on Hud
             PlayerHud.Instance.ChangeGrenadeFillAmount(_time, curTime);
 
             yield return null;
         }
 
-
+        // Can throw grandew again
         canThrowGrenade = true;
     }
 
+    /// <summary>
+    /// Play 3rd Person Grewnade Animation
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator PlayerGrenadeAnimator()
     {
         thirdPersonAnimator.SetBool("isThrowing", true);
@@ -791,6 +831,10 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         thirdPersonAnimator.SetBool("isThrowing", false);
     }
 
+    /// <summary>
+    /// 3rd person meele Animation
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator MeleeAnimation()
     {
         thirdPersonAnimator.SetBool("isStabbing", true);
@@ -798,17 +842,27 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
         thirdPersonAnimator.SetBool("isStabbing", false);
     }
 
+    /// <summary>
+    /// Chnage Fov Event
+    /// </summary>
     private void ChangeFov()
     {
         fov = GameManager.Instance.Fov;
     }
 
+    /// <summary>
+    /// Change the Shoot Toggle to can and cant shoot
+    /// </summary>
     private void CanShootToggle()
     {
         Debug.Log("Hier");
         canShoot = !canShoot;
     }
 
+    /// <summary>
+    /// Check what trigger hit to add ammo to CurrentAmmo
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
         if (!photonView.IsMine)
@@ -816,29 +870,35 @@ public class PlayerShooting : MonoBehaviourPunCallbacks
             return;
         }
 
+        // Check if Pistol
         if (other.CompareTag("AmmoPistol"))
         {
             Pistol.CurrentAmmo += 100;
 
         }
+        // Check if Shotgun
         else if (other.CompareTag("AmmoShotgun"))
         {
             Shotgun.CurrentAmmo += 50;
         }
+        // Check if Ar
         else if (other.CompareTag("AmmoAR"))
         {
             AR.CurrentAmmo += 200;
         }
+        // Check if Sniper
         else if (other.CompareTag("AmmoSniper"))
         {
             Sniper.CurrentAmmo += 20;
         }
 
+        // Dsiplay current Ammo on Hud
         PlayerHud.Instance.ChangeAmmoAmount(currentGun.BulletsInMag, currentGun.CurrentAmmo);
     }
 
     private void OnDestroy()
     {
+        //Unsub to events
         GameManager.Instance.OnFovChange -= ChangeFov;
         EscapeMenu.Instance.OnToggle -= CanShootToggle;
     }
