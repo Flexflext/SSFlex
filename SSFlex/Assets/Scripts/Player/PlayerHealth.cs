@@ -135,17 +135,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
     {
         // Take Dmg only if the Networking Client is mine
         if (!photonView.IsMine)
-        {
-            if (shield > 0)
-            {
-                impactEffectShield.Play();
-            }
-            else
-            {
-                impactEffect.Play();
-            }
-
-            
+        {           
             return;
         }
 
@@ -159,11 +149,13 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
         if (difference >= 0)
         {
             shield -= _dmg;
+            photonView.RPC("PlayHitVfx", RpcTarget.All ,true);
         }
         else
         {
             shield = 0f;
             health += difference;
+            photonView.RPC("PlayHitVfx", RpcTarget.All, false);
         }
 
         //Check if the Player is Dead
@@ -176,6 +168,29 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
         //Display Health and Shield on Hud
         PlayerHud.Instance.ChangeHealthAmount(maxHealth, health);
         PlayerHud.Instance.ChangeShieldAmount(maxShield, shield, true);
+    }
+
+    /// <summary>
+    /// Play Impact Vfx Hit
+    /// </summary>
+    /// <param name="_shield"></param>
+    [PunRPC]
+    private void PlayHitVfx(bool _shield)
+    {
+        if (photonView.IsMine)
+        {
+            return;
+        }
+
+        // Check what impact hit to Play
+        if (_shield)
+        {
+            impactEffectShield.Play();
+        }
+        else
+        {
+            impactEffect.Play();
+        }
     }
 
 
