@@ -1083,6 +1083,9 @@ MonoBehaviour:
   gravelGroundedMask:
     serializedVersion: 2
     m_Bits: 8192
+  buildLayerGroundedMask:
+    serializedVersion: 2
+    m_Bits: 0
   cameraHolder: {fileID: 1370586007870551904}
   firstPersonShotgun: {fileID: 2973837745761628819}
   firstPersonAR: {fileID: 5645009478004994270}
@@ -1106,15 +1109,6 @@ MonoBehaviour:
   jumpForce: 2500
   groundDrag: 6
   airDrag: 1
-  isOnStone: 0
-  isOnGravel: 0
-  isMoving: 0
-  isRunning: 0
-  isSneaking: 0
-  isStoneWalking: 0
-  isStoneRunning: 0
-  isGravelWalking: 0
-  isGravelRunning: 0
 --- !u!114 &1370586008316802725
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1213,6 +1207,7 @@ MonoBehaviour:
   timeUntilShieldRegen: 5
   regenPerSecond: 10
   impactEffect: {fileID: 1676757721523387770}
+  impactEffectShield: {fileID: 0}
   regenEffect: {fileID: 7029569183256148174}
 --- !u!136 &1370586008316802745
 CapsuleCollider:

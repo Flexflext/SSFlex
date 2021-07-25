@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private LayerMask stoneGroundedMask;
     [SerializeField] private LayerMask gravelGroundedMask;
+    [SerializeField] private LayerMask buildLayerGroundedMask;
 
     // Photon
     [SerializeField] private GameObject cameraHolder;
@@ -66,7 +67,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 input;
 
     // Jump
-    private bool isGrounded, isStoneGrounded, isGravelGrounded;
+    private bool isGrounded, isStoneGrounded, isGravelGrounded, isBuildLayerGrounded;
     private bool isStoneWalking, isStoneRunning, isGravelWalking, isGravelRunning;
     private bool isOnStone, isOnGravel;
     private bool useGravity = true;
@@ -298,6 +299,11 @@ public class PlayerController : MonoBehaviour
     {
         isGravelGrounded = _isGravelGrounded;
     }
+    public void SetIsBuildLayerGroundedState(bool _isBuildLayerGrounded)
+    {
+        isBuildLayerGrounded = _isBuildLayerGrounded;
+    }
+
     #endregion
     #region Audio
 
@@ -369,6 +375,15 @@ public class PlayerController : MonoBehaviour
             AudioManager.Instance.Stop("StoneWalk");
             AudioManager.Instance.Stop("StoneRun");
             AudioManager.Instance.Stop("BreathingRun");
+        }
+
+        if(isBuildLayerGrounded && !isMoving)
+        {
+            rb.mass = 0;
+        }
+        else
+        {
+            rb.mass = 3;
         }
 
     }

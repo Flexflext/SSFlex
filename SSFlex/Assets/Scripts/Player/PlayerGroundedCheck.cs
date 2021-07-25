@@ -37,6 +37,11 @@ public class PlayerGroundedCheck : MonoBehaviour
             playerController.SetIsGravelGroundedState(true);
         }
 
+        // Trigger with GroundGravel
+        if (_other.gameObject.layer == LayerMask.NameToLayer("BuildLayer"))
+        {
+            playerController.SetIsBuildLayerGroundedState(true);
+        }
         // Just Trigger with Ground
         playerController.SetIsGroundedState(true);
     }
@@ -58,6 +63,11 @@ public class PlayerGroundedCheck : MonoBehaviour
             playerController.SetIsGravelGroundedState(false);
         }
 
+        if (_other.gameObject.layer == LayerMask.NameToLayer("BuildLayer"))
+        {
+            playerController.SetIsBuildLayerGroundedState(false);
+        }
+
         playerController.SetIsGroundedState(false);
     }
 
@@ -76,6 +86,11 @@ public class PlayerGroundedCheck : MonoBehaviour
         if (_other.gameObject.layer == LayerMask.NameToLayer("GroundGravel"))
         {
             playerController.SetIsGravelGroundedState(true);
+        }
+
+        if (_other.gameObject.layer == LayerMask.NameToLayer("BuildLayer"))
+        {
+            playerController.SetIsBuildLayerGroundedState(true);
         }
 
         playerController.SetIsGroundedState(true);
@@ -100,6 +115,12 @@ public class PlayerGroundedCheck : MonoBehaviour
             playerController.SetIsGravelGroundedState(true);
         }
 
+        if (_collision.gameObject.layer == LayerMask.NameToLayer("BuildLayer"))
+        {
+            playerController.SetIsBuildLayerGroundedState(true);
+        }
+
+
         playerController.SetIsGroundedState(true);
     }
 
@@ -120,6 +141,12 @@ public class PlayerGroundedCheck : MonoBehaviour
             playerController.SetIsGravelGroundedState(false);
         }
 
+        if (_collision.gameObject.layer == LayerMask.NameToLayer("BuildLayer"))
+        {
+            playerController.SetIsBuildLayerGroundedState(true);
+        }
+
+
         playerController.SetIsGroundedState(false);
     }
 
@@ -138,6 +165,11 @@ public class PlayerGroundedCheck : MonoBehaviour
         if (_collision.gameObject.layer == LayerMask.NameToLayer("GroundGravel"))
         {
             playerController.SetIsGravelGroundedState(true);
+        }
+
+        if (_collision.gameObject.layer == LayerMask.NameToLayer("BuildLayer"))
+        {
+            playerController.SetIsBuildLayerGroundedState(true);
         }
 
         playerController.SetIsGroundedState(true);
