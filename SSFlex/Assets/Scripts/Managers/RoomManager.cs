@@ -8,6 +8,8 @@ using System.IO;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
+    // Code: Haoke
+
     public static RoomManager Instance;
 
     public Team MyTeam => myTeam;
@@ -46,6 +48,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    // Spawns players and sets up teams.
     void OnSceneLoaded (Scene _scene, LoadSceneMode _loadSceneMode)
     {
 

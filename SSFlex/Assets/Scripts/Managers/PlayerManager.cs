@@ -7,6 +7,9 @@ using System.IO;
 
 public class PlayerManager : MonoBehaviour
 {
+    // Code: Haoke
+    // Purpose: Spawns players with their player controllers at their desiganted locations.
+
     private PhotonView photonView;
     private Vector3 player1SpawnPoint_Red = new Vector3(-110, 3, 0);
     private Vector3 player2SpawnPoint_Blue = new Vector3(110, 3, 0);

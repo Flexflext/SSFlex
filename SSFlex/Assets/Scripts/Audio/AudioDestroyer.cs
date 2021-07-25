@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class AudioDestroyer : MonoBehaviour
 {
-    // Start is called before the first frame update
+    // Code: Haoke
+    // Responsible for:
+    // - Destroying instantiated sounds afer 3 seconds.
+
     void Start()
     {
         StartCoroutine(AutoDestroyer());

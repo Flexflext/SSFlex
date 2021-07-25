@@ -7,6 +7,11 @@ using TMPro;
 
 public class PlayerListItem : MonoBehaviourPunCallbacks
 {
+    // Code: Haoke
+    // Responsible for:
+    // - Letting players give them nicknames.
+    // - Deleting the nicknames after players left.
+
     [SerializeField] private TMP_Text text;
     Player player;
 

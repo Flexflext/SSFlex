@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Menu : MonoBehaviour
 {
+    // Code: Haoke & Max
+
     public string menuName;
     public bool isOpen;
 
