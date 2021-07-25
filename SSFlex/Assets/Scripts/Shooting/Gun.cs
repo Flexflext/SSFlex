@@ -9,6 +9,9 @@ using UnityEngine.VFX;
 
 public class Gun : MonoBehaviourPunCallbacks
 {
+    // Script von Felix
+    // Purpose: Script for Bullet hitting Shit and Stuff
+
     //Bullet Behavior
     [SerializeField] protected bool isShooting;
     [SerializeField] protected float dmg;
@@ -183,12 +186,13 @@ public class Gun : MonoBehaviourPunCallbacks
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         Bullet bulletScript = bullet.GetComponent<Bullet>();
 
+        // Sub to Hit Event
         if (photonView.IsMine)
         {
             bulletScript.OnHit += HitAnything;
         }
 
-
+        // Add Force to Bullet
         rb.AddForce(_direction * _speed);
     }
 
@@ -199,28 +203,32 @@ public class Gun : MonoBehaviourPunCallbacks
     /// <param name="_gameobject"></param>
     public void HitAnything(GameObject _gameobject)
     {
-        Debug.Log("Hit Smth");
+        //Debug.Log("Hit Smth");
         if (!photonView.IsMine)
         {
             return;
         }
 
-        Debug.Log(_gameobject.layer);
+        //Debug.Log(_gameobject.layer);
 
         //if (_gameobject.CompareTag("Player"))
         //{
         //    Debug.Log("Fuck U");
         //}
 
-
+        // Pls Dont Judge me this shit wack
+        // Check what gameObject got hit
         if (_gameobject.CompareTag("Player"))
         {
             Debug.Log("Hit Player");
+            // Do DMG to Players
             PlayerHealth health = _gameobject.GetComponentInParent<PlayerHealth>();
             health.TakeDamage(dmg, photonView.OwnerActorNr);
 
+            // Display Dmg To Player
             PlayerHud.Instance.DisplayDmgToPlayer();
         }
+        // Do Dmg to Buildings
         else if (_gameobject.layer == 8)
         {
             if(_gameobject.CompareTag("ClipTag"))
@@ -233,11 +241,15 @@ public class Gun : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// On Kill Smth Event Funktion
+    /// </summary>
+    /// <param name="_name"></param>
     private void OnKillSmth(string _name)
     {
         //Debug.Log("Killed " + _name);
 
-
+        // Display Kill On PLayer
         PlayerHud.Instance.DisplayKillOnPlayer(gunImg, photonView.Owner.NickName, _name);
         PlayerHud.Instance.ChangeKillAmount(1);
     }
@@ -335,11 +347,13 @@ public class Gun : MonoBehaviourPunCallbacks
     /// <param name="_deltatime"></param>
     public void ReloadGun(float _deltatime)
     {
+        // Check if can Reload
         if (!canReload)
         {
             return;
         }
 
+        // Check if reload Timer is up and Relöoad Acoordingly
         if (isReloading)
         {
             if (currentReloadTime <= reloadTime)
@@ -362,6 +376,7 @@ public class Gun : MonoBehaviourPunCallbacks
                     currentAmmo -= currentAmmo;
                 }
 
+                // Display Ammo on Hud Element
                 if (photonView.IsMine)
                 {
                     PlayerHud.Instance.ChangeAmmoAmount(BulletsInMag, CurrentAmmo);
@@ -480,8 +495,10 @@ public class Gun : MonoBehaviourPunCallbacks
 
     private new void OnEnable()
     {
+        // Sub to Network Event
         PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
 
+        // Change Bullets on Hud
         if (photonView.IsMine)
         {
             PlayerHud.Instance.ChangeAmmoAmount(BulletsInMag, CurrentAmmo);
@@ -490,12 +507,18 @@ public class Gun : MonoBehaviourPunCallbacks
 
     private new void OnDisable()
     {
+        // UnSub to Network Event
         PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
     }
 
+    /// <summary>
+    /// On Event Function from Network Event
+    /// </summary>
+    /// <param name="photonEvent"></param>
     public void OnEvent(EventData photonEvent)
     {
 
+        // Check if photonEvent has Event Code
         byte num = 66;
         if (photonEvent.Code == num)
         {
@@ -505,9 +528,10 @@ public class Gun : MonoBehaviourPunCallbacks
             }
 
             //Debug.Log("HIEr !!!");
-
+            // Get Data
             object[] data = (object[])photonEvent.CustomData;
 
+            // Display Data
             OnKillSmth((string)data[0]);
         }
     }

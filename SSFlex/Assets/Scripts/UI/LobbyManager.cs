@@ -8,6 +8,9 @@ using UnityEngine;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
+    // Script von Felix
+    // Purpose: Manager for the lobby
+
     public Team CurrentTeam => team;
 
     [Header("Select Name Text")]
