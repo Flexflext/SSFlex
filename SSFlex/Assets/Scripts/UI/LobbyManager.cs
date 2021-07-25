@@ -8,6 +8,9 @@ using UnityEngine;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
+    // Script von Felix
+    // Purpose: Manager for the lobby
+
     public Team CurrentTeam => team;
 
     [Header("Select Name Text")]
@@ -61,8 +64,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     private void Update()
     { 
+        // Check if can Start Game
         if (canStartGame)
         {
+            // Open Button if MasterClient
             if (PhotonNetwork.IsMasterClient)
             {
                 if (!startGameButton.activeSelf)
@@ -76,6 +81,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         }
         else
         {
+            // Deactivate StartGame
             if (startGameButton.activeSelf)
             {
                 startGameButton.SetActive(false);
@@ -117,6 +123,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// Check if Can start Game because all Players have Selected a Team
+    /// </summary>
     private void CheckIfCanChange()
     {
         foreach (var player in playerIdTeam)
@@ -131,8 +140,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     }
 
 
+    /// <summary>
+    /// Activate or Deactivate the Select Buttons
+    /// </summary>
+    /// <param name="_teamnum"></param>
     public void ChangeTeam(int _teamnum)
     {
+        //Check what Team was Selected
         switch (_teamnum)
         {
             case 1:
@@ -164,6 +178,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
                 break;
         }
 
+        // Open Close wich TEam was selected vis RPC Call
         mTeamSet = true;
         RoomManager.Instance.ChangeTeam(team);
         photonView.RPC("DisplayTeam", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.NickName, _teamnum, PhotonNetwork.LocalPlayer.ActorNumber);
@@ -177,8 +192,12 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     }
 
+    /// <summary>
+    /// Start the Next Level
+    /// </summary>
     public void StartGame()
     {
+        // Load Game Scene
         PhotonNetwork.LoadLevel(2);
     }
 
@@ -188,6 +207,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         startGameButton.SetActive(PhotonNetwork.IsMasterClient);
     }
 
+    // On Left Room Load the Main Menu
     public override void OnLeftRoom()
     {
         MenuManager.Instance.LoadMainMenu();
@@ -196,10 +216,16 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     #region RPC Calls
 
+    /// <summary>
+    /// Display to Others wich Team is already Selected
+    /// </summary>
+    /// <param name="_name"></param>
+    /// <param name="_team"></param>
+    /// <param name="_id"></param>
     [PunRPC]
     private void DisplayTeam(string _name, int _team, int _id)
     {
-
+        // Check wich Team Select Button should be deactivated
         switch (_team)
         {
             case 1:
@@ -227,6 +253,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         CheckIfCanChange();
     }
 
+    /// <summary>
+    /// Add to Dictionary witch your id 
+    /// </summary>
+    /// <param name="_id"></param>
     [PunRPC]
     private void AddToDictionary(int _id)
     {

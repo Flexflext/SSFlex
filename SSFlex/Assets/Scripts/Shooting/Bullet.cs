@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviourPunCallbacks
 {
+    // Script von Felix
+    // Purpose: Script for Bullet hitting Shit and Stuff
+
     public System.Action<GameObject> OnHit;
     [SerializeField] private float timeTillDestroy = 4f;
     [SerializeField] private GameObject impactEffect;
@@ -13,6 +16,7 @@ public class Bullet : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        // Start Coroutine to Destroy Bullet after some Time
         StartCoroutine(C_TimeTillDestoy(timeTillDestroy));
     }
 
@@ -25,17 +29,16 @@ public class Bullet : MonoBehaviourPunCallbacks
     {
         yield return new WaitForSeconds(_time);
 
-
-        Debug.Log("Hier");
+        // Destroy Bullet after Time
         Destroy(gameObject);
-        //PhotonNetwork.RemoveRPCs(photonView);
-        //PhotonNetwork.Destroy(this.gameObject);
     }
 
 
     private void OnCollisionEnter(Collision collision)
     {
-        
+        // Play Impact Hit on Copllision and Stops all Coroutines of Obj
+
+
         StopAllCoroutines();
         Instantiate(impactEffect, transform.position, Quaternion.identity);
 
@@ -44,10 +47,11 @@ public class Bullet : MonoBehaviourPunCallbacks
         if (OnHit != null)
         {
             //canDmgAgain = false;
+            // BulletHitEvent
             OnHit.Invoke(collision.gameObject);
         }
 
-
+        // Destroy after Hit
         Destroy(this.gameObject);
     }
 }
